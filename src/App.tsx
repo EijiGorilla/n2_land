@@ -24,12 +24,11 @@ import {
   CalciteListItem,
 } from '@esri/calcite-components-react';
 import { getMuniciaplityBarangayPair, zoomToLayer } from './components/Query';
-import StructureChart from './chart/StructureChart';
-import NloChart from './chart/NloChart';
 import LotProgressChart from './chart/LotProgressChart';
 import ExpropriationList from './components/ExpropriationList';
 import loadable from '@loadable/component';
 import { lotLayer } from './layers';
+import LotChart from './chart/LotChart';
 
 function App() {
   //**** Set states */
@@ -67,7 +66,8 @@ function App() {
   const [barangaySelected, setBarangaySelected] = useState({ name: '' });
 
   // loadable for code splitting
-  const LotChart = loadable(() => import('./chart/LotChart'));
+  const NloChart = loadable(() => import('./chart/NloChart'));
+  const StructureChart = loadable(() => import('./chart/StructureChart'));
 
   //**** Create dropdonw list */
   // Get a pair of municipality and barangay
