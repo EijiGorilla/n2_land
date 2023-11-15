@@ -338,12 +338,7 @@ function App() {
             hidden
           >
             <CalciteList>
-              <CalciteListItem
-                label=""
-                description=""
-                value="basemaps"
-                ref={calcitePanelBasemaps}
-              ></CalciteListItem>
+              <CalciteListItem value="basemaps" ref={calcitePanelBasemaps}></CalciteListItem>
             </CalciteList>
           </CalcitePanel>
 

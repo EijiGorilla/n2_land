@@ -1196,7 +1196,11 @@ const pierAccessDateColor = {
   6: [255, 0, 0, 0.9], // Dates are missing
 };
 
-const cutOffDateAccess = 1636070400000;
+//const cutOffDateAccess = '01/01/1970';
+const today = new Date();
+const todayn = today.getTime();
+const cutOffDateAccess = todayn;
+console.log(todayn);
 
 const pierAccessReadyDateLabel = new LabelClass({
   symbol: new LabelSymbol3D({
@@ -1227,13 +1231,13 @@ const pierAccessReadyDateLabel = new LabelClass({
     },
   }),
   labelExpressionInfo: {
-    expression: '$feature.PIER',
-    //'DefaultValue($feature.GeoTechName, "no data")'
-    //"IIF($feature.Score >= 13, '', '')"
-    //value: "{Type}"
+    expression: `var accessdate = $feature.AccessDate;
+                  var cutoffDate = 1700011031473;
+                  var labelPier = when($feature.AccessDate <= cutoffDate, $feature.PIER, '');
+                  return \`\${labelPier}\`
+                  `,
   },
   labelPlacement: 'above-center',
-  where: "AccessDate <= '" + cutOffDateAccess + "'",
 });
 
 const pierAccessNotYetLabel = new LabelClass({
@@ -1265,14 +1269,13 @@ const pierAccessNotYetLabel = new LabelClass({
     },
   }),
   labelExpressionInfo: {
-    expression: '$feature.PIER',
-    //'DefaultValue($feature.GeoTechName, "no data")'
-    //"IIF($feature.Score >= 13, '', '')"
-    //value: "{Type}"
+    expression: `var accessdate = $feature.AccessDate;
+                  var cutoffDate = 1700011031473;
+                  var labelPier = when($feature.AccessDate > cutoffDate || isEmpty($feature.AccessDate), $feature.PIER, '');
+                  return \`\${labelPier}\`
+                  `,
   },
   labelPlacement: 'above-center',
-  // eslint-disable-next-line no-useless-concat
-  where: "AccessDate > '" + cutOffDateAccess + "'" + ' OR ' + 'AccessDate IS NULL',
 });
 
 const pierAccessDateMissingLabel = new LabelClass({
@@ -1323,7 +1326,7 @@ export const pierAccessLayer = new FeatureLayer(
       },
     },
     layerId: 6,
-    labelingInfo: [pierAccessDateMissingLabel, pierAccessReadyDateLabel, pierAccessNotYetLabel],
+    labelingInfo: [pierAccessReadyDateLabel, pierAccessNotYetLabel, pierAccessDateMissingLabel], //[pierAccessDateMissingLabel, pierAccessReadyDateLabel, pierAccessNotYetLabel],
     title: 'Pier with Access Date',
     minScale: 150000,
     maxScale: 0,
@@ -1334,70 +1337,6 @@ export const pierAccessLayer = new FeatureLayer(
   },
   //{ utcOffset: 300 },
 );
-
-// we first need to obtain unique values of date because valueExpression does not allow
-// date'2021-10-01' notation
-//const queryDate = 'AccessDate IS NOT NULL';
-
-/*
-let dates: any[] = [];
-async function DateValues() {
-  var query = pierAccessLayer.createQuery();
-
-  query.where = queryDate;
-  return pierAccessLayer.queryFeatures(query).then((response: any) => {
-    var stats = response.features;
-
-    // eslint-disable-next-line array-callback-return
-    stats.forEach((result: any, index: any) => {
-      const attributes = result.attributes;
-      const date = attributes.AccessDate;
-      dates.push(date);
-    });
-    return dates;
-  });
-}
-
-let uniqueValues: any[] = [];
-async function uniqueDateValues(values: any) {
-  // eslint-disable-next-line array-callback-return
-  values.forEach((item: any, index: any) => {
-    if ((uniqueValues.length < 1 || uniqueValues.indexOf(item) === -1) && item !== '') {
-      uniqueValues.push(item);
-    }
-  });
-  const sortedDates = uniqueValues.sort();
-  return sortedDates;
-}
-
-function uniqueValuesInfos(sortedDates: any) {
-  const dates = sortedDates.map((date: any, index: any) => {
-    const temp = new Date(date);
-    const labelDate = temp.toLocaleDateString('en-US');
-    return Object.assign(
-      {},
-      {
-        value: date, // make sure to use 'number'. you cannot add 'date'
-        label: labelDate,
-      },
-    );
-  });
-}
-DateValues().then(uniqueDateValues).then(uniqueValuesInfos);
-
-// 2. Point Symbol Renderer
-var defaultPointSymbol = new SimpleRenderer({
-  label: 'Accessible',
-  symbol: new SimpleMarkerSymbol({
-    size: 5,
-    color: pierAccessDateColor[0],
-    outline: {
-      width: 0,
-      color: 'black',
-    },
-  }),
-});
-*/
 
 const pierAccessRenderer = new UniqueValueRenderer({
   field: 'AccessDate',
@@ -1483,18 +1422,21 @@ let customContent = new CustomContent({
     let dateValue = dateFormat(date, 'MM-dd-yyyy');
 
     // If the date is before current date, popupContent should be "AVAILABLE"
-    let DATES;
+    let DATES: any;
     if (dateValue === '01-01-1970') {
       // Empty date is entered as this
       DATES = 'NO DATES AVAILABLE';
     } else if (statsDate <= cutOffDateAccess) {
       DATES = 'ACCESSIBLE';
     } else if (statsDate > cutOffDateAccess) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       DATES = dateValue;
     }
 
     //return `Access Date: <b>${DATES}</b>`;
-    return `Access Date: <b>${DATES}</b>`;
+    return `Access Date: <b>${dateValue}</b><br>
+            Status: <b>Accessible</b> 
+    `;
   },
 });
 
