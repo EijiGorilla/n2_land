@@ -1435,7 +1435,7 @@ let customContent = new CustomContent({
 
     //return `Access Date: <b>${DATES}</b>`;
     return `Access Date: <b>${dateValue}</b><br>
-            Status: <b>Accessible</b> 
+            Status: <b>${DATES}</b> 
     `;
   },
 });
