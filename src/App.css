@@ -97,21 +97,7 @@ calcite-tabs {
 
 ::-webkit-scrollbar {
   width: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #00032235; /*#032235*/
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #ffba1f;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #b98816;
+  display: none;
 }
 
 .esri-legend__layer-caption {
