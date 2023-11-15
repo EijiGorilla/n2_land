@@ -520,9 +520,9 @@ const superUrgentLotRenderer = new UniqueValueRenderer({
       value: 0,
       label: 'Super Urgent',
       symbol: new SimpleFillSymbol({
-        color: 'red',
+        color: [255, 0, 0, 0],
         outline: {
-          color: 'black',
+          color: [255, 0, 0, 1],
           width: 0.3,
         },
       }),
