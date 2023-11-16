@@ -1,7 +1,7 @@
 {
   "homepage": "https://eijigorilla.github.io/n2_land",
   "name": "n2_land",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@amcharts/amcharts5": "^5.5.5",
@@ -52,6 +52,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@types/loadable__component": "^5.13.7"
+    "@types/loadable__component": "^5.13.7",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1"
   }
 }
