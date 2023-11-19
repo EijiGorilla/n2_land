@@ -45,7 +45,7 @@ var chainageRenderer = new SimpleRenderer({
 
 export const chainageLayer = new FeatureLayer({
   portalItem: {
-    id: '590680d19f2e48fdbd8bcddce3aaedb5',
+    id: 'e47e9f4d475e4e24acad458a1428f3f9',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -108,7 +108,7 @@ let stationBoxRenderer = new UniqueValueRenderer({
 
 export const stationBoxLayer = new FeatureLayer({
   portalItem: {
-    id: '590680d19f2e48fdbd8bcddce3aaedb5',
+    id: 'e47e9f4d475e4e24acad458a1428f3f9',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -128,7 +128,7 @@ export const stationBoxLayer = new FeatureLayer({
 /* ROW Layer */
 export const prowLayer = new FeatureLayer({
   portalItem: {
-    id: '590680d19f2e48fdbd8bcddce3aaedb5',
+    id: 'e47e9f4d475e4e24acad458a1428f3f9',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -235,7 +235,7 @@ var labelClass = new LabelClass({
     ],
     verticalOffset: {
       screenLength: 100,
-      maxWorldLength: 300,
+      maxWorldLength: 700,
       minWorldLength: 80,
     },
 
@@ -255,20 +255,19 @@ var labelClass = new LabelClass({
   },
 });
 
-export const stationLayer = new SceneLayer({
+export const stationLayer = new FeatureLayer({
   portalItem: {
-    id: '207cb34b8a324b40985b5805862c4b29',
+    id: 'e47e9f4d475e4e24acad458a1428f3f9',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
   },
+  layerId: 2,
   title: 'N2 Stations',
   labelingInfo: [labelClass],
   elevationInfo: {
     mode: 'relative-to-ground',
   },
-  definitionExpression: "Extension = 'N2'",
-  //screenSizePerspectiveEnabled: false, // gives constant size regardless of zoom
 });
 stationLayer.listMode = 'hide';
 
@@ -1166,7 +1165,7 @@ const pierHeadRenderer = new UniqueValueRenderer({
 
 export const pierHeadColumnLayer = new FeatureLayer({
   portalItem: {
-    id: '590680d19f2e48fdbd8bcddce3aaedb5',
+    id: 'e47e9f4d475e4e24acad458a1428f3f9',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -1320,7 +1319,7 @@ const pierAccessDateMissingLabel = new LabelClass({
 export const pierAccessLayer = new FeatureLayer(
   {
     portalItem: {
-      id: '590680d19f2e48fdbd8bcddce3aaedb5',
+      id: 'e47e9f4d475e4e24acad458a1428f3f9',
       portal: {
         url: 'https://gis.railway-sector.com/portal',
       },
