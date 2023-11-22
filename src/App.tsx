@@ -219,7 +219,7 @@ function App() {
             style={{ marginBottom: 'auto', marginTop: 'auto' }}
           />
           <b className="headerTitle">N2 LAND ACQUISITION</b>
-          <div className="date">As of October 25, 2023</div>
+          <div className="date">As of November 16, 2023</div>
 
           <div className="dropdownFilter">
             <div className="dropdownFilterLayout">
