@@ -171,7 +171,7 @@ let pnrRenderer = new UniqueValueRenderer({
 
 export const pnrLayer = new FeatureLayer({
   portalItem: {
-    id: 'dca1d785da0f458b8f87638a76918496',
+    id: '13026f2da4804673be557e959ed154c4',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -441,7 +441,7 @@ const templateLot = new PopupTemplate({
 
 export const lotLayer = new FeatureLayer({
   portalItem: {
-    id: 'dca1d785da0f458b8f87638a76918496',
+    id: '13026f2da4804673be557e959ed154c4',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -491,7 +491,7 @@ let endorsedLayerRenderer = new UniqueValueRenderer({
 
 export const endorsedLotLayer = new FeatureLayer({
   portalItem: {
-    id: 'dca1d785da0f458b8f87638a76918496',
+    id: '13026f2da4804673be557e959ed154c4',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -531,7 +531,7 @@ const superUrgentLotRenderer = new UniqueValueRenderer({
 
 export const superUrgentLotLayer = new FeatureLayer({
   portalItem: {
-    id: 'dca1d785da0f458b8f87638a76918496',
+    id: '13026f2da4804673be557e959ed154c4',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -696,7 +696,7 @@ const structureRenderer = new UniqueValueRenderer({
 
 export const structureLayer = new FeatureLayer({
   portalItem: {
-    id: 'dca1d785da0f458b8f87638a76918496',
+    id: '13026f2da4804673be557e959ed154c4',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -872,7 +872,7 @@ const nloRenderer = new UniqueValueRenderer({
 
 export const nloLayer = new FeatureLayer({
   portalItem: {
-    id: 'dca1d785da0f458b8f87638a76918496',
+    id: '13026f2da4804673be557e959ed154c4',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -954,7 +954,7 @@ let NLOLORenderer = new UniqueValueRenderer({
 
 export const strucOwnershipLayer = new FeatureLayer({
   portalItem: {
-    id: 'dca1d785da0f458b8f87638a76918496',
+    id: '13026f2da4804673be557e959ed154c4',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },
@@ -1041,7 +1041,7 @@ let occupancyRenderer = new UniqueValueRenderer({
 
 export const occupancyLayer = new FeatureLayer({
   portalItem: {
-    id: 'dca1d785da0f458b8f87638a76918496',
+    id: '13026f2da4804673be557e959ed154c4',
     portal: {
       url: 'https://gis.railway-sector.com/portal',
     },

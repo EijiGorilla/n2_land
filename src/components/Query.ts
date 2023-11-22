@@ -170,7 +170,7 @@ export async function generatePermitEnter() {
     const pte = stats.total_pte_lot;
     const totaln = stats.total_lot_N;
     const percent = ((pte / totaln) * 100).toFixed(0);
-    return [percent, totaln];
+    return [percent, pte];
   });
 }
 
