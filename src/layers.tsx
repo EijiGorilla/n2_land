@@ -1199,7 +1199,6 @@ const pierAccessDateColor = {
 const today = new Date();
 const todayn = today.getTime();
 const cutOffDateAccess = todayn;
-console.log(todayn);
 
 const pierAccessReadyDateLabel = new LabelClass({
   symbol: new LabelSymbol3D({
