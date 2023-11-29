@@ -28,7 +28,6 @@ import ExpropriationList from './components/ExpropriationList';
 import loadable from '@loadable/component';
 import { lotLayer } from './layers';
 import LotChart from './chart/LotChart';
-import HandedOverAreaChart from './chart/HandedOverAreaChart';
 
 function App() {
   //**** Set states */
@@ -69,6 +68,7 @@ function App() {
   const NloChart = loadable(() => import('./chart/NloChart'));
   const StructureChart = loadable(() => import('./chart/StructureChart'));
   const LotProgressChart = loadable(() => import('./chart/LotProgressChart'));
+  const HandedOverAreaChart = loadable(() => import('./chart/HandedOverAreaChart'));
 
   //**** Create dropdonw list */
   // Get a pair of municipality and barangay
@@ -220,7 +220,7 @@ function App() {
             style={{ marginBottom: 'auto', marginTop: 'auto' }}
           />
           <b className="headerTitle">N2 LAND ACQUISITION</b>
-          <div className="date">As of November 16, 2023</div>
+          <div className="date">As of November 29, 2023</div>
 
           <div className="dropdownFilter">
             <div className="dropdownFilterLayout">

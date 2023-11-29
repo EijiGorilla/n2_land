@@ -745,6 +745,7 @@ export const structureLayer = new FeatureLayer({
 
 // NLO Layer
 const symbolSize = 30;
+
 const nloSymbolRef = [
   'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_Relocated.svg',
   'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_Paid.svg',
