@@ -717,6 +717,10 @@ export const structureLayer = new FeatureLayer({
         type: 'fields',
         fieldInfos: [
           {
+            fieldName: 'FamilyNumber',
+            label: '<b>Number of Families</b>',
+          },
+          {
             fieldName: 'StrucOwner',
             label: 'Structure Owner',
           },
