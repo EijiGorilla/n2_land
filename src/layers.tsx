@@ -1200,6 +1200,7 @@ const pierAccessDateColor = {
 const today = new Date();
 const todayn = today.getTime();
 const cutOffDateAccess = todayn;
+console.log(todayn, '; ', cutOffDateAccess);
 
 const pierAccessReadyDateLabel = new LabelClass({
   symbol: new LabelSymbol3D({
@@ -1231,7 +1232,7 @@ const pierAccessReadyDateLabel = new LabelClass({
   }),
   labelExpressionInfo: {
     expression: `var accessdate = $feature.AccessDate;
-                  var cutoffDate = 1700011031473;
+                  var cutoffDate = 1701300301806;
                   var labelPier = when($feature.AccessDate <= cutoffDate, $feature.PIER, '');
                   return \`\${labelPier}\`
                   `,
@@ -1269,7 +1270,7 @@ const pierAccessNotYetLabel = new LabelClass({
   }),
   labelExpressionInfo: {
     expression: `var accessdate = $feature.AccessDate;
-                  var cutoffDate = 1700011031473;
+                  var cutoffDate = 1701300301806;
                   var labelPier = when($feature.AccessDate > cutoffDate || isEmpty($feature.AccessDate), $feature.PIER, '');
                   return \`\${labelPier}\`
                   `,
@@ -1326,7 +1327,7 @@ export const pierAccessLayer = new FeatureLayer(
     },
     layerId: 6,
     labelingInfo: [pierAccessReadyDateLabel, pierAccessNotYetLabel, pierAccessDateMissingLabel], //[pierAccessDateMissingLabel, pierAccessReadyDateLabel, pierAccessNotYetLabel],
-    title: 'Pier with Access Date',
+    title: 'Pier with Access Date (as of October 2023)',
     minScale: 150000,
     maxScale: 0,
     outFields: ['*'],
