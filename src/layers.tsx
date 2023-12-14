@@ -449,6 +449,7 @@ export const lotLayer = new FeatureLayer({
   layerId: 7,
   labelingInfo: [lotIdLabel],
   renderer: lotLayerRenderer,
+  outFields: ['*'],
   popupTemplate: templateLot,
   title: 'Land Acquisition',
   minScale: 150000,

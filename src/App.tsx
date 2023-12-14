@@ -220,7 +220,7 @@ function App() {
             style={{ marginBottom: 'auto', marginTop: 'auto' }}
           />
           <b className="headerTitle">N2 LAND ACQUISITION</b>
-          <div className="date">As of November 29, 2023</div>
+          <div className="date">As of December 14, 2023</div>
 
           <div className="dropdownFilter">
             <div className="dropdownFilterLayout">
@@ -387,12 +387,18 @@ function App() {
                     <b>Lots under expropriation</b> are available in the 'Expro List' tab.
                   </li>
                   <li>
-                    Click/unclick widgets icon for viewing Layer list, legend, basemaps, and locate
-                    widgets under the main title.
+                    <b>'Handed-Over'</b> in the lot pie chart represents <b>public lands only</b>.
                   </li>
                   <li>
-                    <b>Toggle a checkbox</b> above the Land pie chart to view{' '}
-                    <b>handed-over areas</b> (m2) of Contract Packages.
+                    <b>All other processes</b> in the lot pie chart represent{' '}
+                    <b>private lands only</b>.
+                  </li>
+                  <li>
+                    <b>Permit-to-Enter</b> represents both public and private lands{' '}
+                  </li>
+                  <li>
+                    <b>Time-series progress chart</b> indicates the number of handed-over lots for
+                    both public and private lands{' '}
                   </li>
                 </ul>
               </div>
