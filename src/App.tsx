@@ -387,11 +387,7 @@ function App() {
                     <b>Lots under expropriation</b> are available in the 'Expro List' tab.
                   </li>
                   <li>
-                    <b>'Handed-Over'</b> in the lot pie chart represents <b>public lands only</b>.
-                  </li>
-                  <li>
-                    <b>All other processes</b> in the lot pie chart represent{' '}
-                    <b>private lands only</b>.
+                    <b>Pie chart for lands</b> represent <b>private lands only</b>.
                   </li>
                   <li>
                     <b>Permit-to-Enter</b> represents both public and private lands{' '}

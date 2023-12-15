@@ -21,6 +21,7 @@ import {
   prowLayer,
   strucOwnershipLayer,
   superUrgentLotLayer,
+  handedOverLotLayer,
 } from './layers';
 import { highlightUrgent } from './components/Query';
 
@@ -48,7 +49,7 @@ const lotGroupLayer = new GroupLayer({
   title: 'Land',
   visible: true,
   visibilityMode: 'independent',
-  layers: [endorsedLotLayer, lotLayer, superUrgentLotLayer, pnrLayer],
+  layers: [endorsedLotLayer, lotLayer, handedOverLotLayer, superUrgentLotLayer, pnrLayer],
 });
 
 // Change the layer order by using index numbers in map.add
@@ -90,12 +91,15 @@ export const layerList = new LayerList({
 
     if (item.title === 'Super Urgent Lot') {
       highlightUrgent(superUrgentLotLayer);
+    } else if (item.title === 'Handed-Over (public + private)') {
+      highlightUrgent(handedOverLotLayer);
     }
 
     item.title === 'Chainage' ||
     item.title === 'NLO/LO Ownership (Structure)' ||
     item.title === 'Super Urgent Lot' ||
     item.title === 'Land Acquisition (Endorsed Status)' ||
+    item.title === 'Handed-Over (public + private)' ||
     item.title === 'Structure' ||
     item.title === 'NLO (Non-Land Owner)' ||
     item.title === 'Occupancy (Structure)'

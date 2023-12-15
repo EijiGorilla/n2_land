@@ -548,6 +548,42 @@ export const superUrgentLotLayer = new FeatureLayer({
   },
 });
 
+/* Handed-Over Lot (public + private) */
+const handedOverLotRenderer = new UniqueValueRenderer({
+  field: 'HandedOver',
+
+  uniqueValueInfos: [
+    {
+      value: 1,
+      label: 'Handed-Over',
+      symbol: new SimpleFillSymbol({
+        color: [255, 0, 0, 0],
+        outline: {
+          color: '#00c5ff',
+          width: 0.3,
+        },
+      }),
+    },
+  ],
+});
+
+export const handedOverLotLayer = new FeatureLayer({
+  portalItem: {
+    id: '13026f2da4804673be557e959ed154c4',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 7,
+  definitionExpression: 'HandedOver = 1',
+  renderer: handedOverLotRenderer,
+  popupEnabled: false,
+  title: 'Handed-Over (public + private)',
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+});
+
 /* Structure Layer */
 const height = 5;
 const edgeSize = 0.3;

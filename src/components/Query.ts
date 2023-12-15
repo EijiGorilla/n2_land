@@ -17,11 +17,11 @@ const statusLot: string[] = [
 ];
 
 export async function generateLotData() {
-  var total_handedover_lot = new StatisticDefinition({
-    onStatisticField: 'CASE WHEN StatusLA = 0 THEN 1 ELSE 0 END',
-    outStatisticFieldName: 'total_handedover_lot',
-    statisticType: 'sum',
-  });
+  // var total_handedover_lot = new StatisticDefinition({
+  //   onStatisticField: 'CASE WHEN StatusLA = 0 THEN 1 ELSE 0 END',
+  //   outStatisticFieldName: 'total_handedover_lot',
+  //   statisticType: 'sum',
+  // });
 
   var total_paid_lot = new StatisticDefinition({
     onStatisticField: 'CASE WHEN StatusLA = 1 THEN 1 ELSE 0 END',
@@ -55,7 +55,7 @@ export async function generateLotData() {
 
   var query = lotLayer.createQuery();
   query.outStatistics = [
-    total_handedover_lot,
+    // total_handedover_lot,
     total_paid_lot,
     total_payp_lot,
     total_legalpass_lot,
@@ -66,7 +66,7 @@ export async function generateLotData() {
 
   return lotLayer.queryFeatures(query).then((response: any) => {
     var stats = response.features[0].attributes;
-    const handedover = stats.total_handedover_lot;
+    // const handedover = stats.total_handedover_lot;
     const paid = stats.total_paid_lot;
     const payp = stats.total_payp_lot;
     const legalpass = stats.total_legalpass_lot;
@@ -74,13 +74,13 @@ export async function generateLotData() {
     const expro = stats.total_expro_lot;
 
     const compile = [
-      {
-        category: statusLot[0],
-        value: handedover,
-        sliceSettings: {
-          fill: am5.color('#00c5ff'),
-        },
-      },
+      // {
+      //   category: statusLot[0],
+      //   value: handedover,
+      //   sliceSettings: {
+      //     fill: am5.color('#00c5ff'),
+      //   },
+      // },
       {
         category: statusLot[1],
         value: paid,
@@ -129,7 +129,7 @@ export async function generateLotNumber() {
   });
 
   var total_lot_pie = new StatisticDefinition({
-    onStatisticField: 'CASE WHEN StatusLA >= 0 THEN 1 ELSE 0 END',
+    onStatisticField: 'CASE WHEN StatusLA >= 1 THEN 1 ELSE 0 END',
     outStatisticFieldName: 'total_lot_pie',
     statisticType: 'sum',
   });
