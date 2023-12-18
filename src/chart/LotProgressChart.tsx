@@ -194,10 +194,10 @@ const LotProgressChart = ({ municipal, barangay, nextwidget }: any) => {
       });
     });
 
+    var highlightSelect: any;
     series.columns.template.events.on('click', (ev) => {
       const selected: any = ev.target.dataItem?.dataContext;
       const selectedDate = dateFormat(selected.date, 'yyyy-MM-dd');
-      var highlightSelect: any;
 
       // const qExpression =
       const qMunicipality = "Municipality = '" + municipal + "'";

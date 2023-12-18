@@ -786,7 +786,7 @@ export function zoomToLayer(layer: any) {
   });
 }
 
-export function highlightUrgent(layer: any) {
+export function highlightLot(layer: any) {
   let highlight: any;
   view.whenLayerView(layer).then((urgentLayerView) => {
     var query = layer.createQuery();

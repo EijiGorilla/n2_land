@@ -23,7 +23,7 @@ import {
   superUrgentLotLayer,
   handedOverLotLayer,
 } from './layers';
-import { highlightUrgent } from './components/Query';
+import { highlightLot } from './components/Query';
 
 export const map = new Map({
   basemap: 'dark-gray-vector', // "streets-night-vector", basemap
@@ -90,9 +90,9 @@ export const layerList = new LayerList({
     }
 
     if (item.title === 'Super Urgent Lot') {
-      highlightUrgent(superUrgentLotLayer);
+      highlightLot(superUrgentLotLayer);
     } else if (item.title === 'Handed-Over (public + private)') {
-      highlightUrgent(handedOverLotLayer);
+      highlightLot(handedOverLotLayer);
     }
 
     item.title === 'Chainage' ||
