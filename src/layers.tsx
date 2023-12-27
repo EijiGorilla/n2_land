@@ -311,14 +311,14 @@ let lotLayerRenderer = new UniqueValueRenderer({
   field: 'StatusLA',
   defaultSymbol: lotDefaultSymbol, // autocasts as new SimpleFillSymbol()
   uniqueValueInfos: [
-    {
-      // All features with value of "North" will be blue
-      value: 0,
-      label: 'Handed-Over',
-      symbol: new SimpleFillSymbol({
-        color: colorLotReqs[0],
-      }),
-    },
+    // {
+    //   // All features with value of "North" will be blue
+    //   value: 0,
+    //   label: 'Handed-Over',
+    //   symbol: new SimpleFillSymbol({
+    //     color: colorLotReqs[0],
+    //   }),
+    // },
     {
       // All features with value of "North" will be blue
       value: 1,
@@ -423,7 +423,7 @@ let customContentLot = new CustomContent({
               <li>Status:           <b>${
                 statusLot >= 0 ? lotStatusArray[statusLot] : ''
               }</b></li><br>
-              <li>Land Use:         <b>${landUse >= 1 ? landUseArray[landUse - 1] : ''}</b></li><br>
+              <li>Land Use:         <b>${landUse}</b></li><br>
               <li>Municipality:     <b>${municipal}</b></li><br>
               <li>Barangay:         <b>${barangay}</b></li><br>
               <li>Land Owner:       <b>${landOwner}</b>
