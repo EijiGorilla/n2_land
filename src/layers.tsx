@@ -16,6 +16,17 @@ import {
 import SolidEdges3D from '@arcgis/core/symbols/edges/SolidEdges3D';
 import CustomContent from '@arcgis/core/popup/content/CustomContent';
 import PopupTemplate from '@arcgis/core/PopupTemplate';
+import { dateFormat } from './components/Query';
+
+/* Standalone table for Dates */
+export const dateTable = new FeatureLayer({
+  portalItem: {
+    id: '68fe46f717f94218a9adcbc1dfb908b7',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+});
 
 /* Chainage Layer  */
 var labelChainage = new LabelClass({
@@ -1237,7 +1248,6 @@ const pierAccessDateColor = {
   6: [255, 0, 0, 0.9], // Dates are missing
 };
 
-//const cutOffDateAccess = '01/01/1970';
 const today = new Date();
 const todayn = today.getTime();
 const cutOffDateAccess = todayn;
@@ -1273,7 +1283,7 @@ const pierAccessReadyDateLabel = new LabelClass({
   }),
   labelExpressionInfo: {
     expression: `var accessdate = $feature.AccessDate;
-                  var cutoffDate = 1701300301806;
+                  var cutoffDate = 1705282363039;
                   var labelPier = when($feature.AccessDate <= cutoffDate, $feature.PIER, '');
                   return \`\${labelPier}\`
                   `,
@@ -1311,7 +1321,7 @@ const pierAccessNotYetLabel = new LabelClass({
   }),
   labelExpressionInfo: {
     expression: `var accessdate = $feature.AccessDate;
-                  var cutoffDate = 1701300301806;
+                  var cutoffDate = 1705282363039;
                   var labelPier = when($feature.AccessDate > cutoffDate || isEmpty($feature.AccessDate), $feature.PIER, '');
                   return \`\${labelPier}\`
                   `,
@@ -1426,31 +1436,6 @@ const pierAccessRenderer = new UniqueValueRenderer({
 pierAccessLayer.renderer = pierAccessRenderer;
 
 // 3. Popup Template
-function dateFormat(inputDate: any, format: any) {
-  //parse the input date
-  const date = new Date(inputDate);
-
-  //extract the parts of the date
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  //replace the month
-  format = format.replace('MM', month.toString().padStart(2, '0'));
-
-  //replace the year
-  if (format.indexOf('yyyy') > -1) {
-    format = format.replace('yyyy', year.toString());
-  } else if (format.indexOf('yy') > -1) {
-    format = format.replace('yy', year.toString().substr(2, 2));
-  }
-
-  //replace the day
-  format = format.replace('dd', day.toString().padStart(2, '0'));
-
-  return format;
-}
-
 // Custom Popup Content for pierAccessLayer
 let customContent = new CustomContent({
   outFields: ['*'],

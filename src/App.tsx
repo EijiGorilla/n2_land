@@ -23,13 +23,15 @@ import {
   CalciteList,
   CalciteListItem,
 } from '@esri/calcite-components-react';
-import { getMuniciaplityBarangayPair, zoomToLayer } from './components/Query';
+import { dateUpdate, getMuniciaplityBarangayPair, zoomToLayer } from './components/Query';
 import ExpropriationList from './components/ExpropriationList';
 import loadable from '@loadable/component';
 import { lotLayer } from './layers';
 import LotChart from './chart/LotChart';
 
 function App() {
+  const [asOfDate, setAsOfDate] = useState<undefined | any | unknown>(null);
+
   //**** Set states */
   const mapDiv = useRef(null);
   const layerListDiv = useRef<HTMLDivElement | undefined | any>(null);
@@ -75,6 +77,10 @@ function App() {
   useEffect(() => {
     getMuniciaplityBarangayPair().then((response: any) => {
       setInitMunicipalBarangay(response);
+    });
+
+    dateUpdate().then((response: any) => {
+      setAsOfDate(response);
     });
   }, []);
 
@@ -220,7 +226,7 @@ function App() {
             style={{ marginBottom: 'auto', marginTop: 'auto' }}
           />
           <b className="headerTitle">N2 LAND ACQUISITION</b>
-          <div className="date">As of January 5, 2024</div>
+          <div className="date">{!asOfDate ? '' : 'As of ' + asOfDate}</div>
 
           <div className="dropdownFilter">
             <div className="dropdownFilterLayout">
