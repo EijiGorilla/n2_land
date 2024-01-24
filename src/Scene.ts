@@ -35,7 +35,7 @@ const alignmentGroupLayer = new GroupLayer({
   title: 'Alignment',
   visible: true,
   visibilityMode: 'independent',
-  layers: [stationBoxLayer, chainageLayer],
+  layers: [stationBoxLayer, chainageLayer, pierHeadColumnLayer],
 }); //map.add(alignmentGroupLayer, 0);
 
 const nloLoOccupancyGroupLayer = new GroupLayer({
@@ -60,7 +60,6 @@ map.add(nloLoOccupancyGroupLayer);
 map.add(alignmentGroupLayer);
 map.add(prowLayer);
 map.add(stationLayer);
-map.add(pierHeadColumnLayer);
 
 export const view = new SceneView({
   container: undefined,
@@ -96,6 +95,7 @@ export const layerList = new LayerList({
     }
 
     item.title === 'Chainage' ||
+    item.title === 'Pier Head/Column' ||
     item.title === 'NLO/LO Ownership (Structure)' ||
     item.title === 'Super Urgent Lot' ||
     item.title === 'Land Acquisition (Endorsed Status)' ||

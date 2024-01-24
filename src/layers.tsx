@@ -1235,7 +1235,7 @@ export const pierHeadColumnLayer = new FeatureLayer({
     mode: 'on-the-ground',
   },
 });
-pierHeadColumnLayer.listMode = 'hide';
+// pierHeadColumnLayer.listMode = 'hide';
 
 /* Pier Point Layer with access dates */
 const pierAccessDateColor = {
