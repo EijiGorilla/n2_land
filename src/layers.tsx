@@ -604,7 +604,7 @@ const dismantled = new PolygonSymbol3D({
     new ExtrudeSymbol3DLayer({
       size: height,
       material: {
-        color: [0, 197, 255, 0.3],
+        color: [0, 197, 255, 0.6],
       },
       edges: new SolidEdges3D({
         color: '#4E4E4E',
@@ -619,7 +619,7 @@ const paid = new PolygonSymbol3D({
     new ExtrudeSymbol3DLayer({
       size: height,
       material: {
-        color: [112, 173, 71, 0.3],
+        color: [112, 173, 71, 0.6],
       },
       edges: new SolidEdges3D({
         color: '#4E4E4E',
@@ -634,7 +634,7 @@ const payp = new PolygonSymbol3D({
     new ExtrudeSymbol3DLayer({
       size: height,
       material: {
-        color: [0, 112, 255, 0.3],
+        color: [0, 112, 255, 0.6],
       },
       edges: new SolidEdges3D({
         color: '#4E4E4E',
@@ -649,7 +649,7 @@ const legalpass = new PolygonSymbol3D({
     new ExtrudeSymbol3DLayer({
       size: height,
       material: {
-        color: [255, 255, 0, 0.3],
+        color: [255, 255, 0, 0.6],
       },
       edges: new SolidEdges3D({
         color: '#4E4E4E',
@@ -664,7 +664,7 @@ const otc = new PolygonSymbol3D({
     new ExtrudeSymbol3DLayer({
       size: height,
       material: {
-        color: [255, 170, 0, 0.3],
+        color: [255, 170, 0, 0.6],
       },
       edges: new SolidEdges3D({
         color: '#4E4E4E',
@@ -679,7 +679,7 @@ const lbp = new PolygonSymbol3D({
     new ExtrudeSymbol3DLayer({
       size: height,
       material: {
-        color: [255, 0, 0, 0.3],
+        color: [255, 0, 0, 0.6],
       },
       edges: new SolidEdges3D({
         color: '#4E4E4E',
