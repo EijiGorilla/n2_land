@@ -259,8 +259,8 @@ function App() {
             style={{
               marginBottom: 'auto',
               marginTop: 'auto',
-              marginLeft: 'auto',
-              marginRight: '4rem',
+              marginLeft: '1rem',
+              marginRight: '1.5rem',
             }}
           />
         </header>
