@@ -1372,9 +1372,9 @@ export const pierAccessLayer = new FeatureLayer(
   {
     portalItem: {
       id: '22926e24ad0c41219b60a1522240900d',
-      portal: {
-        url: 'https://gis.railway-sector.com/portal',
-      },
+      // portal: {
+      //   url: 'https://gis.railway-sector.com/portal',
+      // },
     },
     layerId: 6,
     labelingInfo: [pierAccessReadyDateLabel, pierAccessNotYetLabel, pierAccessDateMissingLabel], //[pierAccessDateMissingLabel, pierAccessReadyDateLabel, pierAccessNotYetLabel],
