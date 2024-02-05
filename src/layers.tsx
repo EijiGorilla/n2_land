@@ -138,13 +138,14 @@ export const stationBoxLayer = new FeatureLayer({
 
 /* ROW Layer */
 export const prowLayer = new FeatureLayer({
-  portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
-  },
-  layerId: 1,
+  url: 'https://services8.arcgis.com/h9TUF6x5VzqLQaYx/arcgis/rest/services/N2_Land_Structure/FeatureServer/1',
+  // portalItem: {
+  //   id: '22926e24ad0c41219b60a1522240900d',
+  //   // portal: {
+  //   //   url: 'https://gis.railway-sector.com/portal',
+  //   // },
+  // },
+  // layerId: 1,
   title: 'PROW',
   popupEnabled: false,
 });
@@ -1217,13 +1218,14 @@ const pierHeadRenderer = new UniqueValueRenderer({
 });
 
 export const pierHeadColumnLayer = new FeatureLayer({
-  portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
-  },
-  layerId: 4,
+  url: 'https://services8.arcgis.com/h9TUF6x5VzqLQaYx/arcgis/rest/services/N2_Land_Structure/FeatureServer/4',
+  // portalItem: {
+  //   id: '22926e24ad0c41219b60a1522240900d',
+  //   // portal: {
+  //   //   url: 'https://gis.railway-sector.com/portal',
+  //   // },
+  // },
+  // layerId: 4,
   title: 'Pier Head/Column',
   definitionExpression: "Layer <> 'Pier_Head'",
   outFields: ['*'],
