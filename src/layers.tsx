@@ -419,8 +419,8 @@ let customContentLot = new CustomContent({
     if (handedOverDate) {
       daten = new Date(handedOverDate);
       const year = daten.getFullYear();
-      const month = daten.getMonth();
-      const day = daten.getDay();
+      const month = daten.getMonth() + 1;
+      const day = daten.getDate();
       date = `${year}-${month}-${day}`;
     } else {
       date = 'Undefined';
@@ -431,7 +431,7 @@ let customContentLot = new CustomContent({
     //<li>Hand-Over Date: <b>${date}</b></li><br>
 
     return `<ul><li>Handed-Over Area: <b>${handOverArea} %</b></li><br>
-    <li>Hand-Over Date: <b>${date}</b></li><br>
+    <li>Handed-Over Date: <b>${date}</b></li><br>
               <li>Status:           <b>${
                 statusLot >= 0 ? lotStatusArray[statusLot] : ''
               }</b></li><br>
