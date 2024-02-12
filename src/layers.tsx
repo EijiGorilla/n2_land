@@ -453,12 +453,12 @@ const templateLot = new PopupTemplate({
 
 export const lotLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
+    id: '0ad1d72bdb9f44b3a8f7ed9a1a800b01',
     // portal: {
     //   url: 'https://gis.railway-sector.com/portal',
     // },
   },
-  layerId: 14,
+  // layerId: 14,
   labelingInfo: [lotIdLabel],
   renderer: lotLayerRenderer,
   outFields: ['*'],
