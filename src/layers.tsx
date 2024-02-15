@@ -21,10 +21,10 @@ import { dateFormat } from './components/Query';
 /* Standalone table for Dates */
 export const dateTable = new FeatureLayer({
   portalItem: {
-    id: 'a7c510fa74e64ba190b962f66d4db46c',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '17e5e33af52a4dd1bb0e130319c9736f',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
 });
 
@@ -56,10 +56,10 @@ var chainageRenderer = new SimpleRenderer({
 
 export const chainageLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: 'e9d2e0bfb63d41259edc5b716563356a',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
   layerId: 5,
   title: 'Chainage',
@@ -119,10 +119,10 @@ let stationBoxRenderer = new UniqueValueRenderer({
 
 export const stationBoxLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: 'e9d2e0bfb63d41259edc5b716563356a',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
   layerId: 3,
   renderer: stationBoxRenderer,
@@ -138,14 +138,13 @@ export const stationBoxLayer = new FeatureLayer({
 
 /* ROW Layer */
 export const prowLayer = new FeatureLayer({
-  url: 'https://services8.arcgis.com/h9TUF6x5VzqLQaYx/arcgis/rest/services/N2_Land_Structure/FeatureServer/1',
-  // portalItem: {
-  //   id: '22926e24ad0c41219b60a1522240900d',
-  //   // portal: {
-  //   //   url: 'https://gis.railway-sector.com/portal',
-  //   // },
-  // },
-  // layerId: 1,
+  portalItem: {
+    id: 'e9d2e0bfb63d41259edc5b716563356a',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 1,
   title: 'PROW',
   popupEnabled: false,
 });
@@ -183,12 +182,12 @@ let pnrRenderer = new UniqueValueRenderer({
 
 export const pnrLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
-  layerId: 17,
+  layerId: 10,
   title: 'Land (PNR)',
   definitionExpression:
     "LandOwner IN ('BASES CONVERSION DEVELOPMENT AUTHORITY','MANILA RAILROAD COMPANY')",
@@ -269,10 +268,10 @@ var labelClass = new LabelClass({
 
 export const stationLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: 'e9d2e0bfb63d41259edc5b716563356a',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
   layerId: 2,
   title: 'N2 Stations',
@@ -453,12 +452,12 @@ const templateLot = new PopupTemplate({
 
 export const lotLayer = new FeatureLayer({
   portalItem: {
-    id: '0ad1d72bdb9f44b3a8f7ed9a1a800b01',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
-  // layerId: 14,
+  layerId: 7,
   labelingInfo: [lotIdLabel],
   renderer: lotLayerRenderer,
   outFields: ['*'],
@@ -504,12 +503,12 @@ let endorsedLayerRenderer = new UniqueValueRenderer({
 
 export const endorsedLotLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
-  layerId: 14,
+  layerId: 7,
   renderer: endorsedLayerRenderer,
   labelingInfo: [lotIdLabel],
   outFields: ['*'],
@@ -544,12 +543,12 @@ const superUrgentLotRenderer = new UniqueValueRenderer({
 
 export const superUrgentLotLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
-  layerId: 14,
+  layerId: 7,
   definitionExpression: 'Urgent = 0',
   renderer: superUrgentLotRenderer,
   popupEnabled: false,
@@ -581,12 +580,12 @@ const handedOverLotRenderer = new UniqueValueRenderer({
 
 export const handedOverLotLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
-  layerId: 14,
+  layerId: 7,
   definitionExpression: 'HandedOver = 1',
   renderer: handedOverLotRenderer,
   popupEnabled: false,
@@ -745,12 +744,12 @@ const structureRenderer = new UniqueValueRenderer({
 
 export const structureLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
-  layerId: 13,
+  layerId: 6,
   title: 'Structure',
   renderer: structureRenderer,
   outFields: ['*'],
@@ -926,12 +925,12 @@ const nloRenderer = new UniqueValueRenderer({
 
 export const nloLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
-  layerId: 11,
+  layerId: 4,
   renderer: nloRenderer,
   outFields: ['*'],
   title: 'NLO (Non-Land Owner)',
@@ -1008,13 +1007,13 @@ let NLOLORenderer = new UniqueValueRenderer({
 
 export const strucOwnershipLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
   renderer: NLOLORenderer,
-  layerId: 10,
+  layerId: 3,
   title: 'NLO/LO Ownership (Structure)',
   outFields: ['*'],
   popupEnabled: false,
@@ -1095,12 +1094,12 @@ let occupancyRenderer = new UniqueValueRenderer({
 
 export const occupancyLayer = new FeatureLayer({
   portalItem: {
-    id: '22926e24ad0c41219b60a1522240900d',
-    // portal: {
-    //   url: 'https://gis.railway-sector.com/portal',
-    // },
+    id: '7b03cc9327a640cb82d534cb8ed480f5',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
   },
-  layerId: 12,
+  layerId: 5,
   outFields: ['*'],
   title: 'Occupancy (Structure)',
   renderer: occupancyRenderer,
@@ -1218,14 +1217,13 @@ const pierHeadRenderer = new UniqueValueRenderer({
 });
 
 export const pierHeadColumnLayer = new FeatureLayer({
-  url: 'https://services8.arcgis.com/h9TUF6x5VzqLQaYx/arcgis/rest/services/N2_Land_Structure/FeatureServer/4',
-  // portalItem: {
-  //   id: '22926e24ad0c41219b60a1522240900d',
-  //   // portal: {
-  //   //   url: 'https://gis.railway-sector.com/portal',
-  //   // },
-  // },
-  // layerId: 4,
+  portalItem: {
+    id: 'e9d2e0bfb63d41259edc5b716563356a',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 4,
   title: 'Pier Head/Column',
   definitionExpression: "Layer <> 'Pier_Head'",
   outFields: ['*'],
@@ -1373,10 +1371,10 @@ const pierAccessDateMissingLabel = new LabelClass({
 export const pierAccessLayer = new FeatureLayer(
   {
     portalItem: {
-      id: '22926e24ad0c41219b60a1522240900d',
-      // portal: {
-      //   url: 'https://gis.railway-sector.com/portal',
-      // },
+      id: 'e9d2e0bfb63d41259edc5b716563356a',
+      portal: {
+        url: 'https://gis.railway-sector.com/portal',
+      },
     },
     layerId: 6,
     labelingInfo: [pierAccessReadyDateLabel, pierAccessNotYetLabel, pierAccessDateMissingLabel], //[pierAccessDateMissingLabel, pierAccessReadyDateLabel, pierAccessNotYetLabel],
