@@ -7,6 +7,7 @@ import SimpleRenderer from '@arcgis/core/renderers/SimpleRenderer';
 import {
   TextSymbol3DLayer,
   LabelSymbol3D,
+  SimpleLineSymbol,
   PolygonSymbol3D,
   ExtrudeSymbol3DLayer,
   PointSymbol3D,
@@ -137,16 +138,19 @@ export const stationBoxLayer = new FeatureLayer({
 });
 
 /* ROW Layer */
+var prowRenderer = new SimpleRenderer({
+  symbol: new SimpleLineSymbol({
+    color: '#ff0000',
+    width: '2px',
+  }),
+});
+
 export const prowLayer = new FeatureLayer({
-  portalItem: {
-    id: '876de8483da9485aac5df737cbef2143',
-    portal: {
-      url: 'https://gis.railway-sector.com/portal',
-    },
-  },
+  url: 'https://gis.railway-sector.com/server/rest/services/N2_Alignment/FeatureServer/1',
   layerId: 1,
   title: 'PROW',
   popupEnabled: false,
+  renderer: prowRenderer,
 });
 prowLayer.listMode = 'hide';
 
