@@ -101,21 +101,19 @@ const ExpropriationList = ({ municipal, barangay }: any) => {
             .map((result: any, index: any) => {
               return (
                 // need 'key' to upper div and inside CalciteListItem
-                <div key={index}>
-                  <CalciteListItem
-                    key={result.id}
-                    label={result.lotid}
-                    description={result.landowner}
-                    value={result.objectid}
-                    selected={undefined}
-                    onCalciteListItemSelect={(event: any) => resultClickHandler(event)}
-                  >
-                    <CalciteChip value={result.cp} slot="content-end" scale="s" id="exproListChip">
-                      <CalciteAvatar full-name={result.municipality} scale="s"></CalciteAvatar>
-                      {result.cp}
-                    </CalciteChip>
-                  </CalciteListItem>
-                </div>
+                <CalciteListItem
+                  key={result.id}
+                  label={result.lotid}
+                  description={result.landowner}
+                  value={result.objectid}
+                  selected={undefined}
+                  onCalciteListItemSelect={(event: any) => resultClickHandler(event)}
+                >
+                  <CalciteChip value={result.cp} slot="content-end" scale="s" id="exproListChip">
+                    <CalciteAvatar full-name={result.municipality} scale="s"></CalciteAvatar>
+                    {result.cp}
+                  </CalciteChip>
+                </CalciteListItem>
               );
             })}
       </CalciteList>

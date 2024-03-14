@@ -159,9 +159,8 @@ function App() {
       ...defaultStyles,
       backgroundColor: '#2b2b2b',
       borderColor: '#949494',
-      height: 35,
-      width: '170px',
       color: '#ffffff',
+      touchUi: false,
     }),
     singleValue: (defaultStyles: any) => ({ ...defaultStyles, color: '#fff' }),
   };
@@ -173,50 +172,49 @@ function App() {
   return (
     <div>
       <CalciteShell>
-        <CalciteTabs slot="panel-end" style={{ width: '27vw' }}>
-          <div id="chartPanel" style={{ height: '100%' }}>
-            <CalciteTabNav slot="tab-nav" id="thetabs">
-              <CalciteTabTitle class="Land">Land</CalciteTabTitle>
-              <CalciteTabTitle class="Structure">Structure</CalciteTabTitle>
-              <CalciteTabTitle class="NLO">NLO</CalciteTabTitle>
-              <CalciteTabTitle class="ExproList">ExproList</CalciteTabTitle>
-            </CalciteTabNav>
-            {/* CalciteTab: Lot */}
-            <CalciteTab>
-              <LotChart
-                municipal={municipalSelected.municipality}
-                barangay={barangaySelected.name}
-              />
-            </CalciteTab>
-            {/* CalciteTab: Structure */}
-            <CalciteTab>
-              <StructureChart
-                municipal={municipalSelected.municipality}
-                barangay={barangaySelected.name}
-              />
-            </CalciteTab>
+        <CalciteTabs slot="panel-end" layout="center" scale="m">
+          <CalciteTabNav slot="title-group" id="thetabs">
+            <CalciteTabTitle class="Land">Land</CalciteTabTitle>
+            <CalciteTabTitle class="Structure">Structure</CalciteTabTitle>
+            <CalciteTabTitle class="NLO">NLO</CalciteTabTitle>
+            <CalciteTabTitle class="ExproList">ExproList</CalciteTabTitle>
+          </CalciteTabNav>
+          {/* CalciteTab: Lot */}
+          <CalciteTab>
+            <LotChart municipal={municipalSelected.municipality} barangay={barangaySelected.name} />
+          </CalciteTab>
+          {/* CalciteTab: Structure */}
+          <CalciteTab>
+            <StructureChart
+              municipal={municipalSelected.municipality}
+              barangay={barangaySelected.name}
+            />
+          </CalciteTab>
 
-            {/* CalciteTab: Non-Land Owner */}
-            <CalciteTab>
-              <NloChart
-                municipal={municipalSelected.municipality}
-                barangay={barangaySelected.name}
-              />
-            </CalciteTab>
+          {/* CalciteTab: Non-Land Owner */}
+          <CalciteTab>
+            <NloChart municipal={municipalSelected.municipality} barangay={barangaySelected.name} />
+          </CalciteTab>
 
-            {/* CalciteTab: List of Lots under Expropriation */}
-            <CalciteTab>
-              <ExpropriationList
-                municipal={municipalSelected.municipality}
-                barangay={barangaySelected.name}
-              />
-            </CalciteTab>
-          </div>
+          {/* CalciteTab: List of Lots under Expropriation */}
+          <CalciteTab>
+            <ExpropriationList
+              municipal={municipalSelected.municipality}
+              barangay={barangaySelected.name}
+            />
+          </CalciteTab>
         </CalciteTabs>
         <header
           slot="header"
           id="header-title"
-          style={{ display: 'flex', width: '100%', height: '70px', padding: '0 1rem' }}
+          style={{
+            display: 'flex',
+            width: '100%',
+            height: '70px',
+            padding: '0 1rem',
+            borderStyle: 'solid',
+            borderWidth: 1,
+          }}
         >
           <img
             src="https://EijiGorilla.github.io/Symbols/Projec_Logo/DOTr_Logo_v2.png"
@@ -228,29 +226,26 @@ function App() {
           <b className="headerTitle">N2 LAND ACQUISITION</b>
           <div className="date">{!asOfDate ? '' : 'As of ' + asOfDate}</div>
 
-          <div className="dropdownFilter">
-            <div className="dropdownFilterLayout">
-              <b style={{ color: 'white', margin: 10, fontSize: '0.9vw' }}>Municipality</b>
-              <Select
-                placeholder="Select Municipality"
-                value={municipality}
-                options={initMunicipalBarangay}
-                onChange={handleMunicipalityChange}
-                getOptionLabel={(x: any) => x.municipality}
-                styles={customstyles}
-              />
-              <br />
-              <b style={{ color: 'white', margin: 10, fontSize: '0.9vw' }}>Barangay</b>
-              <Select
-                placeholder="Select Barangay"
-                value={barangay}
-                options={barangayList}
-                onChange={handleBarangayChange}
-                getOptionLabel={(x: any) => x.name}
-                styles={customstyles}
-              />
-            </div>
+          <div className="dropdownFilterLayout">
+            <Select
+              placeholder="Select Municipality"
+              value={municipality}
+              options={initMunicipalBarangay}
+              onChange={handleMunicipalityChange}
+              getOptionLabel={(x: any) => x.municipality}
+              styles={customstyles}
+            />
+            <br />
+            <Select
+              placeholder="Select Barangay"
+              value={barangay}
+              options={barangayList}
+              onChange={handleBarangayChange}
+              getOptionLabel={(x: any) => x.name}
+              styles={customstyles}
+            />
           </div>
+
           <img
             src="https://EijiGorilla.github.io/Symbols/Projec_Logo/GCR LOGO.png"
             alt="GCR Logo"

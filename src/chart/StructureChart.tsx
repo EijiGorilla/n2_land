@@ -14,6 +14,7 @@ import {
   generateStructureData,
   thousands_separators,
 } from '../components/Query';
+import { CalciteLabel } from '@esri/calcite-components-react';
 
 const statusStructure = [
   'Dismantling/Clearing',
@@ -111,9 +112,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
     var chart = root.container.children.push(
       am5percent.PieChart.new(root, {
-        //centerY: am5.percent(-2), //-10
-        y: am5.percent(-25), // space between pie chart and total lots
-        layout: root.horizontalLayout,
+        layout: root.verticalLayout,
       }),
     );
     chartRef.current = chart;
@@ -129,7 +128,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
         legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(20),
-        marginBottom: -10,
+        scale: 1.8,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -139,7 +138,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
     pieSeries.slices.template.setAll({
       fillOpacity: 0.9,
       stroke: am5.color('#ffffff'),
-      strokeWidth: 1,
+      strokeWidth: 0.5,
       strokeOpacity: 1,
       templateField: 'sliceSettings',
     });
@@ -221,12 +220,10 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
 
     // Legend
     // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
-    var legend = root.container.children.push(
+    var legend = chart.children.push(
       am5.Legend.new(root, {
         centerX: am5.percent(50),
         x: am5.percent(50),
-        y: am5.percent(48),
-        layout: root.verticalLayout,
       }),
     );
     legendRef.current = legend;
@@ -284,8 +281,8 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
 
     legend.itemContainers.template.setAll({
       // set space between legend items
-      paddingTop: 1.1,
-      paddingBottom: 2,
+      paddingTop: 3,
+      paddingBottom: 1,
     });
 
     pieSeries.appear(1000, 100);
@@ -321,9 +318,6 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
         panY: false,
         wheelX: 'none',
         wheelY: 'none',
-        paddingLeft: 0,
-        marginTop: 20,
-        //height: am5.percent(81),
       }),
     );
     chartRef_moa.current = chart;
@@ -492,19 +486,6 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
       }); // End of whenLayerView
     });
 
-    // Chart title
-    chart.children.unshift(
-      am5.Label.new(root, {
-        text: 'MODE OF ACQUISITION',
-        fontSize: '1.1vw',
-        fontWeight: 'normal',
-        textAlign: 'left',
-        fill: am5.color('#f7f5f7'),
-        paddingTop: -21,
-        paddingLeft: 20,
-      }),
-    );
-
     yAxisRef.current = yAxis;
     yAxis.data.setAll(structureMoaData);
     series.data.setAll(structureMoaData);
@@ -526,58 +507,67 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
 
   return (
     <>
-      <div className="lotNumberImage">
-        <div>
-          <div className="totalStructuresLabel">TOTAL STRUCTURES </div>
-          <br />
-          <br />
-          <b className="totalLotsNumber">{thousands_separators(structureNumber[2])} </b>
-        </div>
-        <img
-          src="https://EijiGorilla.github.io/Symbols/House_Logo.svg"
-          alt="Structure Logo"
-          height={'19%'}
-          width={'19%'}
-          style={{ padding: '10px', margin: 'auto' }}
-        />
-      </div>
+      <CalciteLabel>TOTAL STRUCTURES</CalciteLabel>
+      <CalciteLabel layout="inline">
+        <b className="totalLotsNumber">
+          {thousands_separators(structureNumber[2])}
+          <img
+            src="https://EijiGorilla.github.io/Symbols/House_Logo.svg"
+            alt="Structure Logo"
+            height={'35%'}
+            width={'35%'}
+            style={{ marginLeft: '120%', display: 'flex', marginTop: '-22%' }}
+          />
+        </b>
+      </CalciteLabel>
+
+      {/* Structure Chart */}
       <div
         id={chartID}
         style={{
-          height: '45vh',
+          height: '37vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
-          marginBottom: '-1.5vh',
+          marginBottom: '7%',
         }}
       ></div>
-      <div className="pteNumberImage">
-        <div>
-          <div className="permitToEnterLabel">PERMIT-TO-ENTER</div>
-          <br />
-          <br />
-          {/* If zero, display as zero else */}
-          {structureNumber[1] === 0 ? (
-            <b className="permitToEnterNumber">{structureNumber[0]}% (0)</b>
-          ) : (
-            <b className="permitToEnterNumber">
-              {structureNumber[0]}% ({thousands_separators(structureNumber[1])})
-            </b>
-          )}
-        </div>
-        <img
-          src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
-          alt="Structure Logo"
-          height={'18%'}
-          width={'18%'}
-          style={{ padding: '10px', margin: 'auto' }}
-        />
-      </div>
+
+      {/* Permit-to-Enter */}
+      <CalciteLabel>PERMIT-TO-ENTER</CalciteLabel>
+      <CalciteLabel layout="inline">
+        {structureNumber[1] === 0 ? (
+          <b className="permitToEnterNumber">
+            {structureNumber[0]}% (0)
+            <img
+              src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
+              alt="Structure Logo"
+              height={'18%'}
+              width={'18%'}
+              style={{ marginLeft: '70%', display: 'flex', marginTop: '-10%' }}
+            />
+          </b>
+        ) : (
+          <b className="permitToEnterNumber">
+            {structureNumber[0]}% ({thousands_separators(structureNumber[1])})
+            <img
+              src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
+              alt="Structure Logo"
+              height={'18%'}
+              width={'18%'}
+              style={{ marginLeft: '70%', display: 'flex', marginTop: '-10%' }}
+            />
+          </b>
+        )}
+      </CalciteLabel>
+
+      <CalciteLabel>MODE OF ACQUISITION</CalciteLabel>
       <div
         id={chartID_moa}
         style={{
           height: '21vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
+          marginTop: '-3%',
         }}
       ></div>
     </>

@@ -8,6 +8,7 @@ import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import { generateNloData, generateNloNumber, thousands_separators } from '../components/Query';
+import { CalciteLabel } from '@esri/calcite-components-react';
 
 const statusNlo = [
   'Relocated',
@@ -95,9 +96,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
     var chart = root.container.children.push(
       am5percent.PieChart.new(root, {
-        //centerY: am5.percent(-2), //-10
-        y: am5.percent(-25), // space between pie chart and total lots
-        layout: root.horizontalLayout,
+        layout: root.verticalLayout,
       }),
     );
     chartRef.current = chart;
@@ -113,7 +112,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
         legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(20),
-        marginBottom: -10,
+        scale: 1.8,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -123,7 +122,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     pieSeries.slices.template.setAll({
       fillOpacity: 0.9,
       stroke: am5.color('#ffffff'),
-      strokeWidth: 1,
+      strokeWidth: 0.5,
       strokeOpacity: 1,
       templateField: 'sliceSettings',
     });
@@ -205,12 +204,10 @@ const NloChart = memo(({ municipal, barangay }: any) => {
 
     // Legend
     // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
-    var legend = root.container.children.push(
+    var legend = chart.children.push(
       am5.Legend.new(root, {
         centerX: am5.percent(50),
         x: am5.percent(50),
-        y: am5.percent(48),
-        layout: root.verticalLayout,
       }),
     );
     legendRef.current = legend;
@@ -268,8 +265,8 @@ const NloChart = memo(({ municipal, barangay }: any) => {
 
     legend.itemContainers.template.setAll({
       // set space between legend items
-      paddingTop: 1.1,
-      paddingBottom: 2,
+      paddingTop: 3,
+      paddingBottom: 1,
     });
 
     pieSeries.appear(1000, 100);
@@ -286,28 +283,26 @@ const NloChart = memo(({ municipal, barangay }: any) => {
 
   return (
     <>
-      <div className="lotNumberImage">
-        <div style={{}}>
-          <div className="totalStructuresLabel">TOTAL NON-LAND OWNERS </div>
-          <br />
-          <br />
-          <b className="permitToEnterNumber">{thousands_separators(nloNumber)} </b>
-        </div>
-        <img
-          src="https://EijiGorilla.github.io/Symbols/NLO_Logo.svg"
-          alt="NLO Logo"
-          height={'19%'}
-          width={'19%'}
-          style={{ padding: '10px', margin: 'auto' }}
-        />
-      </div>
+      <CalciteLabel>TOTAL NON-LAND OWNERS</CalciteLabel>
+      <CalciteLabel layout="inline">
+        <b className="permitToEnterNumber">
+          {thousands_separators(nloNumber)}
+          <img
+            src="https://EijiGorilla.github.io/Symbols/NLO_Logo.svg"
+            alt="NLO Logo"
+            height={'55%'}
+            width={'55%'}
+            style={{ marginLeft: '200%', display: 'flex', marginTop: '-17%' }}
+          />
+        </b>
+      </CalciteLabel>
+
       <div
         id={chartID}
         style={{
-          height: '45vh',
+          height: '40vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
-          marginBottom: '-1.5vh',
         }}
       ></div>
     </>

@@ -24,6 +24,14 @@ br {
 
 /*https://developers.arcgis.com/calcite-design-system/foundations/colors/ */
 
+calcite-label {
+  --calcite-ui-text-1: #ffffff;
+  --calcite-font-size--1: 1.1rem;
+  /* margin-top: 1vh; */
+  margin-left: 15px;
+  margin-top: 5px;
+}
+
 calcite-action-bar {
   --calcite-ui-border-3: #555555;
   --calcite-ui-text-3: #bfbfbf;
@@ -56,6 +64,20 @@ calcite-list {
   --calcite-ui-border-3: #555555;
 }
 
+calcite-avatar {
+  margin-inline-end: 0.3rem;
+  margin-top: 0.15rem;
+}
+
+calcite-tabs {
+  --calcite-ui-border-3: #555555;
+  --calcite-ui-border-2: #555555;
+  --calcite-ui-border-1: #555555;
+  border-style: solid;
+  border-width: 0.7;
+  border-top: rgb(0, 0, 0, 0);
+}
+
 #result-list {
   overflow-y: auto;
   --calcite-ui-text-1: #ff0000;
@@ -68,18 +90,6 @@ calcite-list {
   /*--calcite-ui-foreground-2: #555555;*/
   --calcite-ui-foreground-2: rgb(0, 0, 0, 0);
   margin-inline-end: 0.75rem;
-}
-
-calcite-avatar {
-  margin-inline-end: 0.3rem;
-  margin-top: 0.15rem;
-}
-
-calcite-tab,
-calcite-tabs {
-  --calcite-ui-border-3: #555555;
-  --calcite-ui-border-2: #555555;
-  --calcite-ui-border-1: #555555;
 }
 
 .esri-view .esri-view-surface--touch-none:focus::after {
@@ -116,49 +126,28 @@ calcite-tabs {
 }
 
 /* Lot Tab */
-.lotNumberImage {
-  display: flex;
-  padding-left: 20px;
-}
-
-.totalLotsLabel {
-  color: white;
-  font-size: 1vw;
-  padding-bottom: 0.5vh;
-  padding-top: 0.6vh;
-}
-
 .totalLotsNumber {
   color: #6ede00;
-  font-size: 2.5vw;
+  font-size: 5vh;
   font-weight: bold;
   font-family: 'calibri';
+  margin-left: 4%;
 }
 
 .totalLotsNumber2 {
   color: white;
-  font-size: 1vw;
+  font-size: 2vh;
   font-weight: normal;
-  padding-top: 0.5vh;
-}
-
-.pteNumberImage {
-  display: flex;
-  padding-left: 20px;
-  margin-bottom: 1.5vh;
-}
-
-.permitToEnterLabel {
-  color: white;
-  font-size: 1vw;
-  padding-bottom: 0.6vh;
+  margin-top: 3%;
+  margin-left: 4%;
 }
 
 .permitToEnterNumber {
   color: #6ede00;
-  font-size: 2.5vw;
+  font-size: 5vh;
   font-weight: bold;
   font-family: 'calibri';
+  margin-left: 4%;
 }
 
 /* Structure Tab */
@@ -200,7 +189,7 @@ calcite-tabs {
   flex-direction: row;
   font-size: 12px;
   color: black;
-  justify-content: right;
+  margin: auto;
 }
 
 /* Calcite Action panel */

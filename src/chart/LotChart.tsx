@@ -16,6 +16,7 @@ import {
   thousands_separators,
 } from '../components/Query';
 import '../App.css';
+import { CalciteLabel } from '@esri/calcite-components-react';
 
 const statusLot: string[] = [
   'Handed-Over',
@@ -110,7 +111,6 @@ const LotChart = ({ municipal, barangay }: any) => {
   // 1. Pie Chart for Land Acquisition
   useEffect(() => {
     // Dispose previously created root element
-
     maybeDisposeRoot(chartID);
 
     var root = am5.Root.new(chartID);
@@ -118,22 +118,19 @@ const LotChart = ({ municipal, barangay }: any) => {
     root._logo?.dispose();
 
     // Set themesf
-    // https://www.amcharts.com/docs/v5/concepts/themes/
     root.setThemes([am5themes_Animated.new(root), am5themes_Responsive.new(root)]);
 
     // Create chart
-    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
     var chart = root.container.children.push(
       am5percent.PieChart.new(root, {
-        //centerY: am5.percent(-2), //-10
-        y: am5.percent(-25), // space between pie chart and total lots
-        layout: root.horizontalLayout,
+        // centerY: am5.percent(25), //-10
+        // y: am5.percent(-25), // space between pie chart and total lots
+        layout: root.verticalLayout,
       }),
     );
     chartRef.current = chart;
 
     // Create series
-    // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/#Series
     var pieSeries = chart.series.push(
       am5percent.PieSeries.new(root, {
         name: 'Series',
@@ -143,7 +140,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(20),
-        marginBottom: -10,
+        scale: 1.8,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -153,7 +150,7 @@ const LotChart = ({ municipal, barangay }: any) => {
     pieSeries.slices.template.setAll({
       fillOpacity: 0.9,
       stroke: am5.color('#ffffff'),
-      strokeWidth: 1,
+      strokeWidth: 0.5,
       strokeOpacity: 1,
       templateField: 'sliceSettings',
     });
@@ -235,12 +232,10 @@ const LotChart = ({ municipal, barangay }: any) => {
 
     // Legend
     // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
-    var legend = root.container.children.push(
+    var legend = chart.children.push(
       am5.Legend.new(root, {
         centerX: am5.percent(50),
         x: am5.percent(50),
-        y: am5.percent(48),
-        layout: root.verticalLayout,
       }),
     );
     legendRef.current = legend;
@@ -296,8 +291,8 @@ const LotChart = ({ municipal, barangay }: any) => {
 
     legend.itemContainers.template.setAll({
       // set space between legend items
-      paddingTop: 1.1,
-      paddingBottom: 2,
+      paddingTop: 3,
+      paddingBottom: 1,
     });
 
     pieSeries.appear(1000, 100);
@@ -334,9 +329,6 @@ const LotChart = ({ municipal, barangay }: any) => {
         panY: false,
         wheelX: 'none',
         wheelY: 'none',
-        paddingLeft: 0,
-        marginTop: 20,
-        //height: am5.percent(81),
       }),
     );
     chartRef_moa.current = chart;
@@ -508,18 +500,6 @@ const LotChart = ({ municipal, barangay }: any) => {
     });
 
     // Chart title
-    chart.children.unshift(
-      am5.Label.new(root2, {
-        text: 'MODE OF ACQUISITION',
-        fontSize: '1.0vw',
-        fontWeight: 'normal',
-        textAlign: 'left',
-        fill: am5.color('#f7f5f7'),
-        paddingTop: -15,
-        paddingLeft: 20,
-      }),
-    );
-
     yAxisRef.current = yAxis;
     yAxis.data.setAll(lotMoaData);
     series.data.setAll(lotMoaData);
@@ -541,61 +521,68 @@ const LotChart = ({ municipal, barangay }: any) => {
 
   return (
     <>
-      <div className="lotNumberImage">
-        <div>
-          <div className="totalLotsLabel">TOTAL LOTS</div>
-          <br />
-          <br />
-          <b className="totalLotsNumber">
-            {thousands_separators(lotNumber[1])}{' '}
-            <div className="totalLotsNumber2">({thousands_separators(lotNumber[0])})</div>
-          </b>
-        </div>
-        <img
-          src="https://EijiGorilla.github.io/Symbols/Land_logo.png"
-          alt="Land Logo"
-          height={'18%'}
-          width={'18%'}
-          style={{ padding: '10px', margin: 'auto' }}
-        />
-      </div>
+      <CalciteLabel>TOTAL LOTS</CalciteLabel>
+      <CalciteLabel layout="inline">
+        <b className="totalLotsNumber">
+          {thousands_separators(lotNumber[1])}
+          <img
+            src="https://EijiGorilla.github.io/Symbols/Land_logo.png"
+            alt="Land Logo"
+            height={'21%'}
+            width={'21%'}
+            style={{ marginLeft: '90%', display: 'flex', marginTop: '-17%' }}
+          />
+          <div className="totalLotsNumber2">({thousands_separators(lotNumber[0])})</div>
+        </b>
+      </CalciteLabel>
+
+      {/* Lot Chart */}
       <div
         id={chartID}
         style={{
-          height: '45vh',
+          height: '35vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
-          marginBottom: '-1.5vh',
+          marginBottom: '10%',
         }}
       ></div>
-      <div className="pteNumberImage">
-        <div>
-          <div className="permitToEnterLabel">PERMIT-TO-ENTER</div>
-          <br />
-          <br />
-          {/* if pte is 'Infinity, display 'N/A' else  */}
-          {pteNumber[0] === 'Infinity' ? (
-            <b className="permitToEnterNumber">N/A</b>
-          ) : (
-            <b className="permitToEnterNumber">
-              {pteNumber[0]}% ({thousands_separators(pteNumber[1])})
-            </b>
-          )}
-        </div>
-        <img
-          src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
-          alt="Land Logo"
-          height={'18%'}
-          width={'18%'}
-          style={{ padding: '10px', margin: 'auto' }}
-        />
-      </div>
+
+      {/* Permit-to-Enter */}
+      <CalciteLabel>PERMIT-TO-ENTER</CalciteLabel>
+      <CalciteLabel layout="inline">
+        {pteNumber[0] === 'Infinity' ? (
+          <b className="permitToEnterNumber">
+            N/A
+            <img
+              src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
+              alt="Land Logo"
+              height={'18%'}
+              width={'18%'}
+              style={{ marginLeft: '70%', display: 'flex', marginTop: '-10%' }}
+            />
+          </b>
+        ) : (
+          <b className="permitToEnterNumber">
+            {pteNumber[0]}% ({thousands_separators(pteNumber[1])})
+            <img
+              src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
+              alt="Land Logo"
+              height={'18%'}
+              width={'18%'}
+              style={{ marginLeft: '70%', display: 'flex', marginTop: '-10%' }}
+            />
+          </b>
+        )}
+      </CalciteLabel>
+
+      <CalciteLabel>MODE OF ACQUISITION</CalciteLabel>
       <div
         id={chartID_moa}
         style={{
           height: '21vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
+          marginTop: '-3%',
         }}
       ></div>
     </>
