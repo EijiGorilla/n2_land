@@ -136,7 +136,7 @@ calcite-tabs {
 
 .totalLotsNumber2 {
   color: white;
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: normal;
   margin-top: 3%;
   margin-left: 4%;
@@ -151,12 +151,6 @@ calcite-tabs {
 }
 
 /* Structure Tab */
-.totalStructuresLabel {
-  color: white;
-  font-size: 1rem;
-  padding-bottom: 0.5vh;
-  padding-top: 0.6vh;
-}
 
 /* Header */
 .headerTitle {
