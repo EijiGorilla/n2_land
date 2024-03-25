@@ -18,6 +18,24 @@ import SolidEdges3D from '@arcgis/core/symbols/edges/SolidEdges3D';
 import CustomContent from '@arcgis/core/popup/content/CustomContent';
 import PopupTemplate from '@arcgis/core/PopupTemplate';
 import { dateFormat } from './components/Query';
+import {
+  pierAccessValue,
+  pierAccessValueDateColor,
+  pierAccessValueLabel,
+  statusLotColor,
+  statusLotEndorsedColor,
+  statusLotEndorsedLabel,
+  statusLotLabel,
+  statusNlo,
+  statusNloLabel,
+  statusNloSymbolRef,
+  statusStructureColor,
+  statusStructureLabel,
+  statusStructureOccupancyLabel,
+  statusStructureOccupancyRef,
+  statusStructureOwnershipColor,
+  statusStructureOwnershipLabel,
+} from './StatusUniqueValues';
 
 /* Standalone table for Dates */
 export const dateTable = new FeatureLayer({
@@ -302,16 +320,6 @@ var lotIdLabel = new LabelClass({
 });
 
 /* uniqueRenderer */
-const colorLotReqs = {
-  0: [0, 197, 255],
-  1: [112, 173, 71],
-  2: [0, 112, 255],
-  3: [255, 255, 0],
-  4: [255, 170, 0],
-  5: [255, 0, 0],
-  6: [0, 0, 0, 0],
-};
-
 let lotDefaultSymbol = new SimpleFillSymbol({
   color: [0, 0, 0, 0],
   style: 'solid',
@@ -322,59 +330,20 @@ let lotDefaultSymbol = new SimpleFillSymbol({
   },
 });
 
+const lotLayerRendererUniqueValueInfos = statusLotLabel.map((status: any, index: any) => {
+  return Object.assign({
+    value: index + 1,
+    label: status,
+    symbol: new SimpleFillSymbol({
+      color: statusLotColor[index],
+    }),
+  });
+});
+
 let lotLayerRenderer = new UniqueValueRenderer({
   field: 'StatusLA',
   defaultSymbol: lotDefaultSymbol, // autocasts as new SimpleFillSymbol()
-  uniqueValueInfos: [
-    // {
-    //   // All features with value of "North" will be blue
-    //   value: 0,
-    //   label: 'Handed-Over',
-    //   symbol: new SimpleFillSymbol({
-    //     color: colorLotReqs[0],
-    //   }),
-    // },
-    {
-      // All features with value of "North" will be blue
-      value: 1,
-      label: 'Paid',
-      symbol: new SimpleFillSymbol({
-        color: colorLotReqs[1],
-      }),
-    },
-    {
-      // All features with value of "North" will be blue
-      value: 2,
-      label: 'For Payment Processing',
-      symbol: new SimpleFillSymbol({
-        color: colorLotReqs[2],
-      }),
-    },
-    {
-      // All features with value of "North" will be blue
-      value: 3,
-      label: 'For Legal Pass',
-      symbol: new SimpleFillSymbol({
-        color: colorLotReqs[3],
-      }),
-    },
-    {
-      // All features with value of "North" will be blue
-      value: 4,
-      label: 'For Appraisal/Offer to Buy',
-      symbol: new SimpleFillSymbol({
-        color: colorLotReqs[4],
-      }),
-    },
-    {
-      // All features with value of "North" will be blue
-      value: 5,
-      label: 'For Expro',
-      symbol: new SimpleFillSymbol({
-        color: colorLotReqs[5],
-      }),
-    },
-  ],
+  uniqueValueInfos: lotLayerRendererUniqueValueInfos,
 });
 
 // Custom popup for lot layer
@@ -476,32 +445,21 @@ export const lotLayer = new FeatureLayer({
 
 /* Endorsed Lot Layer */
 // Endorsed lot layer
+const endorsedLayerRendererUniqueValueInfos = statusLotEndorsedLabel.map(
+  (status: any, index: any) => {
+    return Object.assign({
+      value: index,
+      label: status,
+      symbol: new SimpleFillSymbol({
+        color: statusLotEndorsedColor[index],
+      }),
+    });
+  },
+);
 let endorsedLayerRenderer = new UniqueValueRenderer({
   field: 'Endorsed',
   defaultSymbol: lotDefaultSymbol,
-  uniqueValueInfos: [
-    {
-      value: 0,
-      label: 'Not Endorsed',
-      symbol: new SimpleFillSymbol({
-        color: colorLotReqs[5],
-      }),
-    },
-    {
-      value: 1,
-      label: 'Endorsed',
-      symbol: new SimpleFillSymbol({
-        color: colorLotReqs[2],
-      }),
-    },
-    {
-      value: 2,
-      label: 'NA',
-      symbol: new SimpleFillSymbol({
-        color: [211, 211, 211, 0.7],
-      }),
-    },
-  ],
+  uniqueValueInfos: endorsedLayerRendererUniqueValueInfos,
 });
 
 export const endorsedLotLayer = new FeatureLayer({
@@ -602,96 +560,6 @@ export const handedOverLotLayer = new FeatureLayer({
 const height = 5;
 const edgeSize = 0.3;
 
-const dismantled = new PolygonSymbol3D({
-  symbolLayers: [
-    new ExtrudeSymbol3DLayer({
-      size: height,
-      material: {
-        color: [0, 197, 255, 0.6],
-      },
-      edges: new SolidEdges3D({
-        color: '#4E4E4E',
-        size: edgeSize,
-      }),
-    }),
-  ],
-});
-
-const paid = new PolygonSymbol3D({
-  symbolLayers: [
-    new ExtrudeSymbol3DLayer({
-      size: height,
-      material: {
-        color: [112, 173, 71, 0.6],
-      },
-      edges: new SolidEdges3D({
-        color: '#4E4E4E',
-        size: edgeSize,
-      }),
-    }),
-  ],
-});
-
-const payp = new PolygonSymbol3D({
-  symbolLayers: [
-    new ExtrudeSymbol3DLayer({
-      size: height,
-      material: {
-        color: [0, 112, 255, 0.6],
-      },
-      edges: new SolidEdges3D({
-        color: '#4E4E4E',
-        size: edgeSize,
-      }),
-    }),
-  ],
-});
-
-const legalpass = new PolygonSymbol3D({
-  symbolLayers: [
-    new ExtrudeSymbol3DLayer({
-      size: height,
-      material: {
-        color: [255, 255, 0, 0.6],
-      },
-      edges: new SolidEdges3D({
-        color: '#4E4E4E',
-        size: edgeSize,
-      }),
-    }),
-  ],
-});
-
-const otc = new PolygonSymbol3D({
-  symbolLayers: [
-    new ExtrudeSymbol3DLayer({
-      size: height,
-      material: {
-        color: [255, 170, 0, 0.6],
-      },
-      edges: new SolidEdges3D({
-        color: '#4E4E4E',
-        size: edgeSize,
-      }),
-    }),
-  ],
-});
-
-const lbp = new PolygonSymbol3D({
-  symbolLayers: [
-    new ExtrudeSymbol3DLayer({
-      size: height,
-      material: {
-        color: [255, 0, 0, 0.6],
-      },
-      edges: new SolidEdges3D({
-        color: '#4E4E4E',
-        size: edgeSize,
-      }),
-    }),
-  ],
-});
-
 const defaultStructureRenderer = new PolygonSymbol3D({
   symbolLayers: [
     new ExtrudeSymbol3DLayer({
@@ -707,42 +575,32 @@ const defaultStructureRenderer = new PolygonSymbol3D({
   ],
 });
 
+const structureRendererUniqueValueInfos = statusStructureLabel.map((status: any, index: any) => {
+  return Object.assign({
+    value: index + 1,
+    symbol: new PolygonSymbol3D({
+      symbolLayers: [
+        new ExtrudeSymbol3DLayer({
+          size: height,
+          material: {
+            color: statusStructureColor[index],
+          },
+          edges: new SolidEdges3D({
+            color: '#4E4E4E',
+            size: edgeSize,
+          }),
+        }),
+      ],
+    }),
+    label: status,
+  });
+});
+
 const structureRenderer = new UniqueValueRenderer({
   defaultSymbol: defaultStructureRenderer,
   defaultLabel: 'Other',
   field: 'StatusStruc',
-  uniqueValueInfos: [
-    {
-      value: 1,
-      symbol: dismantled,
-      label: 'Dismantling/Clearing',
-    },
-    {
-      value: 2,
-      symbol: paid,
-      label: 'Paid',
-    },
-    {
-      value: 3,
-      symbol: payp,
-      label: 'For Payment Processing',
-    },
-    {
-      value: 4,
-      symbol: legalpass,
-      label: 'For Legal Pass',
-    },
-    {
-      value: 5,
-      symbol: otc,
-      label: 'For Appraisal/Offer to Compensation',
-    },
-    {
-      value: 6,
-      symbol: lbp,
-      label: 'LBP Account Opening',
-    },
-  ],
+  uniqueValueInfos: structureRendererUniqueValueInfos,
 });
 
 export const structureLayer = new FeatureLayer({
@@ -810,120 +668,31 @@ const nloSymbolRef = [
   'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_LBP.svg',
 ];
 
+const nloRendererUniqueValueInfos = statusNlo.map((status: any, index: any) => {
+  return Object.assign({
+    value: status,
+    label: statusNloLabel[index],
+    symbol: new PointSymbol3D({
+      symbolLayers: [
+        new IconSymbol3DLayer({
+          resource: {
+            href: statusNloSymbolRef[index],
+          },
+          size: symbolSize,
+          outline: {
+            color: 'white',
+            size: 2,
+          },
+        }),
+      ],
+    }),
+  });
+});
 const nloRenderer = new UniqueValueRenderer({
   field: 'StatusRC',
   valueExpression:
     "When($feature.StatusRC == 1, 'relocated', $feature.StatusRC == 2, 'paid', $feature.StatusRC == 3, 'payp', $feature.StatusRC == 4, 'legalpass', $feature.StatusRC == 5, 'otc', $feature.StatusRC == 6, 'lbp', $feature.StatusRC)",
-  uniqueValueInfos: [
-    {
-      value: 'relocated',
-      label: 'Relocated',
-      symbol: new PointSymbol3D({
-        symbolLayers: [
-          new IconSymbol3DLayer({
-            resource: {
-              href: nloSymbolRef[0],
-            },
-            size: symbolSize,
-            outline: {
-              color: 'white',
-              size: 2,
-            },
-          }),
-        ],
-      }),
-    },
-    {
-      value: 'paid',
-      label: 'Paid',
-      symbol: new PointSymbol3D({
-        symbolLayers: [
-          new IconSymbol3DLayer({
-            resource: {
-              href: nloSymbolRef[1],
-            },
-            size: symbolSize,
-            outline: {
-              color: 'white',
-              size: 2,
-            },
-          }),
-        ],
-      }),
-    },
-    {
-      value: 'payp',
-      label: 'For Payment Processing',
-      symbol: new PointSymbol3D({
-        symbolLayers: [
-          new IconSymbol3DLayer({
-            resource: {
-              href: nloSymbolRef[2],
-            },
-            size: symbolSize,
-            outline: {
-              color: 'white',
-              size: 2,
-            },
-          }),
-        ],
-      }),
-    },
-    {
-      value: 'legalpass',
-      label: 'For Legal Pass',
-      symbol: new PointSymbol3D({
-        symbolLayers: [
-          new IconSymbol3DLayer({
-            resource: {
-              href: nloSymbolRef[3],
-            },
-            size: symbolSize,
-            outline: {
-              color: 'white',
-              size: 2,
-            },
-          }),
-        ],
-      }),
-    },
-    {
-      value: 'otc',
-      label: 'For Appraisal/OtC/Reqs for Other Entitlements',
-      symbol: new PointSymbol3D({
-        symbolLayers: [
-          new IconSymbol3DLayer({
-            resource: {
-              href: nloSymbolRef[4],
-            },
-            size: symbolSize,
-            outline: {
-              color: 'white',
-              size: 2,
-            },
-          }),
-        ],
-      }),
-    },
-    {
-      value: 'lbp',
-      label: 'LBP Account Opening',
-      symbol: new PointSymbol3D({
-        symbolLayers: [
-          new IconSymbol3DLayer({
-            resource: {
-              href: nloSymbolRef[5],
-            },
-            size: symbolSize,
-            outline: {
-              color: 'white',
-              size: 2,
-            },
-          }),
-        ],
-      }),
-    },
-  ],
+  uniqueValueInfos: nloRendererUniqueValueInfos,
 });
 
 export const nloLayer = new FeatureLayer({
@@ -978,34 +747,28 @@ export const nloLayer = new FeatureLayer({
 });
 
 /* Structure Ownership Layer */
+const statusStructureOwnershipSymbolStyles: any = ['forward-diagonal', 'vertical'];
+
+const structureOwnershipRendererUniqueValueInfos = statusStructureOwnershipLabel.map(
+  (status: any, index: any) => {
+    return Object.assign({
+      value: index + 1,
+      label: status,
+      symbol: new SimpleFillSymbol({
+        style: statusStructureOwnershipSymbolStyles[index],
+        color: statusStructureOwnershipColor[index],
+        outline: {
+          color: '#6E6E6E',
+          width: 0.3,
+        },
+      }),
+    });
+  },
+);
+
 let NLOLORenderer = new UniqueValueRenderer({
   field: 'Status',
-  uniqueValueInfos: [
-    {
-      value: 1,
-      label: 'LO (Land Owner)',
-      symbol: new SimpleFillSymbol({
-        style: 'forward-diagonal',
-        color: [128, 128, 128, 1],
-        outline: {
-          color: '#6E6E6E',
-          width: 0.3,
-        },
-      }),
-    },
-    {
-      value: 2,
-      label: 'NLO (Non-Land Owner)',
-      symbol: new SimpleFillSymbol({
-        style: 'vertical',
-        color: [128, 128, 128, 1],
-        outline: {
-          color: '#6E6E6E',
-          width: 0.3,
-        },
-      }),
-    },
-  ],
+  uniqueValueInfos: structureOwnershipRendererUniqueValueInfos,
 });
 
 export const strucOwnershipLayer = new FeatureLayer({
@@ -1033,66 +796,40 @@ var verticalOffsetExistingOccupancy = {
 };
 const occupancyPointSize = 20;
 
+const statusStructureOccupancyRendererUniqueValueInfos = statusStructureOccupancyLabel.map(
+  (status: any, index: any) => {
+    return Object.assign({
+      value: index,
+      label: status,
+      symbol: new PointSymbol3D({
+        symbolLayers: [
+          new IconSymbol3DLayer({
+            resource: {
+              href: statusStructureOccupancyRef[index],
+            },
+            size: occupancyPointSize,
+            outline: {
+              color: 'white',
+              size: 2,
+            },
+          }),
+        ],
+        verticalOffset: verticalOffsetExistingOccupancy,
+        callout: {
+          type: 'line',
+          color: [128, 128, 128, 0.6],
+          size: 0.4,
+          border: {
+            color: 'grey',
+          },
+        },
+      }),
+    });
+  },
+);
 let occupancyRenderer = new UniqueValueRenderer({
   field: 'Occupancy',
-  uniqueValueInfos: [
-    {
-      value: 0,
-      label: 'Occupied',
-      symbol: new PointSymbol3D({
-        symbolLayers: [
-          new IconSymbol3DLayer({
-            resource: {
-              href: 'https://EijiGorilla.github.io/Symbols/Demolished.png',
-            },
-            size: occupancyPointSize,
-            outline: {
-              color: 'white',
-              size: 2,
-            },
-          }),
-        ],
-        verticalOffset: verticalOffsetExistingOccupancy,
-
-        callout: {
-          type: 'line', // autocasts as new LineCallout3D()
-          color: [128, 128, 128, 0.6],
-          size: 0.4,
-          border: {
-            color: 'grey',
-          },
-        },
-      }),
-    },
-    {
-      value: 1,
-      label: 'Relocated',
-      symbol: new PointSymbol3D({
-        symbolLayers: [
-          new IconSymbol3DLayer({
-            resource: {
-              href: 'https://EijiGorilla.github.io/Symbols/DemolishComplete_v2.png',
-            },
-            size: occupancyPointSize,
-            outline: {
-              color: 'white',
-              size: 2,
-            },
-          }),
-        ],
-        verticalOffset: verticalOffsetExistingOccupancy,
-
-        callout: {
-          type: 'line', // autocasts as new LineCallout3D()
-          color: [128, 128, 128, 0.6],
-          size: 0.4,
-          border: {
-            color: 'grey',
-          },
-        },
-      }),
-    },
-  ],
+  uniqueValueInfos: statusStructureOccupancyRendererUniqueValueInfos,
 });
 
 export const occupancyLayer = new FeatureLayer({
@@ -1241,16 +978,6 @@ export const pierHeadColumnLayer = new FeatureLayer({
 // pierHeadColumnLayer.listMode = 'hide';
 
 /* Pier Point Layer with access dates */
-const pierAccessDateColor = {
-  0: [0, 255, 0, 0.9], // Accessible (green)
-  1: [255, 127, 80], // Orange
-  2: [255, 255, 0], // Yellow
-  3: [0, 112, 255], // Blue
-  4: [143, 0, 255], // violet
-  5: [255, 255, 255, 0.9],
-  6: [255, 0, 0, 0.9], // Dates are missing
-};
-
 const today = new Date();
 const todayn = today.getTime();
 const cutOffDateAccess = todayn;
@@ -1261,7 +988,7 @@ const pierAccessReadyDateLabel = new LabelClass({
     symbolLayers: [
       new TextSymbol3DLayer({
         material: {
-          color: pierAccessDateColor[0],
+          color: pierAccessValueDateColor[1],
         },
         size: 15,
         font: {
@@ -1286,7 +1013,7 @@ const pierAccessReadyDateLabel = new LabelClass({
   }),
   labelExpressionInfo: {
     expression: `var accessdate = $feature.AccessDate;
-                  var cutoffDate = 1705282363039;
+                  var cutoffDate = 1711337063661;
                   var labelPier = when($feature.AccessDate <= cutoffDate, $feature.PIER, '');
                   return \`\${labelPier}\`
                   `,
@@ -1324,7 +1051,7 @@ const pierAccessNotYetLabel = new LabelClass({
   }),
   labelExpressionInfo: {
     expression: `var accessdate = $feature.AccessDate;
-                  var cutoffDate = 1705282363039;
+                  var cutoffDate = 1711337063661;
                   var labelPier = when($feature.AccessDate > cutoffDate || isEmpty($feature.AccessDate), $feature.PIER, '');
                   return \`\${labelPier}\`
                   `,
@@ -1379,6 +1106,7 @@ export const pierAccessLayer = new FeatureLayer(
         url: 'https://gis.railway-sector.com/portal',
       },
     },
+    outFields: ['*'],
     layerId: 6,
     labelingInfo: [pierAccessReadyDateLabel, pierAccessNotYetLabel, pierAccessDateMissingLabel], //[pierAccessDateMissingLabel, pierAccessReadyDateLabel, pierAccessNotYetLabel],
     title: 'Pier with Access Date (as of October 2023)',
@@ -1392,49 +1120,25 @@ export const pierAccessLayer = new FeatureLayer(
   //{ utcOffset: 300 },
 );
 
+const pierAccessRendererUniqueValueInfos = pierAccessValue.map((status: any, index: any) => {
+  return Object.assign({
+    value: status,
+    label: pierAccessValueLabel[index],
+    symbol: new SimpleMarkerSymbol({
+      size: 5,
+      color: pierAccessValueDateColor[index],
+      outline: {
+        width: 0.1,
+        color: 'white',
+      },
+    }),
+  });
+});
 const pierAccessRenderer = new UniqueValueRenderer({
   field: 'AccessDate',
-
   valueExpression:
-    "When(IsEmpty($feature.AccessDate), 'empty', $feature.AccessDate <= 1636070400000, 'accessible', $feature.AccessDate > 1636070400000, 'others',$feature.AccessDate)",
-  uniqueValueInfos: [
-    {
-      value: 'empty',
-      label: 'Dates are missing',
-      symbol: new SimpleMarkerSymbol({
-        size: 5,
-        color: pierAccessDateColor[6],
-        outline: {
-          width: 0.1,
-          color: 'white',
-        },
-      }),
-    },
-    {
-      value: 'accessible',
-      label: 'Accessible',
-      symbol: new SimpleMarkerSymbol({
-        size: 5,
-        color: pierAccessDateColor[0],
-        outline: {
-          width: 0.1,
-          color: 'white',
-        },
-      }),
-    },
-    {
-      value: 'others',
-      label: 'Others',
-      symbol: new SimpleMarkerSymbol({
-        size: 5,
-        color: pierAccessDateColor[5],
-        outline: {
-          width: 0.1,
-          color: 'white',
-        },
-      }),
-    },
-  ],
+    "When(IsEmpty($feature.AccessDate), 'empty', $feature.AccessDate <= 1711337063661, 'accessible', $feature.AccessDate > 1636070400000, 'others',$feature.AccessDate)",
+  uniqueValueInfos: pierAccessRendererUniqueValueInfos,
 });
 pierAccessLayer.renderer = pierAccessRenderer;
 
@@ -1444,6 +1148,7 @@ let customContent = new CustomContent({
   creator: function (event: any) {
     // Extract AsscessDate of clicked pierAccessLayer
     const statsDate = event.graphic.attributes.AccessDate;
+    console.log(statsDate);
 
     // Convert numeric to date format
     const date = new Date(statsDate);
