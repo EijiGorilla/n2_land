@@ -2,7 +2,16 @@ import { dateTable, lotLayer, nloLayer, structureLayer } from '../layers';
 import StatisticDefinition from '@arcgis/core/rest/support/StatisticDefinition';
 import * as am5 from '@amcharts/amcharts5';
 import { view } from '../Scene';
-import { statusLotLabel, statusLotQuery } from '../StatusUniqueValues';
+import {
+  statusLotLabel,
+  statusLotQuery,
+  statusMoa,
+  statusMoaStructure,
+  statusNloLabel,
+  statusNloQuery,
+  statusStructureLabel,
+  statusStructureQuery,
+} from '../StatusUniqueValues';
 
 // Updat date
 export async function dateUpdate() {
@@ -192,14 +201,6 @@ export async function generatePermitEnter() {
 }
 
 // For Lot MoA Chart
-const statusMOA: String[] = [
-  'For Negotiation',
-  'Expropriation',
-  'Donation',
-  'CA 141',
-  'No Need to Acquire',
-];
-
 export async function generateLotMoaData() {
   var total_nego_lot = new StatisticDefinition({
     onStatisticField: 'CASE WHEN MoA = 1 THEN 1 ELSE 0 END',
@@ -250,23 +251,23 @@ export async function generateLotMoaData() {
 
     const compile = [
       {
-        category: statusMOA[0],
+        category: statusMoa[0],
         value: nego,
       },
       {
-        category: statusMOA[1],
+        category: statusMoa[1],
         value: expro,
       },
       {
-        category: statusMOA[2],
+        category: statusMoa[2],
         value: donate,
       },
       {
-        category: statusMOA[3],
+        category: statusMoa[3],
         value: ca141,
       },
       {
-        category: statusMOA[4],
+        category: statusMoa[4],
         value: noneed,
       },
     ];
@@ -367,15 +368,6 @@ export async function generateHandedOverAreaData() {
 }
 
 // Structure
-const statusStructure = [
-  'Dismantling/Clearing',
-  'Paid',
-  'For Payment Processing',
-  'For Legal Pass',
-  'For Appraisal/Offer to Compensate',
-  'LBP Account Opening',
-];
-
 export async function generateStructureData() {
   var total_clear_lot = new StatisticDefinition({
     onStatisticField: 'CASE WHEN StatusStruc = 1 THEN 1 ELSE 0 END',
@@ -436,45 +428,45 @@ export async function generateStructureData() {
 
     const compile = [
       {
-        category: statusStructure[0],
+        category: statusStructureLabel[0],
         value: clear,
         sliceSettings: {
-          fill: am5.color('#00C5FF'),
+          fill: am5.color(statusStructureQuery[0].color),
         },
       },
       {
-        category: statusStructure[1],
+        category: statusStructureLabel[1],
         value: paid,
         sliceSettings: {
-          fill: am5.color('#70AD47'),
+          fill: am5.color(statusStructureQuery[1].color),
         },
       },
       {
-        category: statusStructure[2],
+        category: statusStructureLabel[2],
         value: payp,
         sliceSettings: {
-          fill: am5.color('#0070FF'),
+          fill: am5.color(statusStructureQuery[2].color),
         },
       },
       {
-        category: statusStructure[3],
+        category: statusStructureLabel[3],
         value: legalpass,
         sliceSettings: {
-          fill: am5.color('#FFFF00'),
+          fill: am5.color(statusStructureQuery[3].color),
         },
       },
       {
-        category: statusStructure[4],
+        category: statusStructureLabel[4],
         value: otc,
         sliceSettings: {
-          fill: am5.color('#FFAA00'),
+          fill: am5.color(statusStructureQuery[4].color),
         },
       },
       {
-        category: statusStructure[5],
+        category: statusStructureLabel[5],
         value: lbp,
         sliceSettings: {
-          fill: am5.color('#FF0000'),
+          fill: am5.color(statusStructureQuery[5].color),
         },
       },
     ];
@@ -507,8 +499,6 @@ export async function generateStrucNumber() {
     return [percPTE, pte, totaln];
   });
 }
-
-const statusMoaStructure = ['For Negotiation', 'Expropriation', 'Donation', 'No Need to Acquire'];
 
 export async function generateStrucMoaData() {
   var total_nego_lot = new StatisticDefinition({
@@ -568,14 +558,6 @@ export async function generateStrucMoaData() {
 }
 
 // Non-Land Owner
-const statusNlo = [
-  'Relocated',
-  'Paid',
-  'For Payment Processing',
-  'For Legal Pass',
-  'For Appraisal/OtC/Requirements for Other Entitlements',
-  'LBP Account Opening',
-];
 export async function generateNloData() {
   var total_relocated_lot = new StatisticDefinition({
     onStatisticField: 'CASE WHEN StatusRC = 1 THEN 1 ELSE 0 END',
@@ -636,45 +618,45 @@ export async function generateNloData() {
 
     const compile = [
       {
-        category: statusNlo[0],
+        category: statusNloLabel[0],
         value: clear,
         sliceSettings: {
-          fill: am5.color('#00C5FF'),
+          fill: am5.color(statusNloQuery[0].color),
         },
       },
       {
-        category: statusNlo[1],
+        category: statusNloLabel[1],
         value: paid,
         sliceSettings: {
-          fill: am5.color('#70AD47'),
+          fill: am5.color(statusNloQuery[1].color),
         },
       },
       {
-        category: statusNlo[2],
+        category: statusNloLabel[2],
         value: payp,
         sliceSettings: {
-          fill: am5.color('#0070FF'),
+          fill: am5.color(statusNloQuery[2].color),
         },
       },
       {
-        category: statusNlo[3],
+        category: statusNloLabel[3],
         value: legalpass,
         sliceSettings: {
-          fill: am5.color('#FFFF00'),
+          fill: am5.color(statusNloQuery[3].color),
         },
       },
       {
-        category: statusNlo[4],
+        category: statusNloLabel[4],
         value: otc,
         sliceSettings: {
-          fill: am5.color('#FFAA00'),
+          fill: am5.color(statusNloQuery[4].color),
         },
       },
       {
-        category: statusNlo[5],
+        category: statusNloLabel[5],
         value: lbp,
         sliceSettings: {
-          fill: am5.color('#FF0000'),
+          fill: am5.color(statusNloQuery[5].color),
         },
       },
     ];

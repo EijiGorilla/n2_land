@@ -22,19 +22,19 @@ import {
   pierAccessValue,
   pierAccessValueDateColor,
   pierAccessValueLabel,
-  statusLotEndorsedColor,
   statusLotEndorsedLabel,
+  statusLotEndorsedQuery,
   statusLotLabel,
   statusLotQuery,
-  statusNlo,
   statusNloLabel,
   statusNloSymbolRef,
-  statusStructureColor,
+  statusStructureQuery,
   statusStructureLabel,
   statusStructureOccupancyLabel,
   statusStructureOccupancyRef,
   statusStructureOwnershipColor,
   statusStructureOwnershipLabel,
+  statusNloQuery,
 } from './StatusUniqueValues';
 
 /* Standalone table for Dates */
@@ -369,8 +369,6 @@ const landUseArray = [
   'Special Exempt',
 ];
 
-const endorsedStatus = ['Not Endorsed', 'Endorsed', 'NA'];
-
 let customContentLot = new CustomContent({
   outFields: ['*'],
   creator: (event: any) => {
@@ -384,7 +382,7 @@ let customContentLot = new CustomContent({
     const landOwner = event.graphic.attributes.LandOwner;
     const cpNo = event.graphic.attributes.CP;
     const endorse = event.graphic.attributes.Endorsed;
-    const endorsed = endorsedStatus[endorse];
+    const endorsed = statusLotEndorsedLabel[endorse];
 
     let daten: any;
     let date: any;
@@ -451,7 +449,7 @@ const endorsedLayerRendererUniqueValueInfos = statusLotEndorsedLabel.map(
       value: index,
       label: status,
       symbol: new SimpleFillSymbol({
-        color: statusLotEndorsedColor[index],
+        color: statusLotEndorsedQuery[index].color,
       }),
     });
   },
@@ -583,7 +581,7 @@ const structureRendererUniqueValueInfos = statusStructureLabel.map((status: any,
         new ExtrudeSymbol3DLayer({
           size: height,
           material: {
-            color: statusStructureColor[index],
+            color: statusStructureQuery[index].colorLayer,
           },
           edges: new SolidEdges3D({
             color: '#4E4E4E',
@@ -659,19 +657,10 @@ export const structureLayer = new FeatureLayer({
 // NLO Layer
 const symbolSize = 30;
 
-const nloSymbolRef = [
-  'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_Relocated.svg',
-  'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_Paid.svg',
-  'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_PaymentProcess.svg',
-  'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_LegalPass.svg',
-  'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_OtC.svg',
-  'https://EijiGorilla.github.io/Symbols/3D_Web_Style/ISF/ISF_LBP.svg',
-];
-
-const nloRendererUniqueValueInfos = statusNlo.map((status: any, index: any) => {
+const nloRendererUniqueValueInfos = statusNloLabel.map((status: any, index: any) => {
   return Object.assign({
-    value: status,
-    label: statusNloLabel[index],
+    value: statusNloQuery[index].value,
+    label: status,
     symbol: new PointSymbol3D({
       symbolLayers: [
         new IconSymbol3DLayer({
@@ -690,8 +679,6 @@ const nloRendererUniqueValueInfos = statusNlo.map((status: any, index: any) => {
 });
 const nloRenderer = new UniqueValueRenderer({
   field: 'StatusRC',
-  valueExpression:
-    "When($feature.StatusRC == 1, 'relocated', $feature.StatusRC == 2, 'paid', $feature.StatusRC == 3, 'payp', $feature.StatusRC == 4, 'legalpass', $feature.StatusRC == 5, 'otc', $feature.StatusRC == 6, 'lbp', $feature.StatusRC)",
   uniqueValueInfos: nloRendererUniqueValueInfos,
 });
 
