@@ -2,9 +2,7 @@ import { dateTable, lotLayer, nloLayer, structureLayer } from '../layers';
 import StatisticDefinition from '@arcgis/core/rest/support/StatisticDefinition';
 import * as am5 from '@amcharts/amcharts5';
 import { view } from '../Scene';
-// Read this for why useState is not updated
-//https://stackoverflow.com/questions/68627317/usestate-not-updated-as-expected
-//https://codesandbox.io/s/optimistic-moore-zm8sc?file=/src/App.js
+import { statusLotLabel, statusLotQuery } from '../StatusUniqueValues';
 
 // Updat date
 export async function dateUpdate() {
@@ -42,15 +40,6 @@ export async function dateUpdate() {
 }
 
 // For Lot Pie Chart
-const statusLot: string[] = [
-  'Handed-Over',
-  'Paid',
-  'For Payment Processing',
-  'For Legal Pass',
-  'For Appraisal/Offer to Buy',
-  'For Expro',
-];
-
 export async function generateLotData() {
   // var total_handedover_lot = new StatisticDefinition({
   //   onStatisticField: 'CASE WHEN StatusLA = 0 THEN 1 ELSE 0 END',
@@ -109,46 +98,39 @@ export async function generateLotData() {
     const expro = stats.total_expro_lot;
 
     const compile = [
-      // {
-      //   category: statusLot[0],
-      //   value: handedover,
-      //   sliceSettings: {
-      //     fill: am5.color('#00c5ff'),
-      //   },
-      // },
       {
-        category: statusLot[1],
+        category: statusLotLabel[1],
         value: paid,
         sliceSettings: {
-          fill: am5.color('#70ad47'),
+          fill: am5.color(statusLotQuery[1].color),
         },
       },
       {
-        category: statusLot[2],
+        category: statusLotLabel[2],
         value: payp,
         sliceSettings: {
-          fill: am5.color('#0070ff'),
+          fill: am5.color(statusLotQuery[2].color),
         },
       },
       {
-        category: statusLot[3],
+        category: statusLotLabel[3],
         value: legalpass,
         sliceSettings: {
-          fill: am5.color('#ffff00'),
+          fill: am5.color(statusLotQuery[3].color),
         },
       },
       {
-        category: statusLot[4],
+        category: statusLotLabel[4],
         value: otb,
         sliceSettings: {
-          fill: am5.color('#ffaa00'),
+          fill: am5.color(statusLotQuery[4].color),
         },
       },
       {
-        category: statusLot[5],
+        category: statusLotLabel[5],
         value: expro,
         sliceSettings: {
-          fill: am5.color('#ff0000'),
+          fill: am5.color(statusLotQuery[5].color),
         },
       },
     ];

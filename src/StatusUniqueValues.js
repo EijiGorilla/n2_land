@@ -8,14 +8,37 @@ export const statusLotLabel = [
   'For Expro',
 ];
 
-export const statusLotColor = [
-  [0, 197, 255],
-  [112, 173, 71],
-  [0, 112, 255],
-  [255, 255, 0],
-  [255, 170, 0],
-  [255, 0, 0],
-  [0, 0, 0, 0],
+export const statusLotQuery = [
+  {
+    category: statusLotLabel[0],
+    value: 0,
+    color: '#00734d', //
+  },
+  {
+    category: statusLotLabel[1],
+    value: 1,
+    color: '#00734d',
+  },
+  {
+    category: statusLotLabel[2],
+    value: 2,
+    color: '#0070ff',
+  },
+  {
+    category: statusLotLabel[3],
+    value: 3,
+    color: '#ffff00',
+  },
+  {
+    category: statusLotLabel[4],
+    value: 4,
+    color: '#ffaa00',
+  },
+  {
+    category: statusLotLabel[5],
+    value: 5,
+    color: '#ff0000',
+  },
 ];
 
 // Endorsed Lot

@@ -17,15 +17,7 @@ import {
 } from '../components/Query';
 import '../App.css';
 import { CalciteLabel } from '@esri/calcite-components-react';
-
-const statusLot: string[] = [
-  'Handed-Over',
-  'Paid',
-  'For Payment Processing',
-  'For Legal Pass',
-  'For Appraisal/Offer to Buy',
-  'For Expro',
-];
+import { statusLotQuery } from '../StatusUniqueValues';
 
 const statusMOA = ['For Negotiation', 'Expropriation', 'Donation', 'CA 141', 'No Need to Acquire'];
 
@@ -51,15 +43,7 @@ const LotChart = ({ municipal, barangay }: any) => {
   const pieSeriesRef = useRef<unknown | any | undefined>({});
   const legendRef = useRef<unknown | any | undefined>({});
   const chartRef = useRef<unknown | any | undefined>({});
-  const [lotData, setLotData] = useState([
-    {
-      category: String,
-      value: Number,
-      sliceSettings: {
-        fill: am5.color('#00c5ff'),
-      },
-    },
-  ]);
+  const [lotData, setLotData] = useState([]);
 
   const chartID = 'pie-two';
 
@@ -164,23 +148,11 @@ const LotChart = ({ municipal, barangay }: any) => {
     pieSeries.slices.template.events.on('click', (ev) => {
       var Selected: any = ev.target.dataItem?.dataContext;
       var Category: string = Selected.category;
+      const find = statusLotQuery.find((emp: any) => emp.category === Category);
+      const statusSelected = find?.value;
+      console.log(statusSelected);
 
       var highlightSelect: any;
-      var SelectedStatus: number | null;
-
-      if (Category === statusLot[0]) {
-        SelectedStatus = 0;
-      } else if (Category === statusLot[1]) {
-        SelectedStatus = 1;
-      } else if (Category === statusLot[2]) {
-        SelectedStatus = 2;
-      } else if (Category === statusLot[3]) {
-        SelectedStatus = 3;
-      } else if (Category === statusLot[4]) {
-        SelectedStatus = 4;
-      } else if (Category === statusLot[5]) {
-        SelectedStatus = 5;
-      }
 
       var query = lotLayer.createQuery();
 
@@ -222,7 +194,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           }); // End of queryFeatures
 
           layerView.filter = new FeatureFilter({
-            where: 'StatusLA = ' + SelectedStatus,
+            where: 'StatusLA = ' + statusSelected,
           });
         }); // End of view.whenLayerView
       }); // End of view.whenv

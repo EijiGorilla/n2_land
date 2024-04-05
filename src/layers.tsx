@@ -22,10 +22,10 @@ import {
   pierAccessValue,
   pierAccessValueDateColor,
   pierAccessValueLabel,
-  statusLotColor,
   statusLotEndorsedColor,
   statusLotEndorsedLabel,
   statusLotLabel,
+  statusLotQuery,
   statusNlo,
   statusNloLabel,
   statusNloSymbolRef,
@@ -335,7 +335,7 @@ const lotLayerRendererUniqueValueInfos = statusLotLabel.map((status: any, index:
     value: index + 1,
     label: status,
     symbol: new SimpleFillSymbol({
-      color: statusLotColor[index],
+      color: statusLotQuery[index + 1]?.color,
     }),
   });
 });

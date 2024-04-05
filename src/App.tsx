@@ -227,6 +227,16 @@ function App() {
           <div className="date">{!asOfDate ? '' : 'As of ' + asOfDate}</div>
 
           <div className="dropdownFilterLayout">
+            <div
+              style={{
+                color: 'white',
+                fontSize: '0.85rem',
+                margin: 'auto',
+                paddingRight: '0.5rem',
+              }}
+            >
+              Municipality
+            </div>
             <Select
               placeholder="Select Municipality"
               value={municipality}
@@ -236,6 +246,16 @@ function App() {
               styles={customstyles}
             />
             <br />
+            <div
+              style={{
+                color: 'white',
+                fontSize: '0.85rem',
+                margin: 'auto',
+                paddingRight: '0.5rem',
+              }}
+            >
+              Barangay
+            </div>
             <Select
               placeholder="Select Barangay"
               value={barangay}
