@@ -150,7 +150,6 @@ const LotChart = ({ municipal, barangay }: any) => {
       var Category: string = Selected.category;
       const find = statusLotQuery.find((emp: any) => emp.category === Category);
       const statusSelected = find?.value;
-      console.log(statusSelected);
 
       var highlightSelect: any;
 

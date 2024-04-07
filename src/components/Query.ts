@@ -40,7 +40,6 @@ export async function dateUpdate() {
       const year = date.getFullYear();
       const month = monthList[date.getMonth()];
       const day = date.getDate();
-      console.log(day);
       const final = year < 1990 ? '' : `${month} ${day}, ${year}`;
       return final;
     });
@@ -286,16 +285,14 @@ export async function generateLotProgress(municipality: any, barangay: any) {
   var query = lotLayer.createQuery();
   query.outStatistics = [total_count_lot];
   // eslint-disable-next-line no-useless-concat
-  const municipal = municipality;
-  const barang = barangay;
-  const queryMunicipality = "Municipality = '" + municipal + "'";
-  const queryBarangay = "Barangay = '" + barang + "'";
+  const queryMunicipality = "Municipality = '" + municipality + "'";
+  const queryBarangay = "Barangay = '" + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const queryHandedOverDate = 'HandedOverDate IS NOT NULL';
 
-  if (municipal && barang) {
+  if (municipality && barangay) {
     query.where = queryHandedOverDate + ' AND ' + queryMunicipalBarangay;
-  } else if (municipal && !barang) {
+  } else if (municipality && !barangay) {
     query.where = queryHandedOverDate + ' AND ' + queryMunicipality;
   } else {
     query.where = queryHandedOverDate;
