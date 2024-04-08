@@ -335,7 +335,7 @@ const lotLayerRendererUniqueValueInfos = statusLotLabel.map((status: any, index:
     value: index + 1,
     label: status,
     symbol: new SimpleFillSymbol({
-      color: statusLotQuery[index + 1]?.color,
+      color: statusLotQuery[index]?.color,
     }),
   });
 });

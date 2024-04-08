@@ -9,22 +9,7 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import { generateNloData, generateNloNumber, thousands_separators } from '../components/Query';
 import { CalciteLabel } from '@esri/calcite-components-react';
-
-const statusNlo = [
-  'Relocated',
-  'Paid',
-  'For Payment Processing',
-  'For Legal Pass',
-  'For Appraisal/OtC/Requirements for Other Entitlements',
-  'LBP Account Opening',
-];
-
-//https://codesandbox.io/s/amcharts5-react-demo-forked-gid7b0?from-embed=&file=/src/App.js:271-276
-// https://github.com/reactchartjs/react-chartjs-2/blob/master/src/chart.tsx
-//https://www.reddit.com/r/reactjs/comments/gr5vhh/react_hooks_and_amcharts4/?rdt=56344
-//https://medium.com/swlh/how-to-use-amcharts-4-with-react-hooks-999a62c185a5
-//https://codesandbox.io/s/amcharts5-react-demo-forked-hrth2d
-// Zoom
+import { nloStatusField, statusNloQuery } from '../StatusUniqueValues';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -69,7 +54,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
   }
 
   useEffect(() => {
-    generateNloData().then((result: any) => {
+    generateNloData(municipal, barangay).then((result: any) => {
       SetNloData(result);
     });
 
@@ -136,23 +121,10 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     pieSeries.slices.template.events.on('click', (ev) => {
       var Selected: any = ev.target.dataItem?.dataContext;
       var Category: string = Selected.category;
+      const find = statusNloQuery.find((emp: any) => emp.category === Category);
+      const selectedStatus = find?.value;
 
       var highlightSelect: any;
-      var SelectedStatus: number | null;
-
-      if (Category === statusNlo[0]) {
-        SelectedStatus = 1;
-      } else if (Category === statusNlo[1]) {
-        SelectedStatus = 2;
-      } else if (Category === statusNlo[2]) {
-        SelectedStatus = 3;
-      } else if (Category === statusNlo[3]) {
-        SelectedStatus = 4;
-      } else if (Category === statusNlo[4]) {
-        SelectedStatus = 5;
-      } else if (Category === statusNlo[5]) {
-        SelectedStatus = 6;
-      }
 
       var query = nloLayer.createQuery();
 
@@ -194,7 +166,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
           }); // End of queryFeatures
 
           layerView.filter = new FeatureFilter({
-            where: 'StatusRC = ' + SelectedStatus,
+            where: nloStatusField + ' = ' + selectedStatus,
           });
         }); // End of view.whenLayerView
       }); // End of view.whenv

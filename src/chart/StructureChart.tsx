@@ -15,17 +15,12 @@ import {
   thousands_separators,
 } from '../components/Query';
 import { CalciteLabel } from '@esri/calcite-components-react';
-
-const statusStructure = [
-  'Dismantling/Clearing',
-  'Paid',
-  'For Payment Processing',
-  'For Legal Pass',
-  'For Appraisal/Offer to Compensate',
-  'LBP Account Opening',
-];
-
-const statusMoaStructure = ['For Negotiation', 'Expropriation', 'Donation', 'No Need to Acquire'];
+import {
+  statusMoaStructureQuery,
+  statusStructureQuery,
+  structureMoaField,
+  structureStatusField,
+} from '../StatusUniqueValues';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -81,7 +76,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
   }
 
   useEffect(() => {
-    generateStructureData().then((result: any) => {
+    generateStructureData(municipal, barangay).then((result: any) => {
       setStructureData(result);
     });
 
@@ -90,7 +85,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
       setStructureNumber(response);
     });
 
-    generateStrucMoaData().then((response: any) => {
+    generateStrucMoaData(municipal, barangay).then((response: any) => {
       setStructureMoaData(response);
     });
   }, [municipal, barangay]);
@@ -152,24 +147,10 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
     pieSeries.slices.template.events.on('click', (ev) => {
       var Selected: any = ev.target.dataItem?.dataContext;
       var Category: string = Selected.category;
+      const find = statusStructureQuery.find((emp: any) => emp.category === Category);
+      const selectedStatus = find?.value;
 
       var highlightSelect: any;
-      var SelectedStatus: number | null;
-
-      if (Category === statusStructure[0]) {
-        SelectedStatus = 1;
-      } else if (Category === statusStructure[1]) {
-        SelectedStatus = 2;
-      } else if (Category === statusStructure[2]) {
-        SelectedStatus = 3;
-      } else if (Category === statusStructure[3]) {
-        SelectedStatus = 4;
-      } else if (Category === statusStructure[4]) {
-        SelectedStatus = 5;
-      } else if (Category === statusStructure[5]) {
-        SelectedStatus = 6;
-      }
-
       var query = structureLayer.createQuery();
 
       view.when(function () {
@@ -210,7 +191,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
           }); // End of queryFeatures
 
           layerView.filter = new FeatureFilter({
-            where: 'StatusStruc = ' + SelectedStatus,
+            where: structureStatusField + ' = ' + selectedStatus,
           });
         }); // End of view.whenLayerView
       }); // End of view.whenv
@@ -430,19 +411,10 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
     series.columns.template.events.on('click', function (ev) {
       var Selected: any = ev.target.dataItem?.dataContext;
       var Category: string = Selected.category;
+      const find = statusMoaStructureQuery.find((emp: any) => emp.category === Category);
+      const selectedStatus = find?.value;
 
       var highlightSelect: any;
-      var SelectedStatus: number | null;
-
-      if (Category === statusMoaStructure[0]) {
-        SelectedStatus = 1;
-      } else if (Category === statusMoaStructure[1]) {
-        SelectedStatus = 2;
-      } else if (Category === statusMoaStructure[2]) {
-        SelectedStatus = 3;
-      } else if (Category === statusMoaStructure[3]) {
-        SelectedStatus = 4;
-      }
 
       var query = structureLayer.createQuery();
       view.whenLayerView(structureLayer).then(function (layerView) {
@@ -481,7 +453,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
           });
         });
         layerView.filter = new FeatureFilter({
-          where: 'MoA = ' + SelectedStatus,
+          where: structureMoaField + ' = ' + selectedStatus,
         });
       }); // End of whenLayerView
     });

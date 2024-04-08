@@ -1,6 +1,7 @@
 // Lot Status
+export const lotStatusField = 'StatusLA';
 export const statusLotLabel = [
-  'Handed-Over',
+  // 'Handed-Over',
   'Paid',
   'For Payment Processing',
   'For Legal Pass',
@@ -11,35 +12,33 @@ export const statusLotLabel = [
 export const statusLotQuery = [
   {
     category: statusLotLabel[0],
-    value: 0,
-    color: '#00734d', //
-  },
-  {
-    category: statusLotLabel[1],
     value: 1,
     color: '#00734d',
   },
   {
-    category: statusLotLabel[2],
+    category: statusLotLabel[1],
     value: 2,
     color: '#0070ff',
   },
   {
-    category: statusLotLabel[3],
+    category: statusLotLabel[2],
     value: 3,
     color: '#ffff00',
   },
   {
-    category: statusLotLabel[4],
+    category: statusLotLabel[3],
     value: 4,
     color: '#ffaa00',
   },
   {
-    category: statusLotLabel[5],
+    category: statusLotLabel[4],
     value: 5,
     color: '#ff0000',
   },
 ];
+
+// Permit to Enter for lot
+export const lotPteField = 'PTE';
 
 // Endorsed Lot
 export const statusLotEndorsedLabel = ['Not Endorsed', 'Endorsed', 'NA'];
@@ -47,21 +46,22 @@ export const statusLotEndorsedQuery = [
   {
     category: statusLotEndorsedLabel[0],
     value: 0,
-    color: [255, 0, 0],
+    color: '#ff0000',
   },
   {
     category: statusLotEndorsedLabel[0],
     value: 1,
-    color: [0, 112, 255],
+    color: '#006eff',
   },
   {
     category: statusLotEndorsedLabel[0],
     value: 2,
-    color: [211, 211, 211, 0.7],
+    color: '#d3d3d3',
   },
 ];
 
 // Lot MOA
+export const lotMoaField = 'MoA';
 export const statusMoa = [
   'For Negotiation',
   'Expropriation',
@@ -70,7 +70,31 @@ export const statusMoa = [
   'No Need to Acquire',
 ];
 
+export const statusMoaQuery = [
+  {
+    category: statusMoa[0],
+    value: 1,
+  },
+  {
+    category: statusMoa[1],
+    value: 2,
+  },
+  {
+    category: statusMoa[2],
+    value: 3,
+  },
+  {
+    category: statusMoa[3],
+    value: 4,
+  },
+  {
+    category: statusMoa[4],
+    value: 5,
+  },
+];
+
 // Structure
+export const structureStatusField = 'StatusStruc';
 export const statusStructureLabel = [
   'Dismantling/Clearing',
   'Paid',
@@ -119,7 +143,11 @@ export const statusStructureQuery = [
   },
 ];
 
+// Permit to Enter for structure
+export const structurePteField = 'PTE';
+
 // Structure MOA
+export const structureMoaField = 'MoA';
 export const statusMoaStructure = [
   'For Negotiation',
   'Expropriation',
@@ -127,7 +155,31 @@ export const statusMoaStructure = [
   'No Need to Acquire',
 ];
 
+export const statusMoaStructureQuery = [
+  {
+    category: statusMoaStructure[0],
+    value: 1,
+  },
+  {
+    category: statusMoaStructure[1],
+    value: 2,
+  },
+  {
+    category: statusMoaStructure[2],
+    value: 3,
+  },
+  {
+    category: statusMoaStructure[3],
+    value: 4,
+  },
+  {
+    category: statusMoaStructure[4],
+    value: 5,
+  },
+];
+
 // NLO
+export const nloStatusField = 'StatusRC';
 export const statusNloLabel = [
   'Relocated',
   'Paid',
@@ -201,3 +253,7 @@ export const pierAccessValueDateColor = [
   [0, 255, 0, 0.9], // Accessible
   [255, 255, 255, 0.9], // Dates are missing
 ];
+
+// Handed Over Date and Handed Over Area
+export const lotHandedOverDateField = 'HandedOverDate';
+export const lotHandedOverAreaField = 'HandedOverArea';

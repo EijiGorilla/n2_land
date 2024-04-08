@@ -17,15 +17,7 @@ import {
 } from '../components/Query';
 import '../App.css';
 import { CalciteLabel } from '@esri/calcite-components-react';
-import { statusLotQuery } from '../StatusUniqueValues';
-
-const statusMOA = ['For Negotiation', 'Expropriation', 'Donation', 'CA 141', 'No Need to Acquire'];
-
-//https://codesandbox.io/s/amcharts5-react-demo-forked-gid7b0?from-embed=&file=/src/App.js:271-276
-// https://github.com/reactchartjs/react-chartjs-2/blob/master/src/chart.tsx
-//https://www.reddit.com/r/reactjs/comments/gr5vhh/react_hooks_and_amcharts4/?rdt=56344
-//https://medium.com/swlh/how-to-use-amcharts-4-with-react-hooks-999a62c185a5
-//https://codesandbox.io/s/amcharts5-react-demo-forked-hrth2d
+import { lotMoaField, lotStatusField, statusLotQuery, statusMoaQuery } from '../StatusUniqueValues';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -43,7 +35,7 @@ const LotChart = ({ municipal, barangay }: any) => {
   const pieSeriesRef = useRef<unknown | any | undefined>({});
   const legendRef = useRef<unknown | any | undefined>({});
   const chartRef = useRef<unknown | any | undefined>({});
-  const [lotData, setLotData] = useState([]);
+  const [lotData, setLotData] = useState<unknown | any | undefined>([]);
 
   const chartID = 'pie-two';
 
@@ -69,7 +61,7 @@ const LotChart = ({ municipal, barangay }: any) => {
   }
 
   useEffect(() => {
-    generateLotData().then((result: any) => {
+    generateLotData(municipal, barangay).then((result: any) => {
       setLotData(result);
     });
 
@@ -83,7 +75,7 @@ const LotChart = ({ municipal, barangay }: any) => {
     });
 
     // Mode of Acquisition
-    generateLotMoaData().then((response: any) => {
+    generateLotMoaData(municipal, barangay).then((response: any) => {
       setLotMoaData(response);
     });
   }, [municipal, barangay]);
@@ -193,7 +185,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           }); // End of queryFeatures
 
           layerView.filter = new FeatureFilter({
-            where: 'StatusLA = ' + statusSelected,
+            where: lotStatusField + ' = ' + statusSelected,
           });
         }); // End of view.whenLayerView
       }); // End of view.whenv
@@ -412,21 +404,10 @@ const LotChart = ({ municipal, barangay }: any) => {
     series.columns.template.events.on('click', function (ev) {
       var Selected: any = ev.target.dataItem?.dataContext;
       var Category: string = Selected.category;
+      const find = statusMoaQuery.find((emp: any) => emp.category === Category);
+      const selectedStatus = find?.value;
 
       var highlightSelect: any;
-      var SelectedStatus: number | null;
-
-      if (Category === statusMOA[0]) {
-        SelectedStatus = 1;
-      } else if (Category === statusMOA[1]) {
-        SelectedStatus = 2;
-      } else if (Category === statusMOA[2]) {
-        SelectedStatus = 3;
-      } else if (Category === statusMOA[3]) {
-        SelectedStatus = 4;
-      } else if (Category === statusMOA[4]) {
-        SelectedStatus = 5;
-      }
 
       var query = lotLayer.createQuery();
       view.whenLayerView(lotLayer).then(function (layerView) {
@@ -465,7 +446,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           });
         });
         layerView.filter = new FeatureFilter({
-          where: 'MoA = ' + SelectedStatus,
+          where: lotMoaField + ' = ' + selectedStatus,
         });
       }); // End of whenLayerView
     });
