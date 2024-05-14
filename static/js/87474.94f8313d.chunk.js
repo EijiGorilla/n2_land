@@ -1,0 +1,2 @@
+/*! For license information please see 87474.94f8313d.chunk.js.LICENSE.txt */
+"use strict";(self.webpackChunkn2_land=self.webpackChunkn2_land||[]).push([[87474],{87474:(e,n,s)=>{s.r(n),s.d(n,{CalciteIcon:()=>c,defineCustomElement:()=>l});var a=s(57601);const c=a.I,l=a.d}}]);

@@ -1,0 +1,3 @@
+/*! For license information please see 30677.da36e9fa.chunk.js.LICENSE.txt */
+(self.webpackChunkn2_land=self.webpackChunkn2_land||[]).push([[30677,25572,45286,57148,66324,25708,45966],{25572:e=>{function n(e){return Promise.resolve().then((()=>{var n=new Error("Cannot find module '"+e+"'");throw n.code="MODULE_NOT_FOUND",n}))}n.keys=()=>[],n.resolve=n,n.id=25572,e.exports=n},61715:(e,n,r)=>{"use strict";r.r(n),r.d(n,{CalciteAvatar:()=>o,defineCustomElement:()=>s});var t=r(19074);const o=t.A,s=t.d}}]);
+//# sourceMappingURL=30677.da36e9fa.chunk.js.map
