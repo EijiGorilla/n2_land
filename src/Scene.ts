@@ -6,6 +6,7 @@ import Search from '@arcgis/core/widgets/Search';
 import Expand from '@arcgis/core/widgets/Expand';
 import GroupLayer from '@arcgis/core/layers/GroupLayer';
 import Locate from '@arcgis/core/widgets/Locate.js';
+import Measurement from '@arcgis/core/widgets/Measurement';
 import {
   lotLayer,
   nloLayer,
@@ -159,23 +160,30 @@ const searchWidget = new Search({
   sources: sources,
 });
 
-const searchExpand = new Expand({
+// Measurement Tool
+export const measurement = new Measurement({
+  view: view,
+  activeTool: undefined,
+  container: undefined,
+});
+
+export const searchExpand = new Expand({
   view: view,
   content: searchWidget,
   expandIconClass: 'esri-icon-search',
   group: 'top-right',
 });
-view.ui.add(searchExpand, {
-  position: 'top-right',
-});
+// view.ui.add(searchExpand, {
+//   position: 'top-right',
+// });
 
-const locateBtn = new Locate({
+export const locateBtn = new Locate({
   view,
   // container: undefined,
 });
-view.ui.add(locateBtn, { position: 'top-right' });
+// view.ui.add(locateBtn, { position: 'top-right' });
 
-const zoom = new Zoom({
+export const zoom = new Zoom({
   view,
 });
-view.ui.add(zoom, { position: 'bottom-right' });
+// view.ui.add(zoom, { position: 'bottom-right' });
