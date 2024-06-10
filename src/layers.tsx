@@ -1000,7 +1000,7 @@ const pierAccessReadyDateLabel = new LabelClass({
   }),
   labelExpressionInfo: {
     expression: `var accessdate = $feature.AccessDate;
-                  var cutoffDate = 1711337063661;
+                  var cutoffDate = 1718062335146;
                   var labelPier = when($feature.AccessDate <= cutoffDate, $feature.PIER, '');
                   return \`\${labelPier}\`
                   `,
@@ -1038,7 +1038,7 @@ const pierAccessNotYetLabel = new LabelClass({
   }),
   labelExpressionInfo: {
     expression: `var accessdate = $feature.AccessDate;
-                  var cutoffDate = 1711337063661;
+                  var cutoffDate = 1718062335146;
                   var labelPier = when($feature.AccessDate > cutoffDate || isEmpty($feature.AccessDate), $feature.PIER, '');
                   return \`\${labelPier}\`
                   `,
@@ -1124,7 +1124,7 @@ const pierAccessRendererUniqueValueInfos = pierAccessValue.map((status: any, ind
 const pierAccessRenderer = new UniqueValueRenderer({
   field: 'AccessDate',
   valueExpression:
-    "When(IsEmpty($feature.AccessDate), 'empty', $feature.AccessDate <= 1711337063661, 'accessible', $feature.AccessDate > 1636070400000, 'others',$feature.AccessDate)",
+    "When(IsEmpty($feature.AccessDate), 'empty', $feature.AccessDate <= 1718062335146, 'accessible', $feature.AccessDate > 1636070400000, 'others',$feature.AccessDate)",
   uniqueValueInfos: pierAccessRendererUniqueValueInfos,
 });
 pierAccessLayer.renderer = pierAccessRenderer;
