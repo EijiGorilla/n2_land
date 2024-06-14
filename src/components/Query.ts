@@ -139,6 +139,87 @@ export async function generateLotNumber() {
   });
 }
 
+export async function generateTotalAffectedArea(municipal: any, barangay: any) {
+  // Query
+  const queryMunicipality = "Municipality = '" + municipal + "'";
+  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
+  const queryField = 'AffectedArea IS NOT NULL' + ' AND ' + lotStatusField + ' IS NOT NULL';
+
+  var total_affected_area = new StatisticDefinition({
+    onStatisticField: 'AffectedArea',
+    outStatisticFieldName: 'total_affected_area',
+    statisticType: 'sum',
+  });
+
+  var query = lotLayer.createQuery();
+  query.outStatistics = [total_affected_area];
+
+  if (municipal && !barangay) {
+    query.where = queryField + ' AND ' + queryMunicipality + ' AND ' + queryField;
+  } else if (barangay) {
+    query.where = queryField + ' AND ' + queryMunicipalBarangay + ' AND ' + queryField;
+  }
+
+  return lotLayer.queryFeatures(query).then((response: any) => {
+    var stats = response.features[0].attributes;
+    const value = stats.total_affected_area;
+    return value;
+  });
+}
+
+export async function generateAffectedAreaForPie(municipal: any, barangay: any) {
+  const queryMunicipality = "Municipality = '" + municipal + "'";
+  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
+  const statusQuery = 'StatusLA IS NOT NULL' + ' AND ' + 'StatusLA >= 1';
+  var total_affected_area = new StatisticDefinition({
+    onStatisticField: 'AffectedArea',
+    outStatisticFieldName: 'total_affected_area',
+    statisticType: 'sum',
+  });
+
+  var query = lotLayer.createQuery();
+  query.outStatistics = [total_affected_area];
+  query.orderByFields = ['StatusLA'];
+
+  query.groupByFieldsForStatistics = ['StatusLA'];
+
+  if (municipal && !barangay) {
+    query.where = statusQuery + ' AND ' + queryMunicipality;
+  } else if (barangay) {
+    query.where = statusQuery + ' AND ' + queryMunicipalBarangay;
+  } else {
+    query.where = statusQuery;
+  }
+
+  return lotLayer.queryFeatures(query).then((response: any) => {
+    var stats = response.features;
+    const data = stats.map((result: any, index: any) => {
+      const attributes = result.attributes;
+      const affected = attributes.total_affected_area;
+      const status_id = attributes.StatusLA;
+
+      return Object.assign({
+        category: statusLotLabel[status_id - 1],
+        value: affected,
+      });
+    });
+
+    const data1: any = [];
+    statusLotLabel.map((status: any, index: any) => {
+      const find = data.find((emp: any) => emp.category === status);
+      const value1 = find === undefined ? 0 : (find?.value).toFixed(0);
+      const object = {
+        category: status,
+        value: value1,
+      };
+      data1.push(object);
+    });
+    return data1;
+  });
+}
+
 // For Permit-to-Enter
 export async function generatePermitEnter() {
   const onStatisticsFieldValue: string = 'CASE WHEN ' + lotPteField + ' = 1 THEN 1 ELSE 0 END';
@@ -598,6 +679,8 @@ export function thousands_separators(num: any) {
     var num_parts = num.toString().split('.');
     num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return num_parts.join('.');
+  } else {
+    return 0;
   }
 }
 

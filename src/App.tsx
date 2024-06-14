@@ -214,7 +214,7 @@ function App() {
   return (
     <div>
       <CalciteShell>
-        <CalciteTabs slot="panel-end" layout="center" scale="m">
+        <CalciteTabs style={{ width: '33%' }} slot="panel-end" layout="center" scale="m">
           <CalciteTabNav slot="title-group" id="thetabs">
             <CalciteTabTitle class="Land">Land</CalciteTabTitle>
             <CalciteTabTitle class="Structure">Structure</CalciteTabTitle>
@@ -435,6 +435,11 @@ function App() {
             {nextWidget === 'information' ? (
               <div className="informationDiv">
                 <ul>
+                  <div>
+                    <b style={{ color: 'white', fontWeight: 'bold' }}>
+                      --- How to Use Dropdown List ---
+                    </b>
+                  </div>
                   <li>
                     You can <b>filter the data</b> by City and Barangy using dropdown lists.
                   </li>
@@ -442,6 +447,10 @@ function App() {
                     <b>Click a tab</b> below the dropdown lists to view progress on land, structure,
                     or NLO in charts.
                   </li>
+
+                  <div>
+                    <b style={{ color: 'white', fontWeight: 'bold' }}>--- How to Use Chart ---</b>
+                  </div>
                   <li>
                     <b>Click series in pie charts</b> to view progress on the corresponding
                     lots/structures/NLO on the map.
@@ -451,6 +460,10 @@ function App() {
                   </li>
                   <li>
                     <b>Pie chart for lands</b> represent <b>private lands only</b>.
+                  </li>
+                  <li>
+                    Values in the bracket of Land legend represent the total affected areas in
+                    square meters corresponeding to milestone status.
                   </li>
                   <li>
                     <b>Permit-to-Enter</b> represents both public and private lands{' '}

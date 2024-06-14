@@ -430,7 +430,6 @@ export const lotLayer = new FeatureLayer({
   layerId: 4,
   labelingInfo: [lotIdLabel],
   renderer: lotLayerRenderer,
-
   popupTemplate: templateLot,
   title: 'Land Acquisition',
   minScale: 150000,
@@ -1124,7 +1123,7 @@ const pierAccessRendererUniqueValueInfos = pierAccessValue.map((status: any, ind
 const pierAccessRenderer = new UniqueValueRenderer({
   field: 'AccessDate',
   valueExpression:
-    "When(IsEmpty($feature.AccessDate), 'empty', $feature.AccessDate <= 1718062335146, 'accessible', $feature.AccessDate > 1636070400000, 'others',$feature.AccessDate)",
+    "When(IsEmpty($feature.AccessDate), 'empty', $feature.AccessDate <= 1636070400000, 'accessible', $feature.AccessDate > 1636070400000, 'others',$feature.AccessDate)",
   uniqueValueInfos: pierAccessRendererUniqueValueInfos,
 });
 pierAccessLayer.renderer = pierAccessRenderer;

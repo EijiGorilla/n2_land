@@ -9,10 +9,12 @@ import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import {
+  generateAffectedAreaForPie,
   generateLotData,
   generateLotMoaData,
   generateLotNumber,
   generatePermitEnter,
+  generateTotalAffectedArea,
   thousands_separators,
 } from '../components/Query';
 import '../App.css';
@@ -42,6 +44,10 @@ const LotChart = ({ municipal, barangay }: any) => {
   const [lotNumber, setLotNumber] = useState([]);
   const [pteNumber, setPteNumber] = useState([]);
 
+  // Affected Area for Pie Chart
+  const [affectAreaPie, setAffectAreaPie] = useState<unknown | any | undefined>([]);
+  const [totalAffectedArea, setTotalAffectedArea] = useState<any>();
+
   // 2.Mode of Acquisition
   const barSeriesRef = useRef<unknown | any | undefined>({});
   const yAxisRef = useRef<unknown | any | undefined>({});
@@ -68,6 +74,16 @@ const LotChart = ({ municipal, barangay }: any) => {
     // Lot number
     generateLotNumber().then((response: any) => {
       setLotNumber(response);
+    });
+
+    // total affected areas for pie chart
+    generateAffectedAreaForPie(municipal, barangay).then((response: any) => {
+      setAffectAreaPie(response);
+    });
+
+    // total affected area for
+    generateTotalAffectedArea(municipal, barangay).then((response: any) => {
+      setTotalAffectedArea(response);
     });
 
     generatePermitEnter().then((response: any) => {
@@ -107,16 +123,18 @@ const LotChart = ({ municipal, barangay }: any) => {
     chartRef.current = chart;
 
     // Create series
+
     var pieSeries = chart.series.push(
       am5percent.PieSeries.new(root, {
         name: 'Series',
         categoryField: 'category',
         valueField: 'value',
-        //legendLabelText: "[{fill}]{category}[/]",
-        legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
+        legendLabelText:
+          '{category}[/] ([#C9CC3F; bold]{valuePercentTotal.formatNumber("#.")}%[/]) ',
+        // legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(20),
-        scale: 1.8,
+        scale: 2.3,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -129,11 +147,8 @@ const LotChart = ({ municipal, barangay }: any) => {
       strokeWidth: 0.5,
       strokeOpacity: 1,
       templateField: 'sliceSettings',
+      tooltipText: '{category}: {valuePercentTotal.formatNumber("#.")}%',
     });
-
-    // Disabling labels and ticksll
-    pieSeries.labels.template.set('visible', false);
-    pieSeries.ticks.template.set('visible', false);
 
     // EventDispatcher is disposed at SpriteEventDispatcher...
     // It looks like this error results from clicking events
@@ -193,12 +208,32 @@ const LotChart = ({ municipal, barangay }: any) => {
 
     pieSeries.data.setAll(lotData);
 
+    // Disabling labels and ticksll
+    pieSeries.labels.template.setAll({
+      fill: am5.color('#ffffff'),
+      fontSize: '0.5rem',
+      visible: false,
+      oversizedBehavior: 'wrap',
+      maxWidth: 65,
+      text: "{category}: [#C9CC3F; fontSize: 10px;]{valuePercentTotal.formatNumber('#.')}%[/]",
+    });
+
+    // pieSeries.labels.template.set('visible', true);
+    pieSeries.ticks.template.setAll({
+      // fillOpacity: 0.9,
+      stroke: am5.color('#ffffff'),
+      // strokeWidth: 0.3,
+      // strokeOpacity: 1,
+      visible: false,
+    });
+
     // Legend
     // https://www.amcharts.com/docs/v5/charts/percent-charts/legend-percent-series/
     var legend = chart.children.push(
       am5.Legend.new(root, {
         centerX: am5.percent(50),
         x: am5.percent(50),
+        scale: 1.1,
       }),
     );
     legendRef.current = legend;
@@ -222,7 +257,7 @@ const LotChart = ({ municipal, barangay }: any) => {
     // https://www.amcharts.com/docs/v5/tutorials/pie-chart-with-a-legend-with-dynamically-sized-labels/
     // This aligns Legend to Left
     chart.onPrivate('width', function (width: any) {
-      const boxWidth = 190; //props.style.width;
+      const boxWidth = 270; //props.style.width;
       var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
       //var availableSpace = (boxWidth - valueLabelsWidth) * 0.7
       legend.labels.template.setAll({
@@ -252,6 +287,62 @@ const LotChart = ({ municipal, barangay }: any) => {
       //fontSize: LEGEND_FONT_SIZE,
     });
 
+    legend.valueLabels.template.adapters.add('text', (text: any, target: any) => {
+      const category = target.dataItem?.dataContext.category;
+      // if (target.dataItem && target.dataItem.get('valuePercentTotal') < 5) {
+      //   return category === 'Paid'
+      //     ? // eslint-disable-next-line no-useless-concat
+      //       "{valuePercentTotal.formatNumber('#.')}% ({value})" + ' (' + testValue + ' sqm)'
+      //     : "{valuePercentTotal.formatNumber('#.')}% ({value})";
+      // }
+      // "[#C9CC3F; fontSize: 12px;][bold]{valuePercentTotal.formatNumber('#.')}% ({value})[/]"
+      if (target.dataItem) {
+        return category === 'Paid'
+          ? '{value}[/]' +
+              ' (' +
+              thousands_separators(
+                affectAreaPie?.find((emp: any) => emp.category === category)?.value,
+              ) +
+              ' m2' +
+              ')'
+          : category === 'For Payment Processing'
+            ? '{value}[/]' +
+              ' (' +
+              thousands_separators(
+                affectAreaPie?.find((emp: any) => emp.category === category)?.value,
+              ) +
+              ' m2' +
+              ')'
+            : category === 'For Legal Pass'
+              ? '{value}[/]' +
+                ' (' +
+                thousands_separators(
+                  affectAreaPie?.find((emp: any) => emp.category === category)?.value,
+                ) +
+                ' m2' +
+                ')'
+              : category === 'For Appraisal/Offer to Buy'
+                ? '{value}[/]' +
+                  ' (' +
+                  thousands_separators(
+                    affectAreaPie?.find((emp: any) => emp.category === category)?.value,
+                  ) +
+                  ' m2' +
+                  ')'
+                : category === 'For Expro'
+                  ? '{value}[/]' +
+                    ' (' +
+                    thousands_separators(
+                      affectAreaPie?.find((emp: any) => emp.category === category)?.value,
+                    ) +
+                    ' m2' +
+                    ')'
+                  : '{value}';
+      }
+
+      return text;
+    });
+
     legend.itemContainers.template.setAll({
       // set space between legend items
       paddingTop: 3,
@@ -263,7 +354,7 @@ const LotChart = ({ municipal, barangay }: any) => {
     return () => {
       root.dispose();
     };
-  }, [chartID, lotData]);
+  }, [chartID, lotData, affectAreaPie]);
 
   useEffect(() => {
     pieSeriesRef.current?.data.setAll(lotData);
@@ -473,68 +564,131 @@ const LotChart = ({ municipal, barangay }: any) => {
 
   return (
     <>
-      <CalciteLabel>TOTAL LOTS</CalciteLabel>
-      <CalciteLabel layout="inline">
-        <b className="totalLotsNumber">
-          {thousands_separators(lotNumber[1])}
-          <img
-            src="https://EijiGorilla.github.io/Symbols/Land_logo.png"
-            alt="Land Logo"
-            height={'21%'}
-            width={'21%'}
-            style={{ marginLeft: '90%', display: 'flex', marginTop: '-17%' }}
-          />
-          <div className="totalLotsNumber2">({thousands_separators(lotNumber[0])})</div>
-        </b>
-      </CalciteLabel>
+      <div
+        style={{
+          display: 'flex',
+          marginTop: '3px',
+          marginLeft: '15px',
+          marginRight: '15px',
+          justifyContent: 'space-between',
+        }}
+      >
+        <img
+          src="https://EijiGorilla.github.io/Symbols/Land_logo.png"
+          alt="Land Logo"
+          height={'15%'}
+          width={'15%'}
+          style={{ paddingTop: '5px', paddingLeft: '5px' }}
+        />
+        <dl style={{ alignItems: 'center' }}>
+          <dt style={{ color: '#D3D3D3', fontSize: '1.3rem' }}>Total Lots</dt>
+          <dd
+            style={{
+              color: '#6ede00',
+              fontSize: '2.1rem',
+              fontWeight: 'bold',
+              fontFamily: 'calibri',
+              lineHeight: '1.2',
+              margin: 'auto',
+            }}
+          >
+            {thousands_separators(lotNumber[1])}
+          </dd>
+          <dd style={{ color: 'white', margin: 'auto' }}>({thousands_separators(lotNumber[0])})</dd>
+        </dl>
+        <dl style={{ alignItems: 'center' }}>
+          <dt style={{ color: '#D3D3D3', fontSize: '1.3rem' }}>Total Affected Area</dt>
+          <dd
+            style={{
+              color: '#6ede00',
+              fontSize: '2.1rem',
+              fontFamily: 'calibri',
+              lineHeight: '1.2',
+              margin: 'auto',
+              fontWeight: 'bold',
+            }}
+          >
+            {totalAffectedArea && thousands_separators(totalAffectedArea.toFixed(0))}
+            <label style={{ fontWeight: 'normal', fontSize: '1.4rem' }}> m</label>
+            <label style={{ verticalAlign: 'super', fontSize: '0.7rem' }}>2</label>
+          </dd>
+        </dl>
+      </div>
 
       {/* Lot Chart */}
       <div
         id={chartID}
         style={{
-          height: '35vh',
+          height: '40vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
-          marginBottom: '10%',
+          marginBottom: '9%',
         }}
       ></div>
 
       {/* Permit-to-Enter */}
-      <CalciteLabel>PERMIT-TO-ENTER</CalciteLabel>
+      <div
+        style={{ color: '#D3D3D3', fontSize: '1.3rem', paddingLeft: '30px', marginBottom: '13px' }}
+      >
+        PERMIT-TO-ENTER
+      </div>
       <CalciteLabel layout="inline">
         {pteNumber[0] === 'Infinity' ? (
-          <b className="permitToEnterNumber">
+          <b
+            style={{
+              color: '#6ede00',
+              fontSize: '2.1rem',
+              fontWeight: 'bold',
+              paddingLeft: '15px',
+              display: 'flex',
+            }}
+          >
             N/A
             <img
               src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
               alt="Land Logo"
-              height={'18%'}
-              width={'18%'}
-              style={{ marginLeft: '70%', display: 'flex', marginTop: '-10%' }}
+              height={'17%'}
+              width={'17%'}
+              style={{ marginLeft: 'auto', marginRight: '20px', marginTop: '-25px' }}
             />
           </b>
         ) : (
-          <b className="permitToEnterNumber">
+          <b
+            style={{
+              color: '#6ede00',
+              fontSize: '2.1rem',
+              fontWeight: 'bold',
+              fontFamily: 'calibri',
+              paddingLeft: '15px',
+              display: 'flex',
+            }}
+          >
             {pteNumber[0]}% ({thousands_separators(pteNumber[1])})
             <img
               src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
               alt="Land Logo"
-              height={'18%'}
-              width={'18%'}
-              style={{ marginLeft: '70%', display: 'flex', marginTop: '-10%' }}
+              height={'17%'}
+              width={'17%'}
+              style={{
+                marginLeft: 'auto',
+                marginRight: '20px',
+                marginTop: '-25px',
+              }}
             />
           </b>
         )}
       </CalciteLabel>
 
-      <CalciteLabel>MODE OF ACQUISITION</CalciteLabel>
+      <div style={{ color: '#D3D3D3', fontSize: '1.3rem', marginLeft: '30px' }}>
+        MODE OF ACQUISITION
+      </div>
       <div
         id={chartID_moa}
         style={{
           height: '21vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
-          marginTop: '-3%',
+          marginLeft: '30px',
         }}
       ></div>
     </>
