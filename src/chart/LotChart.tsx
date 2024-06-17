@@ -134,7 +134,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         // legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(20),
-        scale: 2.3,
+        scale: 2.2,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -581,11 +581,11 @@ const LotChart = ({ municipal, barangay }: any) => {
           style={{ paddingTop: '5px', paddingLeft: '5px' }}
         />
         <dl style={{ alignItems: 'center' }}>
-          <dt style={{ color: '#D3D3D3', fontSize: '1.3rem' }}>Total Lots</dt>
+          <dt style={{ color: '#D3D3D3', fontSize: '1.2rem' }}>Total Lots</dt>
           <dd
             style={{
               color: '#6ede00',
-              fontSize: '2.1rem',
+              fontSize: '2rem',
               fontWeight: 'bold',
               fontFamily: 'calibri',
               lineHeight: '1.2',
@@ -597,11 +597,11 @@ const LotChart = ({ municipal, barangay }: any) => {
           <dd style={{ color: 'white', margin: 'auto' }}>({thousands_separators(lotNumber[0])})</dd>
         </dl>
         <dl style={{ alignItems: 'center' }}>
-          <dt style={{ color: '#D3D3D3', fontSize: '1.3rem' }}>Total Affected Area</dt>
+          <dt style={{ color: '#D3D3D3', fontSize: '1.2rem' }}>Total Affected Area</dt>
           <dd
             style={{
               color: '#6ede00',
-              fontSize: '2.1rem',
+              fontSize: '2rem',
               fontFamily: 'calibri',
               lineHeight: '1.2',
               margin: 'auto',
