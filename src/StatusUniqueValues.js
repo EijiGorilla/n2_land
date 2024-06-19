@@ -58,6 +58,16 @@ export const statusStructureLabel = [
   'For Appraisal/Offer to Compensation',
   'LBP Account Opening',
 ];
+
+// export const statusStructureLabel = [
+//   'Demolished',
+//   'Paid',
+//   'For Payment Processing',
+//   'For Legal Pass',
+//   'For Offer to Compensation',
+//   'For Notice of Taking',
+// ];
+
 export const statusStructureColorHex = [
   '#00C5FF',
   '#70AD47',

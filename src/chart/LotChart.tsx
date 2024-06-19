@@ -561,7 +561,7 @@ const LotChart = ({ municipal, barangay }: any) => {
     barSeriesRef.current?.data.setAll(lotMoaData);
     yAxisRef.current?.data.setAll(lotMoaData);
   });
-
+  //JSX
   return (
     <>
       <div
