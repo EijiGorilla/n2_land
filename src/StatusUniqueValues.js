@@ -51,22 +51,13 @@ export const statusMoaQuery = statusMoa.map((status, index) => {
 // Structure
 export const structureStatusField = 'StatusStruc';
 export const statusStructureLabel = [
-  'Dismantling/Clearing',
+  'Demolished',
   'Paid',
   'For Payment Processing',
   'For Legal Pass',
-  'For Appraisal/Offer to Compensation',
-  'LBP Account Opening',
+  'For Offer to Compensation',
+  'For Notice of Taking',
 ];
-
-// export const statusStructureLabel = [
-//   'Demolished',
-//   'Paid',
-//   'For Payment Processing',
-//   'For Legal Pass',
-//   'For Offer to Compensation',
-//   'For Notice of Taking',
-// ];
 
 export const statusStructureColorHex = [
   '#00C5FF',
