@@ -233,7 +233,7 @@ const LotChart = ({ municipal, barangay }: any) => {
       am5.Legend.new(root, {
         centerX: am5.percent(50),
         x: am5.percent(50),
-        scale: 1.1,
+        scale: 1.03,
       }),
     );
     legendRef.current = legend;
@@ -581,11 +581,11 @@ const LotChart = ({ municipal, barangay }: any) => {
           style={{ paddingTop: '5px', paddingLeft: '5px' }}
         />
         <dl style={{ alignItems: 'center' }}>
-          <dt style={{ color: '#D3D3D3', fontSize: '1.2rem' }}>Total Lots</dt>
+          <dt style={{ color: '#D3D3D3', fontSize: '1.1rem' }}>Total Lots</dt>
           <dd
             style={{
               color: '#6ede00',
-              fontSize: '2rem',
+              fontSize: '1.9rem',
               fontWeight: 'bold',
               fontFamily: 'calibri',
               lineHeight: '1.2',
@@ -597,11 +597,11 @@ const LotChart = ({ municipal, barangay }: any) => {
           <dd style={{ color: 'white', margin: 'auto' }}>({thousands_separators(lotNumber[0])})</dd>
         </dl>
         <dl style={{ alignItems: 'center' }}>
-          <dt style={{ color: '#D3D3D3', fontSize: '1.2rem' }}>Total Affected Area</dt>
+          <dt style={{ color: '#D3D3D3', fontSize: '1.1rem' }}>Total Affected Area</dt>
           <dd
             style={{
               color: '#6ede00',
-              fontSize: '2rem',
+              fontSize: '1.9rem',
               fontFamily: 'calibri',
               lineHeight: '1.2',
               margin: 'auto',
@@ -609,8 +609,8 @@ const LotChart = ({ municipal, barangay }: any) => {
             }}
           >
             {totalAffectedArea && thousands_separators(totalAffectedArea.toFixed(0))}
-            <label style={{ fontWeight: 'normal', fontSize: '1.4rem' }}> m</label>
-            <label style={{ verticalAlign: 'super', fontSize: '0.7rem' }}>2</label>
+            <label style={{ fontWeight: 'normal', fontSize: '1.3rem' }}> m</label>
+            <label style={{ verticalAlign: 'super', fontSize: '0.6rem' }}>2</label>
           </dd>
         </dl>
       </div>
@@ -628,7 +628,7 @@ const LotChart = ({ municipal, barangay }: any) => {
 
       {/* Permit-to-Enter */}
       <div
-        style={{ color: '#D3D3D3', fontSize: '1.3rem', paddingLeft: '30px', marginBottom: '13px' }}
+        style={{ color: '#D3D3D3', fontSize: '1.2rem', paddingLeft: '30px', marginBottom: '13px' }}
       >
         PERMIT-TO-ENTER
       </div>
@@ -637,7 +637,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           <b
             style={{
               color: '#6ede00',
-              fontSize: '2.1rem',
+              fontSize: '2rem',
               fontWeight: 'bold',
               paddingLeft: '15px',
               display: 'flex',
@@ -656,7 +656,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           <b
             style={{
               color: '#6ede00',
-              fontSize: '2.1rem',
+              fontSize: '2rem',
               fontWeight: 'bold',
               fontFamily: 'calibri',
               paddingLeft: '15px',
@@ -679,7 +679,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         )}
       </CalciteLabel>
 
-      <div style={{ color: '#D3D3D3', fontSize: '1.3rem', marginLeft: '30px' }}>
+      <div style={{ color: '#D3D3D3', fontSize: '1.2rem', marginLeft: '30px' }}>
         MODE OF ACQUISITION
       </div>
       <div
