@@ -73,7 +73,7 @@ export const statusStructureColorRgb = [
   [0, 112, 255, 0.6],
   [255, 255, 0, 0.6],
   [255, 170, 0, 0.6],
-  [255, 83, 73], //[255, 0, 0, 0.6],
+  [255, 83, 73, 0.6], //[255, 0, 0, 0.6],
 ];
 
 export const statusStructureQuery = statusStructureLabel.map((status, index) => {
