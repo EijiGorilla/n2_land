@@ -347,7 +347,7 @@ const LotChart = ({ municipal, barangay }: any) => {
 
     legend.itemContainers.template.setAll({
       // set space between legend items
-      paddingTop: 5,
+      paddingTop: 3,
       paddingBottom: 1,
     });
 
@@ -621,10 +621,10 @@ const LotChart = ({ municipal, barangay }: any) => {
       <div
         id={chartID}
         style={{
-          height: '41vh',
+          height: '38vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
-          marginBottom: '9%',
+          marginBottom: '6%',
         }}
       ></div>
 

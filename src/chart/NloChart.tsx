@@ -97,7 +97,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
         legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(20),
-        scale: 1.8,
+        scale: 2.5,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -212,7 +212,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     chart.onPrivate('width', function (width: any) {
       const boxWidth = 270; //props.style.width;
       // var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
-      var availableSpace = (boxWidth - valueLabelsWidth) * 1;
+      var availableSpace = (boxWidth - valueLabelsWidth) * 1.1;
       legend.labels.template.setAll({
         width: availableSpace,
         maxWidth: availableSpace,
@@ -311,7 +311,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
       <div
         id={chartID}
         style={{
-          height: '40vh',
+          height: '41vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
         }}
