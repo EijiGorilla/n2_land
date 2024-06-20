@@ -102,6 +102,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
     // Set themesf
     // https://www.amcharts.com/docs/v5/concepts/themes/
     root.setThemes([am5themes_Animated.new(root), am5themes_Responsive.new(root)]);
+    const responsive = am5themes_Responsive.new(root);
 
     // Create chart
     // https://www.amcharts.com/docs/v5/charts/percent-charts/pie-chart/
@@ -234,21 +235,32 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
     // Responsive legend
     // https://www.amcharts.com/docs/v5/tutorials/pie-chart-with-a-legend-with-dynamically-sized-labels/
     // This aligns Legend to Left
+    const valueLabelsWidth = 50;
     chart.onPrivate('width', function (width: any) {
       const boxWidth = 270; //props.style.width;
-      var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
-      //var availableSpace = (boxWidth - valueLabelsWidth) * 0.7
+      // var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
+      var availableSpace = (boxWidth - valueLabelsWidth) * 1;
       legend.labels.template.setAll({
         width: availableSpace,
         maxWidth: availableSpace,
       });
     });
 
+    // responsive.addRule({
+    //   name: 'Legend',
+    //   relevant: function (width, height) {
+    //     return width > chart.width();
+    //   },
+    //   settings: {
+    //     centerX: am5.percent(50),
+    //     x: am5.percent(50),
+    //     scale: 2,
+    //   },
+    // });
+
     // To align legend items: valueLabels right, labels to left
     // 1. fix width of valueLabels
     // 2. dynamically change width of labels by screen size
-
-    const valueLabelsWidth = 50;
 
     // Change legend labelling properties
     // To have responsive font size, do not set font size
@@ -262,7 +274,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
 
     legend.valueLabels.template.setAll({
       textAlign: 'right',
-      width: valueLabelsWidth,
+      // width: valueLabelsWidth,
       fill: am5.color('#ffffff'),
       //fontSize: LEGEND_FONT_SIZE,
     });

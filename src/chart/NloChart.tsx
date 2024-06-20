@@ -211,8 +211,8 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     // This aligns Legend to Left
     chart.onPrivate('width', function (width: any) {
       const boxWidth = 270; //props.style.width;
-      var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
-      //var availableSpace = (boxWidth - valueLabelsWidth) * 0.7
+      // var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
+      var availableSpace = (boxWidth - valueLabelsWidth) * 1;
       legend.labels.template.setAll({
         width: availableSpace,
         maxWidth: availableSpace,
@@ -289,8 +289,8 @@ const NloChart = memo(({ municipal, barangay }: any) => {
         <img
           src="https://EijiGorilla.github.io/Symbols/NLO_Logo.svg"
           alt="Structure Logo"
-          height={'20%'}
-          width={'20%'}
+          height={'17%'}
+          width={'17%'}
           style={{ paddingTop: '5px', paddingLeft: '5px' }}
         />
       </div>
