@@ -134,7 +134,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         // legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(20),
-        scale: 2.2,
+        scale: 2,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -210,21 +210,23 @@ const LotChart = ({ municipal, barangay }: any) => {
 
     // Disabling labels and ticksll
     pieSeries.labels.template.setAll({
-      fill: am5.color('#ffffff'),
-      fontSize: '0.5rem',
+      // fill: am5.color('#ffffff'),
+      // fontSize: '0.5rem',
       visible: false,
-      oversizedBehavior: 'wrap',
-      maxWidth: 65,
-      text: "{category}: [#C9CC3F; fontSize: 10px;]{valuePercentTotal.formatNumber('#.')}%[/]",
+      scale: 0,
+      // oversizedBehavior: 'wrap',
+      // maxWidth: 65,
+      // text: "{category}: [#C9CC3F; fontSize: 10px;]{valuePercentTotal.formatNumber('#.')}%[/]",
     });
 
     // pieSeries.labels.template.set('visible', true);
     pieSeries.ticks.template.setAll({
       // fillOpacity: 0.9,
-      stroke: am5.color('#ffffff'),
+      // stroke: am5.color('#ffffff'),
       // strokeWidth: 0.3,
       // strokeOpacity: 1,
       visible: false,
+      scale: 0,
     });
 
     // Legend
@@ -345,7 +347,7 @@ const LotChart = ({ municipal, barangay }: any) => {
 
     legend.itemContainers.template.setAll({
       // set space between legend items
-      paddingTop: 3,
+      paddingTop: 5,
       paddingBottom: 1,
     });
 
@@ -619,7 +621,7 @@ const LotChart = ({ municipal, barangay }: any) => {
       <div
         id={chartID}
         style={{
-          height: '40vh',
+          height: '41vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
           marginBottom: '9%',

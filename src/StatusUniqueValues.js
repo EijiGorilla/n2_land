@@ -65,7 +65,7 @@ export const statusStructureColorHex = [
   '#0070FF',
   '#FFFF00',
   '#FFAA00',
-  '#FF5349', //'#FF0000',
+  '#FF5733', //'#FF0000',
 ];
 export const statusStructureColorRgb = [
   [0, 197, 255, 0.6],
@@ -73,7 +73,7 @@ export const statusStructureColorRgb = [
   [0, 112, 255, 0.6],
   [255, 255, 0, 0.6],
   [255, 170, 0, 0.6],
-  [255, 83, 73, 0.6], //[255, 0, 0, 0.6],
+  [255, 87, 51, 0.6], //[255, 0, 0, 0.6],
 ];
 
 export const statusStructureQuery = statusStructureLabel.map((status, index) => {

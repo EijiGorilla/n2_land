@@ -113,8 +113,14 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     });
 
     // Disabling labels and ticksll
-    pieSeries.labels.template.set('visible', false);
-    pieSeries.ticks.template.set('visible', false);
+    pieSeries.labels.template.setAll({
+      visible: false,
+      scale: 0,
+    });
+    pieSeries.ticks.template.setAll({
+      visible: false,
+      scale: 0,
+    });
 
     // EventDispatcher is disposed at SpriteEventDispatcher...
     // It looks like this error results from clicking events
@@ -180,6 +186,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
       am5.Legend.new(root, {
         centerX: am5.percent(50),
         x: am5.percent(50),
+        scale: 1.03,
       }),
     );
     legendRef.current = legend;
@@ -203,7 +210,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     // https://www.amcharts.com/docs/v5/tutorials/pie-chart-with-a-legend-with-dynamically-sized-labels/
     // This aligns Legend to Left
     chart.onPrivate('width', function (width: any) {
-      const boxWidth = 190; //props.style.width;
+      const boxWidth = 270; //props.style.width;
       var availableSpace = Math.max(width - chart.height() - boxWidth, boxWidth);
       //var availableSpace = (boxWidth - valueLabelsWidth) * 0.7
       legend.labels.template.setAll({
@@ -237,7 +244,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
 
     legend.itemContainers.template.setAll({
       // set space between legend items
-      paddingTop: 3,
+      paddingTop: 5,
       paddingBottom: 1,
     });
 
@@ -255,7 +262,39 @@ const NloChart = memo(({ municipal, barangay }: any) => {
 
   return (
     <>
-      <CalciteLabel>TOTAL NON-LAND OWNERS</CalciteLabel>
+      <div
+        style={{
+          display: 'flex',
+          marginTop: '3px',
+          marginLeft: '15px',
+          marginRight: '15px',
+          justifyContent: 'space-between',
+        }}
+      >
+        <dl style={{ alignItems: 'center' }}>
+          <dt style={{ color: '#D3D3D3', fontSize: '1.1rem' }}>TOTAL NON-LAND OWNERS</dt>
+          <dd
+            style={{
+              color: '#6ede00',
+              fontSize: '1.9rem',
+              fontWeight: 'bold',
+              fontFamily: 'calibri',
+              lineHeight: '1.2',
+              margin: 'auto',
+            }}
+          >
+            {thousands_separators(nloNumber)}
+          </dd>
+        </dl>
+        <img
+          src="https://EijiGorilla.github.io/Symbols/NLO_Logo.svg"
+          alt="Structure Logo"
+          height={'20%'}
+          width={'20%'}
+          style={{ paddingTop: '5px', paddingLeft: '5px' }}
+        />
+      </div>
+      {/* <CalciteLabel>TOTAL NON-LAND OWNERS</CalciteLabel>
       <CalciteLabel layout="inline">
         <b className="permitToEnterNumber">
           {thousands_separators(nloNumber)}
@@ -267,7 +306,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
             style={{ marginLeft: '200%', display: 'flex', marginTop: '-17%' }}
           />
         </b>
-      </CalciteLabel>
+      </CalciteLabel> */}
 
       <div
         id={chartID}
