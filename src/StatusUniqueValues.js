@@ -55,7 +55,7 @@ export const statusStructureLabel = [
   'Paid',
   'For Payment Processing',
   'For Legal Pass',
-  'For Offer to Compensation',
+  'For Offer to Compensate',
   'For Notice of Taking',
 ];
 
