@@ -521,20 +521,16 @@ function App() {
         </div>
 
         {/* Lot progress chart is loaded ONLY when charts widget is clicked. */}
-        {nextWidget === 'charts' && nextWidget !== activeWidget && lotLayerLoaded === 'loaded' ? (
+        {nextWidget === 'charts' && nextWidget !== activeWidget && lotLayerLoaded === 'loaded' && (
           <LotProgressChart
             municipal={municipalSelected.municipality}
             barangay={barangaySelected.name}
             nextwidget={nextWidget === activeWidget ? null : nextWidget}
           />
-        ) : (
-          ''
         )}
 
-        {nextWidget === 'handedover-charts' && nextWidget !== activeWidget ? (
+        {nextWidget === 'handedover-charts' && nextWidget !== activeWidget && (
           <HandedOverAreaChart />
-        ) : (
-          ''
         )}
       </CalciteShell>
     </div>
