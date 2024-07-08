@@ -437,7 +437,6 @@ export async function generateStructureData(municipal: any, barangay: any) {
       };
       data1.push(object);
     });
-    console.log(data1);
     return data1;
   });
 }

@@ -92,6 +92,14 @@ function App() {
   const LotProgressChart = loadable(() => import('./chart/LotProgressChart'));
   const HandedOverAreaChart = loadable(() => import('./chart/HandedOverAreaChart'));
 
+  //
+  const [lotLayerLoaded, setLotLayerLoaded] = useState<any>();
+  useEffect(() => {
+    lotLayer.load().then(() => {
+      setLotLayerLoaded(lotLayer.loadStatus);
+    });
+  });
+
   //**** Create dropdonw list */
   // Get a pair of municipality and barangay
   useEffect(() => {
@@ -513,7 +521,7 @@ function App() {
         </div>
 
         {/* Lot progress chart is loaded ONLY when charts widget is clicked. */}
-        {nextWidget === 'charts' && nextWidget !== activeWidget ? (
+        {nextWidget === 'charts' && nextWidget !== activeWidget && lotLayerLoaded === 'loaded' ? (
           <LotProgressChart
             municipal={municipalSelected.municipality}
             barangay={barangaySelected.name}
