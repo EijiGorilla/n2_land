@@ -323,7 +323,7 @@ const LotChart = ({ municipal, barangay }: any) => {
                 ) +
                 ' m2' +
                 ')'
-              : category === 'For Appraisal/Offer to Buy'
+              : category === 'For Offer to Buy'
                 ? '{value}[/]' +
                   ' (' +
                   thousands_separators(
@@ -331,7 +331,7 @@ const LotChart = ({ municipal, barangay }: any) => {
                   ) +
                   ' m2' +
                   ')'
-                : category === 'For Expro'
+                : category === 'For Notice of Taking'
                   ? '{value}[/]' +
                     ' (' +
                     thousands_separators(
@@ -339,7 +339,23 @@ const LotChart = ({ municipal, barangay }: any) => {
                     ) +
                     ' m2' +
                     ')'
-                  : '{value}';
+                  : category === 'With PTE'
+                    ? '{value}[/]' +
+                      ' (' +
+                      thousands_separators(
+                        affectAreaPie?.find((emp: any) => emp.category === category)?.value,
+                      ) +
+                      ' m2' +
+                      ')'
+                    : category === 'For Expropriation'
+                      ? '{value}[/]' +
+                        ' (' +
+                        thousands_separators(
+                          affectAreaPie?.find((emp: any) => emp.category === category)?.value,
+                        ) +
+                        ' m2' +
+                        ')'
+                      : '{value}';
       }
 
       return text;
