@@ -237,6 +237,10 @@ export const pnrLayer = new FeatureLayer({
         type: 'fields',
         fieldInfos: [
           {
+            fieldName: 'OwnershipType',
+            label: 'Ownership Type',
+          },
+          {
             fieldName: 'HandOverDate',
             label: 'Hand-Over Date',
           },
