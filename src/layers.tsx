@@ -360,28 +360,6 @@ let lotLayerRenderer = new UniqueValueRenderer({
 });
 
 // Custom popup for lot layer
-const lotStatusArray = [
-  'Handed-Over',
-  'Paid',
-  'For Payment Processing',
-  'For Legal Pass',
-  'For Appraisal/Offer to Buy',
-  'For Expro',
-];
-
-const landUseArray = [
-  'Agricultural',
-  'Agricultural & Commercial',
-  'Agricultural / Residential',
-  'Commercial',
-  'Industrial',
-  'Irrigation',
-  'Residential',
-  'Road',
-  'Road Lot',
-  'Special Exempt',
-];
-
 let customContentLot = new CustomContent({
   outFields: ['*'],
   creator: (event: any) => {
@@ -416,7 +394,7 @@ let customContentLot = new CustomContent({
     return `<ul><li>Handed-Over Area: <b>${handOverArea} %</b></li><br>
     <li>Handed-Over Date: <b>${date}</b></li><br>
               <li>Status:           <b>${
-                statusLot >= 0 ? lotStatusArray[statusLot] : ''
+                statusLot >= 0 ? statusLotLabel[statusLot - 1] : ''
               }</b></li><br>
               <li>Land Use:         <b>${landUse}</b></li><br>
               <li>Municipality:     <b>${municipal}</b></li><br>
