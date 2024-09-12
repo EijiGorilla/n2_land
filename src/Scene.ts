@@ -1,6 +1,7 @@
 import SceneView from '@arcgis/core/views/SceneView';
 import Map from '@arcgis/core/Map';
 import BasemapGallery from '@arcgis/core/widgets/BasemapGallery';
+import Compass from '@arcgis/core/widgets/Compass';
 import LayerList from '@arcgis/core/widgets/LayerList';
 import Search from '@arcgis/core/widgets/Search';
 import Expand from '@arcgis/core/widgets/Expand';
@@ -187,3 +188,8 @@ export const zoom = new Zoom({
   view,
 });
 // view.ui.add(zoom, { position: 'bottom-right' });
+
+// Compass
+export const compass = new Compass({
+  view: view,
+});

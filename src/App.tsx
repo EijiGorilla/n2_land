@@ -9,6 +9,7 @@ import {
   searchExpand,
   locateBtn,
   zoom,
+  compass,
 } from './Scene';
 import './index.css';
 import './App.css';
@@ -186,6 +187,7 @@ function App() {
       });
       view.ui.add(locateBtn, { position: 'top-right' });
       view.ui.add(zoom, { position: 'bottom-right' });
+      view.ui.add(compass, { position: 'top-right' });
 
       view.container = mapDiv.current;
       view.ui.components = [];
