@@ -19,7 +19,14 @@ import {
 } from '../components/Query';
 import '../App.css';
 import { CalciteLabel } from '@esri/calcite-components-react';
-import { lotMoaField, lotStatusField, statusLotQuery, statusMoaQuery } from '../StatusUniqueValues';
+import {
+  lotMoaField,
+  lotStatusField,
+  primaryLabelColor,
+  statusLotQuery,
+  statusMoaQuery,
+  valueLabelColor,
+} from '../StatusUniqueValues';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -133,15 +140,33 @@ const LotChart = ({ municipal, barangay }: any) => {
           '{category}[/] ([#C9CC3F; bold]{valuePercentTotal.formatNumber("#.")}%[/]) ',
         // legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
-        innerRadius: am5.percent(20),
-        scale: 2,
+        innerRadius: am5.percent(28),
+        scale: 2.75,
       }),
     );
     pieSeriesRef.current = pieSeries;
     chart.series.push(pieSeries);
 
+    // values inside a donut
+    let inner_label = pieSeries.children.push(
+      am5.Label.new(root, {
+        text: '[#ffffff]{valueSum}[/]\n[fontSize: 5px; #d3d3d3; verticalAlign: super]LOTS[/]',
+        fontSize: 11,
+        centerX: am5.percent(50),
+        centerY: am5.percent(40),
+        populateText: true,
+        oversizedBehavior: 'fit',
+        textAlign: 'center',
+      }),
+    );
+
+    pieSeries.onPrivate('width', (width: any) => {
+      inner_label.set('maxWidth', width * 0.7);
+    });
+
     // Set slice opacity and stroke color
     pieSeries.slices.template.setAll({
+      toggleKey: 'none',
       fillOpacity: 0.9,
       stroke: am5.color('#ffffff'),
       strokeWidth: 0.5,
@@ -594,15 +619,15 @@ const LotChart = ({ municipal, barangay }: any) => {
         <img
           src="https://EijiGorilla.github.io/Symbols/Land_logo.png"
           alt="Land Logo"
-          height={'15%'}
-          width={'15%'}
+          height={'13%'}
+          width={'13%'}
           style={{ paddingTop: '5px', paddingLeft: '5px' }}
         />
         <dl style={{ alignItems: 'center' }}>
-          <dt style={{ color: '#D3D3D3', fontSize: '1.1rem' }}>Total Lots</dt>
+          <dt style={{ color: primaryLabelColor, fontSize: '1.1rem' }}>Total Lots</dt>
           <dd
             style={{
-              color: '#6ede00',
+              color: valueLabelColor,
               fontSize: '1.9rem',
               fontWeight: 'bold',
               fontFamily: 'calibri',
@@ -610,15 +635,15 @@ const LotChart = ({ municipal, barangay }: any) => {
               margin: 'auto',
             }}
           >
-            {thousands_separators(lotNumber[1])}
+            {thousands_separators(lotNumber[0])}
           </dd>
-          <dd style={{ color: 'white', margin: 'auto' }}>({thousands_separators(lotNumber[0])})</dd>
         </dl>
         <dl style={{ alignItems: 'center' }}>
-          <dt style={{ color: '#D3D3D3', fontSize: '1.1rem' }}>Total Affected Area</dt>
+          <dt style={{ color: primaryLabelColor, fontSize: '1.1rem' }}>Total Affected Area</dt>
+          {/* #d3d3d3 */}
           <dd
             style={{
-              color: '#6ede00',
+              color: valueLabelColor,
               fontSize: '1.9rem',
               fontFamily: 'calibri',
               lineHeight: '1.2',
@@ -646,7 +671,12 @@ const LotChart = ({ municipal, barangay }: any) => {
 
       {/* Permit-to-Enter */}
       <div
-        style={{ color: '#D3D3D3', fontSize: '1.2rem', paddingLeft: '30px', marginBottom: '13px' }}
+        style={{
+          color: primaryLabelColor,
+          fontSize: '1.2rem',
+          paddingLeft: '30px',
+          marginBottom: '13px',
+        }}
       >
         PERMIT-TO-ENTER
       </div>
@@ -654,7 +684,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         {pteNumber[0] === 'Infinity' ? (
           <b
             style={{
-              color: '#6ede00',
+              color: valueLabelColor,
               fontSize: '2rem',
               fontWeight: 'bold',
               paddingLeft: '15px',
@@ -673,7 +703,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         ) : (
           <b
             style={{
-              color: '#6ede00',
+              color: valueLabelColor,
               fontSize: '2rem',
               fontWeight: 'bold',
               fontFamily: 'calibri',
@@ -697,7 +727,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         )}
       </CalciteLabel>
 
-      <div style={{ color: '#D3D3D3', fontSize: '1.2rem', marginLeft: '30px' }}>
+      <div style={{ color: primaryLabelColor, fontSize: '1.2rem', marginLeft: '30px' }}>
         MODE OF ACQUISITION
       </div>
       <div

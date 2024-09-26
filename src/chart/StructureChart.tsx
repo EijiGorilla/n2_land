@@ -16,10 +16,12 @@ import {
 } from '../components/Query';
 import { CalciteLabel } from '@esri/calcite-components-react';
 import {
+  primaryLabelColor,
   statusMoaStructureQuery,
   statusStructureQuery,
   structureMoaField,
   structureStatusField,
+  valueLabelColor,
 } from '../StatusUniqueValues';
 
 // Dispose function
@@ -123,15 +125,33 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
         //legendLabelText: "[{fill}]{category}[/]",
         legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
-        innerRadius: am5.percent(20),
-        scale: 2,
+        innerRadius: am5.percent(28),
+        scale: 2.2,
       }),
     );
     pieSeriesRef.current = pieSeries;
     chart.series.push(pieSeries);
 
+    // values inside a donut
+    let inner_label = pieSeries.children.push(
+      am5.Label.new(root, {
+        text: '[#ffffff]{valueSum}[/]\n[fontSize: 5px; #d3d3d3; verticalAlign: super]STRUCTURES[/]',
+        fontSize: 13,
+        centerX: am5.percent(50),
+        centerY: am5.percent(40),
+        populateText: true,
+        oversizedBehavior: 'fit',
+        textAlign: 'center',
+      }),
+    );
+
+    pieSeries.onPrivate('width', (width: any) => {
+      inner_label.set('maxWidth', width * 0.7);
+    });
+
     // Set slice opacity and stroke color
     pieSeries.slices.template.setAll({
+      toggleKey: 'none',
       fillOpacity: 0.9,
       stroke: am5.color('#ffffff'),
       strokeWidth: 0.5,
@@ -508,10 +528,10 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
         }}
       >
         <dl style={{ alignItems: 'center' }}>
-          <dt style={{ color: '#D3D3D3', fontSize: '1.1rem' }}>TOTAL STRUCTURES</dt>
+          <dt style={{ color: primaryLabelColor, fontSize: '1.1rem' }}>TOTAL STRUCTURES</dt>
           <dd
             style={{
-              color: '#6ede00',
+              color: valueLabelColor,
               fontSize: '1.9rem',
               fontWeight: 'bold',
               fontFamily: 'calibri',
@@ -557,7 +577,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
             />
           </b>
         ) : (
-          <b className="permitToEnterNumber">
+          <b className="permitToEnterNumber" style={{ color: valueLabelColor }}>
             {structureNumber[0]}% ({thousands_separators(structureNumber[1])})
             <img
               src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"

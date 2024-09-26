@@ -9,7 +9,12 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import { generateNloData, generateNloNumber, thousands_separators } from '../components/Query';
 import { CalciteLabel } from '@esri/calcite-components-react';
-import { nloStatusField, statusNloQuery } from '../StatusUniqueValues';
+import {
+  nloStatusField,
+  primaryLabelColor,
+  statusNloQuery,
+  valueLabelColor,
+} from '../StatusUniqueValues';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -96,15 +101,33 @@ const NloChart = memo(({ municipal, barangay }: any) => {
         //legendLabelText: "[{fill}]{category}[/]",
         legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
-        innerRadius: am5.percent(20),
+        innerRadius: am5.percent(28),
         scale: 2.5,
       }),
     );
     pieSeriesRef.current = pieSeries;
     chart.series.push(pieSeries);
 
+    // values inside a donut
+    let inner_label = pieSeries.children.push(
+      am5.Label.new(root, {
+        text: '[#ffffff]{valueSum}[/]\n[fontSize: 5px; #d3d3d3; verticalAlign: super]FAMILIES[/]',
+        fontSize: 13,
+        centerX: am5.percent(50),
+        centerY: am5.percent(40),
+        populateText: true,
+        oversizedBehavior: 'fit',
+        textAlign: 'center',
+      }),
+    );
+
+    pieSeries.onPrivate('width', (width: any) => {
+      inner_label.set('maxWidth', width * 0.7);
+    });
+
     // Set slice opacity and stroke color
     pieSeries.slices.template.setAll({
+      toggleKey: 'none',
       fillOpacity: 0.9,
       stroke: am5.color('#ffffff'),
       strokeWidth: 0.5,
@@ -272,10 +295,10 @@ const NloChart = memo(({ municipal, barangay }: any) => {
         }}
       >
         <dl style={{ alignItems: 'center' }}>
-          <dt style={{ color: '#D3D3D3', fontSize: '1.1rem' }}>TOTAL NON-LAND OWNERS</dt>
+          <dt style={{ color: primaryLabelColor, fontSize: '1.1rem' }}>TOTAL NON-LAND OWNERS</dt>
           <dd
             style={{
-              color: '#6ede00',
+              color: valueLabelColor,
               fontSize: '1.9rem',
               fontWeight: 'bold',
               fontFamily: 'calibri',

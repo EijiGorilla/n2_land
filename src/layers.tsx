@@ -379,9 +379,9 @@ let customContentLot = new CustomContent({
     let date: any;
     if (handedOverDate) {
       daten = new Date(handedOverDate);
-      const year = daten.getFullYear();
-      const month = daten.getMonth() + 1;
-      const day = daten.getDate();
+      const year = daten.toLocalString('default', { year: 'numeric' });
+      const month = daten.toLocalString('default', { month: '2-digit' });
+      const day = daten.toLocalString('default', { day: '2-digit' });
       date = `${year}-${month}-${day}`;
     } else {
       date = 'Undefined';
