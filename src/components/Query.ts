@@ -3,6 +3,7 @@ import StatisticDefinition from '@arcgis/core/rest/support/StatisticDefinition';
 import * as am5 from '@amcharts/amcharts5';
 import { view } from '../Scene';
 import {
+  handedOverLotField,
   lotHandedOverAreaField,
   lotHandedOverDateField,
   lotMoaField,
@@ -220,13 +221,18 @@ export async function generateAffectedAreaForPie(municipal: any, barangay: any) 
   });
 }
 
-// For Permit-to-Enter
-export async function generatePermitEnter() {
-  const onStatisticsFieldValue: string = 'CASE WHEN ' + lotPteField + ' = 1 THEN 1 ELSE 0 END';
+// Handed Over
+export async function generateHandedOverLotsNumber(municipal: any, barangay: any) {
+  const queryMunicipality = "Municipality = '" + municipal + "'";
+  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
+  const statusQuery = 'LotID IS NOT NULL';
+  const onStatisticsFieldValue: string =
+    'CASE WHEN ' + handedOverLotField + ' = 1 THEN 1 ELSE 0 END';
 
-  var total_pte_lot = new StatisticDefinition({
+  var total_handedover_lot = new StatisticDefinition({
     onStatisticField: onStatisticsFieldValue,
-    outStatisticFieldName: 'total_pte_lot',
+    outStatisticFieldName: 'total_handedover_lot',
     statisticType: 'sum',
   });
 
@@ -237,16 +243,24 @@ export async function generatePermitEnter() {
   });
 
   var query = lotLayer.createQuery();
-  //query.where = 'LotID IS NOT NULL';
-  query.outStatistics = [total_pte_lot, total_lot_N];
-  query.returnGeometry = true;
+
+  if (municipal && !barangay) {
+    query.where = statusQuery + ' AND ' + queryMunicipality;
+  } else if (barangay) {
+    query.where = statusQuery + ' AND ' + queryMunicipalBarangay;
+  } else {
+    query.where = statusQuery;
+  }
+
+  query.outStatistics = [total_handedover_lot, total_lot_N];
+  // query.returnGeometry = true;
 
   return lotLayer.queryFeatures(query).then((response: any) => {
     var stats = response.features[0].attributes;
-    const pte = stats.total_pte_lot;
+    const handedover = stats.total_handedover_lot;
     const totaln = stats.total_lot_N;
-    const percent = ((pte / totaln) * 100).toFixed(0);
-    return [percent, pte];
+    const percent = ((handedover / totaln) * 100).toFixed(0);
+    return [percent, handedover];
   });
 }
 

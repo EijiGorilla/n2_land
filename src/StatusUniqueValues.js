@@ -171,6 +171,7 @@ export const pierAccessValueDateColor = [
 ];
 
 // Handed Over Date and Handed Over Area
+export const handedOverLotField = 'HandedOver';
 export const lotHandedOverDateField = 'HandedOverDate';
 export const lotHandedOverAreaField = 'HandedOverArea';
 

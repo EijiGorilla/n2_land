@@ -10,10 +10,10 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import {
   generateAffectedAreaForPie,
+  generateHandedOverLotsNumber,
   generateLotData,
   generateLotMoaData,
   generateLotNumber,
-  generatePermitEnter,
   generateTotalAffectedArea,
   thousands_separators,
 } from '../components/Query';
@@ -27,7 +27,6 @@ import {
   statusMoaQuery,
   valueLabelColor,
 } from '../StatusUniqueValues';
-
 // Dispose function
 function maybeDisposeRoot(divId: any) {
   am5.array.each(am5.registry.rootElements, function (root) {
@@ -49,7 +48,7 @@ const LotChart = ({ municipal, barangay }: any) => {
   const chartID = 'pie-two';
 
   const [lotNumber, setLotNumber] = useState([]);
-  const [pteNumber, setPteNumber] = useState([]);
+  const [handedOverNumber, setHandedOverNumber] = useState([]);
 
   // Affected Area for Pie Chart
   const [affectAreaPie, setAffectAreaPie] = useState<unknown | any | undefined>([]);
@@ -93,8 +92,8 @@ const LotChart = ({ municipal, barangay }: any) => {
       setTotalAffectedArea(response);
     });
 
-    generatePermitEnter().then((response: any) => {
-      setPteNumber(response);
+    generateHandedOverLotsNumber(municipal, barangay).then((response: any) => {
+      setHandedOverNumber(response);
     });
 
     // Mode of Acquisition
@@ -141,7 +140,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         // legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(28),
-        scale: 2.75,
+        scale: 2.5,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -678,10 +677,10 @@ const LotChart = ({ municipal, barangay }: any) => {
           marginBottom: '13px',
         }}
       >
-        PERMIT-TO-ENTER
+        HANDED-OVER
       </div>
       <CalciteLabel layout="inline">
-        {pteNumber[0] === 'Infinity' ? (
+        {handedOverNumber[0] === 'Infinity' ? (
           <b
             style={{
               color: valueLabelColor,
@@ -693,7 +692,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           >
             N/A
             <img
-              src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
+              src="https://EijiGorilla.github.io/Symbols/Land_Acquisition/Handed_Over.svg"
               alt="Land Logo"
               height={'17%'}
               width={'17%'}
@@ -711,12 +710,12 @@ const LotChart = ({ municipal, barangay }: any) => {
               display: 'flex',
             }}
           >
-            {pteNumber[0]}% ({thousands_separators(pteNumber[1])})
+            {handedOverNumber[0]}% ({thousands_separators(handedOverNumber[1])})
             <img
-              src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
+              src="https://EijiGorilla.github.io/Symbols/Land_Acquisition/Handed_Over.svg"
               alt="Land Logo"
-              height={'17%'}
-              width={'17%'}
+              height={'15%'}
+              width={'15%'}
               style={{
                 marginLeft: 'auto',
                 marginRight: '20px',
