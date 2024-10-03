@@ -129,7 +129,6 @@ const LotChart = ({ municipal, barangay }: any) => {
     chartRef.current = chart;
 
     // Create series
-
     var pieSeries = chart.series.push(
       am5percent.PieSeries.new(root, {
         name: 'Series',
