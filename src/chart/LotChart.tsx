@@ -672,7 +672,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         style={{
           color: primaryLabelColor,
           fontSize: '1.2rem',
-          paddingLeft: '30px',
+          marginLeft: '13px',
           marginBottom: '13px',
         }}
       >
@@ -725,7 +725,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         )}
       </CalciteLabel>
 
-      <div style={{ color: primaryLabelColor, fontSize: '1.2rem', marginLeft: '30px' }}>
+      <div style={{ color: primaryLabelColor, fontSize: '1.2rem', marginLeft: '13px' }}>
         MODE OF ACQUISITION
       </div>
       <div
