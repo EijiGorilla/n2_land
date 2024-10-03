@@ -661,14 +661,14 @@ const LotChart = ({ municipal, barangay }: any) => {
       <div
         id={chartID}
         style={{
-          height: '38vh',
+          height: '40vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
           marginBottom: '6%',
         }}
       ></div>
 
-      {/* Permit-to-Enter */}
+      {/* Handed-Over */}
       <div
         style={{
           color: primaryLabelColor,
@@ -694,8 +694,8 @@ const LotChart = ({ municipal, barangay }: any) => {
             <img
               src="https://EijiGorilla.github.io/Symbols/Land_Acquisition/Handed_Over.svg"
               alt="Land Logo"
-              height={'17%'}
-              width={'17%'}
+              height={'14%'}
+              width={'14%'}
               style={{ marginLeft: 'auto', marginRight: '20px', marginTop: '-25px' }}
             />
           </b>
@@ -714,8 +714,8 @@ const LotChart = ({ municipal, barangay }: any) => {
             <img
               src="https://EijiGorilla.github.io/Symbols/Land_Acquisition/Handed_Over.svg"
               alt="Land Logo"
-              height={'15%'}
-              width={'15%'}
+              height={'14%'}
+              width={'14%'}
               style={{
                 marginLeft: 'auto',
                 marginRight: '20px',
