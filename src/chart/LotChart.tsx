@@ -140,7 +140,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         // legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(28),
-        scale: 2.5,
+        scale: 2.2,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -661,7 +661,7 @@ const LotChart = ({ municipal, barangay }: any) => {
       <div
         id={chartID}
         style={{
-          height: '40vh',
+          height: '41vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
           marginBottom: '6%',
