@@ -35,6 +35,7 @@ import {
   statusStructureOwnershipColor,
   statusStructureOwnershipLabel,
   statusNloQuery,
+  valueLabelColor,
 } from './StatusUniqueValues';
 
 /* Standalone table for Dates */
@@ -955,6 +956,46 @@ export const pierHeadColumnLayer = new FeatureLayer({
 // pierHeadColumnLayer.listMode = 'hide';
 
 /* Pier Point Layer with access dates */
+// default label without access dates
+const defaultPierAccessLabel = new LabelClass({
+  symbol: new LabelSymbol3D({
+    symbolLayers: [
+      new TextSymbol3DLayer({
+        material: {
+          color: valueLabelColor,
+        },
+        size: 15,
+        font: {
+          family: 'Ubuntu Mono',
+          weight: 'bold',
+        },
+      }),
+    ],
+    verticalOffset: {
+      screenLength: 80,
+      maxWorldLength: 500,
+      minWorldLength: 30,
+    },
+    callout: {
+      type: 'line',
+      size: 0.5,
+      color: [0, 0, 0],
+      border: {
+        color: [255, 255, 255, 0.7],
+      },
+    },
+  }),
+  labelExpressionInfo: {
+    expression: '$feature.PIER',
+    //'DefaultValue($feature.GeoTechName, "no data")'
+    //"IIF($feature.Score >= 13, '', '')"
+    //value: "{Type}"
+  },
+  labelPlacement: 'above-center',
+  // where: 'AccessDate IS NULL',
+});
+
+// label with access date
 const today = new Date();
 const todayn = today.getTime();
 const cutOffDateAccess = todayn;
@@ -1085,8 +1126,8 @@ export const pierAccessLayer = new FeatureLayer(
     },
     outFields: ['*'],
     layerId: 6,
-    labelingInfo: [pierAccessReadyDateLabel, pierAccessNotYetLabel, pierAccessDateMissingLabel], //[pierAccessDateMissingLabel, pierAccessReadyDateLabel, pierAccessNotYetLabel],
-    title: 'Pier with Access Date (as of October 2023)',
+    labelingInfo: [defaultPierAccessLabel], //[pierAccessReadyDateLabel, pierAccessNotYetLabel, pierAccessDateMissingLabel],
+    title: 'Pier Number', //'Pier with Access Date (as of October 2023)',
     minScale: 150000,
     maxScale: 0,
 
@@ -1117,7 +1158,7 @@ const pierAccessRenderer = new UniqueValueRenderer({
     "When(IsEmpty($feature.AccessDate), 'empty', $feature.AccessDate <= 1636070400000, 'accessible', $feature.AccessDate > 1636070400000, 'others',$feature.AccessDate)",
   uniqueValueInfos: pierAccessRendererUniqueValueInfos,
 });
-pierAccessLayer.renderer = pierAccessRenderer;
+// pierAccessLayer.renderer = pierAccessRenderer;
 
 // 3. Popup Template
 // Custom Popup Content for pierAccessLayer
@@ -1155,4 +1196,4 @@ const template = new PopupTemplate({
   lastEditInfoEnabled: false,
   content: [customContent],
 });
-pierAccessLayer.popupTemplate = template;
+// pierAccessLayer.popupTemplate = template;
