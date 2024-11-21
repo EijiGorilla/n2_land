@@ -10,6 +10,7 @@ import {
   lotPteField,
   lotStatusField,
   nloStatusField,
+  querySuperUrgent,
   statusLotEndorsedLabel,
   statusLotEndorsedQuery,
   statusLotLabel,
@@ -23,6 +24,7 @@ import {
   structureMoaField,
   structurePteField,
   structureStatusField,
+  superurgent_items,
 } from '../StatusUniqueValues';
 
 // Updat date
@@ -60,11 +62,14 @@ export async function dateUpdate() {
 }
 
 // Lot Status Query
-export async function generateLotData(municipal: any, barangay: any) {
+export async function generateLotData(superurgent: any, municipal: any, barangay: any) {
   // Query
   const queryMunicipality = "Municipality = '" + municipal + "'";
+  const querySuperUrgentMunicipality = querySuperUrgent + ' AND ' + queryMunicipality;
   const queryBarangay = "Barangay = '" + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
+  const querySuperUrgentMunicipalBarangay = querySuperUrgentMunicipality + ' AND ' + queryBarangay;
+
   const queryField = lotStatusField + ' IS NOT NULL';
 
   var total_count = new StatisticDefinition({
@@ -78,11 +83,29 @@ export async function generateLotData(municipal: any, barangay: any) {
   query.outStatistics = [total_count];
   query.orderByFields = [lotStatusField];
   query.groupByFieldsForStatistics = [lotStatusField];
-  if (municipal && !barangay) {
-    query.where = queryField + ' AND ' + queryMunicipality;
-  } else if (barangay) {
-    query.where = queryField + ' AND ' + queryMunicipalBarangay;
+
+  if (superurgent === superurgent_items[0]) {
+    if (!municipal) {
+      query.where = queryField;
+    } else if (municipal && !barangay) {
+      query.where = queryField + ' AND ' + queryMunicipality;
+    } else if (municipal && barangay) {
+      query.where = queryField + ' AND ' + queryMunicipalBarangay;
+    }
+  } else if (superurgent === superurgent_items[1]) {
+    if (!municipal) {
+      query.where = queryField + ' AND ' + querySuperUrgent;
+    } else if (municipal && !barangay) {
+      query.where = queryField + ' AND ' + querySuperUrgentMunicipality;
+    } else if (municipal && barangay) {
+      query.where = queryField + ' AND ' + querySuperUrgentMunicipalBarangay;
+    }
   }
+  // if (municipal && !barangay) {
+  //   query.where = queryField + ' AND ' + queryMunicipality;
+  // } else if (barangay) {
+  //   query.where = queryField + ' AND ' + queryMunicipalBarangay;
+  // }
 
   return lotLayer.queryFeatures(query).then((response: any) => {
     var stats = response.features;
@@ -222,11 +245,18 @@ export async function generateAffectedAreaForPie(municipal: any, barangay: any) 
 }
 
 // Handed Over
-export async function generateHandedOverLotsNumber(municipal: any, barangay: any) {
+export async function generateHandedOverLotsNumber(
+  superurgent: any,
+  municipal: any,
+  barangay: any,
+) {
   const queryMunicipality = "Municipality = '" + municipal + "'";
+  const querySuperUrgentMunicipality = querySuperUrgent + ' AND ' + queryMunicipality;
   const queryBarangay = "Barangay = '" + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
-  const statusQuery = 'LotID IS NOT NULL';
+  const querySuperUrgentMunicipalBarangay = querySuperUrgentMunicipality + ' AND ' + queryBarangay;
+
+  const queryField = 'LotID IS NOT NULL';
   const onStatisticsFieldValue: string =
     'CASE WHEN ' + handedOverLotField + ' = 1 THEN 1 ELSE 0 END';
 
@@ -244,12 +274,22 @@ export async function generateHandedOverLotsNumber(municipal: any, barangay: any
 
   var query = lotLayer.createQuery();
 
-  if (municipal && !barangay) {
-    query.where = statusQuery + ' AND ' + queryMunicipality;
-  } else if (barangay) {
-    query.where = statusQuery + ' AND ' + queryMunicipalBarangay;
-  } else {
-    query.where = statusQuery;
+  if (superurgent === superurgent_items[0]) {
+    if (!municipal) {
+      query.where = queryField;
+    } else if (municipal && !barangay) {
+      query.where = queryField + ' AND ' + queryMunicipality;
+    } else if (municipal && barangay) {
+      query.where = queryField + ' AND ' + queryMunicipalBarangay;
+    }
+  } else if (superurgent === superurgent_items[1]) {
+    if (!municipal) {
+      query.where = queryField + ' AND ' + querySuperUrgent;
+    } else if (municipal && !barangay) {
+      query.where = queryField + ' AND ' + querySuperUrgentMunicipality;
+    } else if (municipal && barangay) {
+      query.where = queryField + ' AND ' + querySuperUrgentMunicipalBarangay;
+    }
   }
 
   query.outStatistics = [total_handedover_lot, total_lot_N];
@@ -713,8 +753,8 @@ export function zoomToLayer(layer: any) {
   });
 }
 
+let highlight: any;
 export function highlightLot(layer: any) {
-  let highlight: any;
   view.whenLayerView(layer).then((urgentLayerView) => {
     var query = layer.createQuery();
     layer.queryFeatures(query).then((results: any) => {
@@ -731,4 +771,10 @@ export function highlightLot(layer: any) {
       highlight = urgentLayerView.highlight(objID);
     });
   });
+}
+
+export function highlightRemove(layer: any) {
+  if (highlight) {
+    highlight.remove();
+  }
 }

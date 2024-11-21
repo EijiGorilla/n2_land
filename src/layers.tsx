@@ -491,23 +491,23 @@ const superUrgentLotRenderer = new UniqueValueRenderer({
   ],
 });
 
-export const superUrgentLotLayer = new FeatureLayer({
-  portalItem: {
-    id: '23500954a8d84a46886e76e6e0883a69',
-    portal: {
-      url: 'https://gis.railway-sector.com/portal',
-    },
-  },
-  layerId: 4,
-  definitionExpression: 'Urgent = 0',
-  renderer: superUrgentLotRenderer,
-  popupEnabled: false,
-  labelsVisible: false,
-  title: 'Super Urgent Lot',
-  elevationInfo: {
-    mode: 'on-the-ground',
-  },
-});
+// export const superUrgentLotLayer = new FeatureLayer({
+//   portalItem: {
+//     id: '23500954a8d84a46886e76e6e0883a69',
+//     portal: {
+//       url: 'https://gis.railway-sector.com/portal',
+//     },
+//   },
+//   layerId: 4,
+//   definitionExpression: 'Urgent = 0',
+//   renderer: superUrgentLotRenderer,
+//   popupEnabled: false,
+//   labelsVisible: false,
+//   title: 'Super Urgent Lot',
+//   elevationInfo: {
+//     mode: 'on-the-ground',
+//   },
+// });
 
 /* Handed-Over Lot (public + private) */
 const handedOverLotRenderer = new UniqueValueRenderer({

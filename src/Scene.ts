@@ -22,7 +22,7 @@ import {
   pierHeadColumnLayer,
   prowLayer,
   strucOwnershipLayer,
-  superUrgentLotLayer,
+  // superUrgentLotLayer,
   handedOverLotLayer,
 } from './layers';
 import { highlightLot } from './components/Query';
@@ -52,7 +52,8 @@ const lotGroupLayer = new GroupLayer({
   title: 'Land',
   visible: true,
   visibilityMode: 'independent',
-  layers: [endorsedLotLayer, lotLayer, handedOverLotLayer, superUrgentLotLayer, pnrLayer],
+  // layers: [endorsedLotLayer, lotLayer, handedOverLotLayer, superUrgentLotLayer, pnrLayer],
+  layers: [endorsedLotLayer, lotLayer, handedOverLotLayer, pnrLayer],
 });
 
 // Change the layer order by using index numbers in map.add
@@ -93,7 +94,7 @@ export const layerList = new LayerList({
     }
 
     if (item.title === 'Super Urgent Lot') {
-      highlightLot(superUrgentLotLayer);
+      // highlightLot(superUrgentLotLayer);
     } else if (item.title === 'Handed-Over (public + private)') {
       highlightLot(handedOverLotLayer);
     }

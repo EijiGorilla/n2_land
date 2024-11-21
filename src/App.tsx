@@ -476,8 +476,8 @@ function App() {
                     <b>Permit-to-Enter</b> represents both public and private lands{' '}
                   </li>
                   <li>
-                    <b>Time-series progress chart</b> indicates the number of handed-over lots for
-                    both public and private lands{' '}
+                    <b>Progress Chart</b> indicates the number of handed-over lots for both public
+                    and private lands{' '}
                   </li>
                 </ul>
               </div>

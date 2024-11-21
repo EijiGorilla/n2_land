@@ -15,18 +15,31 @@ import {
   generateLotMoaData,
   generateLotNumber,
   generateTotalAffectedArea,
+  highlightLot,
+  highlightRemove,
   thousands_separators,
+  zoomToLayer,
 } from '../components/Query';
 import '../App.css';
-import { CalciteLabel } from '@esri/calcite-components-react';
+import '@esri/calcite-components/dist/components/calcite-segmented-control';
+import '@esri/calcite-components/dist/components/calcite-segmented-control-item';
+import '@esri/calcite-components/dist/components/calcite-label';
+import {
+  CalciteLabel,
+  CalciteSegmentedControl,
+  CalciteSegmentedControlItem,
+} from '@esri/calcite-components-react';
 import {
   lotMoaField,
   lotStatusField,
   primaryLabelColor,
+  querySuperUrgent,
   statusLotQuery,
   statusMoaQuery,
+  superurgent_items,
   valueLabelColor,
 } from '../StatusUniqueValues';
+
 // Dispose function
 function maybeDisposeRoot(divId: any) {
   am5.array.each(am5.registry.rootElements, function (root) {
@@ -54,26 +67,53 @@ const LotChart = ({ municipal, barangay }: any) => {
   const [affectAreaPie, setAffectAreaPie] = useState<unknown | any | undefined>([]);
   const [totalAffectedArea, setTotalAffectedArea] = useState<any>();
 
+  // Super urgent control items
+  const superurgent_items = ['OFF', 'ON'];
+  const [superUrgentSelected, setSuperUrgentSelected] = useState<any>(superurgent_items[0]);
+
   // 2.Mode of Acquisition
-  const barSeriesRef = useRef<unknown | any | undefined>({});
-  const yAxisRef = useRef<unknown | any | undefined>({});
-  const chartRef_moa = useRef<unknown | any | undefined>({});
-  const [lotMoaData, setLotMoaData] = useState([]);
-  const chartID_moa = 'land-moa';
+  // const barSeriesRef = useRef<unknown | any | undefined>({});
+  // const yAxisRef = useRef<unknown | any | undefined>({});
+  // const chartRef_moa = useRef<unknown | any | undefined>({});
+  // const [lotMoaData, setLotMoaData] = useState([]);
+  // const chartID_moa = 'land-moa';
 
   // Query
   const queryMunicipality = "Municipality = '" + municipal + "'";
+  const querySuperUrgentMunicipality = querySuperUrgent + ' AND ' + queryMunicipality;
   const queryBarangay = "Barangay = '" + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
+  const querySuperUrgentMunicipalBarangay = querySuperUrgentMunicipality + ' AND ' + queryBarangay;
 
-  if (municipal && !barangay) {
-    lotLayer.definitionExpression = queryMunicipality;
-  } else if (barangay) {
-    lotLayer.definitionExpression = queryMunicipalBarangay;
+  if (superUrgentSelected === superurgent_items[0]) {
+    if (!municipal) {
+      lotLayer.definitionExpression = '1=1';
+    } else if (municipal && !barangay) {
+      lotLayer.definitionExpression = queryMunicipality;
+    } else if (municipal && barangay) {
+      lotLayer.definitionExpression = queryMunicipalBarangay;
+    }
+  } else if (superUrgentSelected === superurgent_items[1]) {
+    if (!municipal) {
+      lotLayer.definitionExpression = querySuperUrgent;
+    } else if (municipal && !barangay) {
+      lotLayer.definitionExpression = querySuperUrgentMunicipality;
+    } else if (municipal && barangay) {
+      lotLayer.definitionExpression = querySuperUrgentMunicipalBarangay;
+    }
   }
 
   useEffect(() => {
-    generateLotData(municipal, barangay).then((result: any) => {
+    if (superUrgentSelected === superurgent_items[1]) {
+      zoomToLayer(lotLayer);
+      highlightLot(lotLayer);
+    } else {
+      highlightRemove(lotLayer);
+    }
+  }, [superUrgentSelected]);
+
+  useEffect(() => {
+    generateLotData(superUrgentSelected, municipal, barangay).then((result: any) => {
       setLotData(result);
     });
 
@@ -92,15 +132,15 @@ const LotChart = ({ municipal, barangay }: any) => {
       setTotalAffectedArea(response);
     });
 
-    generateHandedOverLotsNumber(municipal, barangay).then((response: any) => {
+    generateHandedOverLotsNumber(superUrgentSelected, municipal, barangay).then((response: any) => {
       setHandedOverNumber(response);
     });
 
     // Mode of Acquisition
-    generateLotMoaData(municipal, barangay).then((response: any) => {
-      setLotMoaData(response);
-    });
-  }, [municipal, barangay]);
+    // generateLotMoaData(municipal, barangay).then((response: any) => {
+    //   setLotMoaData(response);
+    // });
+  }, [superUrgentSelected, municipal, barangay]);
 
   // useLayoutEffect runs synchronously. If this is used with React.lazy,
   // Every time calcite action is fired, the chart is fired, too.
@@ -148,8 +188,8 @@ const LotChart = ({ municipal, barangay }: any) => {
     // values inside a donut
     let inner_label = pieSeries.children.push(
       am5.Label.new(root, {
-        text: '[#ffffff]{valueSum}[/]\n[fontSize: 5px; #d3d3d3; verticalAlign: super]LOTS[/]',
-        fontSize: 11,
+        text: '[#ffffff]{valueSum}[/]\n[fontSize: 0.45em; #d3d3d3; verticalAlign: super]PRIVATE LOTS[/]',
+        fontSize: '1.3em',
         centerX: am5.percent(50),
         centerY: am5.percent(40),
         populateText: true,
@@ -403,205 +443,205 @@ const LotChart = ({ municipal, barangay }: any) => {
   });
 
   // Mode of Acquisition
-  useEffect(() => {
-    // Dispose previously created root element
+  // useEffect(() => {
+  //   // Dispose previously created root element
 
-    maybeDisposeRoot(chartID_moa);
+  //   maybeDisposeRoot(chartID_moa);
 
-    var root2 = am5.Root.new(chartID_moa);
-    root2.container.children.clear();
-    root2._logo?.dispose();
+  //   var root2 = am5.Root.new(chartID_moa);
+  //   root2.container.children.clear();
+  //   root2._logo?.dispose();
 
-    // Set themesf
-    // https://www.amcharts.com/docs/v5/concepts/themes/
-    root2.setThemes([am5themes_Animated.new(root2), am5themes_Responsive.new(root2)]);
+  //   // Set themesf
+  //   // https://www.amcharts.com/docs/v5/concepts/themes/
+  //   root2.setThemes([am5themes_Animated.new(root2), am5themes_Responsive.new(root2)]);
 
-    // Create chart
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/
-    var chart = root2.container.children.push(
-      am5xy.XYChart.new(root2, {
-        panX: false,
-        panY: false,
-        wheelX: 'none',
-        wheelY: 'none',
-      }),
-    );
-    chartRef_moa.current = chart;
+  //   // Create chart
+  //   // https://www.amcharts.com/docs/v5/charts/xy-chart/
+  //   var chart = root2.container.children.push(
+  //     am5xy.XYChart.new(root2, {
+  //       panX: false,
+  //       panY: false,
+  //       wheelX: 'none',
+  //       wheelY: 'none',
+  //     }),
+  //   );
+  //   chartRef_moa.current = chart;
 
-    // Create axes
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-    var yRenderer = am5xy.AxisRendererY.new(root2, {
-      minGridDistance: 5,
-      strokeOpacity: 1,
-      strokeWidth: 1,
-      inversed: true,
-      stroke: am5.color('#ffffff'),
-    });
-    yRenderer.grid.template.set('location', 1);
+  //   // Create axes
+  //   // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+  //   var yRenderer = am5xy.AxisRendererY.new(root2, {
+  //     minGridDistance: 5,
+  //     strokeOpacity: 1,
+  //     strokeWidth: 1,
+  //     inversed: true,
+  //     stroke: am5.color('#ffffff'),
+  //   });
+  //   yRenderer.grid.template.set('location', 1);
 
-    var yAxis = chart.yAxes.push(
-      am5xy.CategoryAxis.new(root2, {
-        maxDeviation: 0,
-        categoryField: 'category',
-        renderer: yRenderer,
-      }),
-    );
+  //   var yAxis = chart.yAxes.push(
+  //     am5xy.CategoryAxis.new(root2, {
+  //       maxDeviation: 0,
+  //       categoryField: 'category',
+  //       renderer: yRenderer,
+  //     }),
+  //   );
 
-    // Remove grid lines
-    yAxis.get('renderer').grid.template.set('forceHidden', true);
+  //   // Remove grid lines
+  //   yAxis.get('renderer').grid.template.set('forceHidden', true);
 
-    var xAxis = chart.xAxes.push(
-      am5xy.ValueAxis.new(root2, {
-        maxDeviation: 0,
-        min: 0,
-        strictMinMax: true,
-        calculateTotals: true,
-        renderer: am5xy.AxisRendererX.new(root2, {
-          visible: true,
-          strokeOpacity: 1,
-          strokeWidth: 1,
-          stroke: am5.color('#ffffff'),
-        }),
-      }),
-    );
-    // Remove grid lines
-    xAxis.get('renderer').grid.template.set('forceHidden', true);
+  //   var xAxis = chart.xAxes.push(
+  //     am5xy.ValueAxis.new(root2, {
+  //       maxDeviation: 0,
+  //       min: 0,
+  //       strictMinMax: true,
+  //       calculateTotals: true,
+  //       renderer: am5xy.AxisRendererX.new(root2, {
+  //         visible: true,
+  //         strokeOpacity: 1,
+  //         strokeWidth: 1,
+  //         stroke: am5.color('#ffffff'),
+  //       }),
+  //     }),
+  //   );
+  //   // Remove grid lines
+  //   xAxis.get('renderer').grid.template.set('forceHidden', true);
 
-    // Label properties for yAxis (category axis)
-    yAxis.get('renderer').labels.template.setAll({
-      //oversizedBehavior: "wrap",
-      textAlign: 'center',
-      fill: am5.color('#ffffff'),
-      //maxWidth: 150,
-      fontSize: 12,
-    });
+  //   // Label properties for yAxis (category axis)
+  //   yAxis.get('renderer').labels.template.setAll({
+  //     //oversizedBehavior: "wrap",
+  //     textAlign: 'center',
+  //     fill: am5.color('#ffffff'),
+  //     //maxWidth: 150,
+  //     fontSize: 12,
+  //   });
 
-    xAxis.get('renderer').labels.template.setAll({
-      fill: am5.color('#ffffff'),
-      fontSize: 10,
-    });
+  //   xAxis.get('renderer').labels.template.setAll({
+  //     fill: am5.color('#ffffff'),
+  //     fontSize: 10,
+  //   });
 
-    // Create series
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-    var series = chart.series.push(
-      am5xy.ColumnSeries.new(root2, {
-        name: 'Series 1',
-        xAxis: xAxis,
-        yAxis: yAxis,
-        valueXField: 'value',
-        sequencedInterpolation: true,
-        categoryYField: 'category',
-      }),
-    );
-    barSeriesRef.current = series;
-    chart.series.push(series);
+  //   // Create series
+  //   // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+  //   var series = chart.series.push(
+  //     am5xy.ColumnSeries.new(root2, {
+  //       name: 'Series 1',
+  //       xAxis: xAxis,
+  //       yAxis: yAxis,
+  //       valueXField: 'value',
+  //       sequencedInterpolation: true,
+  //       categoryYField: 'category',
+  //     }),
+  //   );
+  //   barSeriesRef.current = series;
+  //   chart.series.push(series);
 
-    var columnTemplate = series.columns.template;
+  //   var columnTemplate = series.columns.template;
 
-    columnTemplate.setAll({
-      draggable: true,
-      cursorOverStyle: 'pointer',
-      tooltipText: '{value}',
-      cornerRadiusBR: 10,
-      cornerRadiusTR: 10,
-      strokeOpacity: 0,
-    });
+  //   columnTemplate.setAll({
+  //     draggable: true,
+  //     cursorOverStyle: 'pointer',
+  //     tooltipText: '{value}',
+  //     cornerRadiusBR: 10,
+  //     cornerRadiusTR: 10,
+  //     strokeOpacity: 0,
+  //   });
 
-    // Add Label bullet
-    series.bullets.push(function () {
-      return am5.Bullet.new(root2, {
-        locationY: 1,
-        sprite: am5.Label.new(root2, {
-          text: '{value}',
-          fill: root2.interfaceColors.get('alternativeText'),
-          centerY: 8,
-          centerX: am5.p50,
-          fontSize: 13,
-          populateText: true,
-        }),
-      });
-    });
+  //   // Add Label bullet
+  //   series.bullets.push(function () {
+  //     return am5.Bullet.new(root2, {
+  //       locationY: 1,
+  //       sprite: am5.Label.new(root2, {
+  //         text: '{value}',
+  //         fill: root2.interfaceColors.get('alternativeText'),
+  //         centerY: 8,
+  //         centerX: am5.p50,
+  //         fontSize: 13,
+  //         populateText: true,
+  //       }),
+  //     });
+  //   });
 
-    // Use different color by column
-    /*
-        columnTemplate.adapters.add('fill', (fill, target) => {
-          return chart.get('colors').getIndex(series.columns.indexOf(target));
-        });
-    
-        columnTemplate.adapters.add('stroke', (stroke, target) => {
-          return chart.get('colors').getIndex(series.columns.indexOf(target));
-        });
-        */
+  //   // Use different color by column
+  //   /*
+  //       columnTemplate.adapters.add('fill', (fill, target) => {
+  //         return chart.get('colors').getIndex(series.columns.indexOf(target));
+  //       });
 
-    series.columns.template.events.on('click', function (ev) {
-      var Selected: any = ev.target.dataItem?.dataContext;
-      var Category: string = Selected.category;
-      const find = statusMoaQuery.find((emp: any) => emp.category === Category);
-      const selectedStatus = find?.value;
+  //       columnTemplate.adapters.add('stroke', (stroke, target) => {
+  //         return chart.get('colors').getIndex(series.columns.indexOf(target));
+  //       });
+  //       */
 
-      var highlightSelect: any;
+  //   series.columns.template.events.on('click', function (ev) {
+  //     var Selected: any = ev.target.dataItem?.dataContext;
+  //     var Category: string = Selected.category;
+  //     const find = statusMoaQuery.find((emp: any) => emp.category === Category);
+  //     const selectedStatus = find?.value;
 
-      var query = lotLayer.createQuery();
-      view.whenLayerView(lotLayer).then(function (layerView) {
-        //CHART_ELEMENT.style.visibility = "visible";
+  //     var highlightSelect: any;
 
-        lotLayer.queryFeatures(query).then(function (results) {
-          const RESULT_LENGTH = results.features;
-          const ROW_N = RESULT_LENGTH.length;
+  //     var query = lotLayer.createQuery();
+  //     view.whenLayerView(lotLayer).then(function (layerView) {
+  //       //CHART_ELEMENT.style.visibility = "visible";
 
-          let objID = [];
-          for (var i = 0; i < ROW_N; i++) {
-            var obj = results.features[i].attributes.OBJECTID;
-            objID.push(obj);
-          }
+  //       lotLayer.queryFeatures(query).then(function (results) {
+  //         const RESULT_LENGTH = results.features;
+  //         const ROW_N = RESULT_LENGTH.length;
 
-          var queryExt = new Query({
-            objectIds: objID,
-          });
+  //         let objID = [];
+  //         for (var i = 0; i < ROW_N; i++) {
+  //           var obj = results.features[i].attributes.OBJECTID;
+  //           objID.push(obj);
+  //         }
 
-          lotLayer.queryExtent(queryExt).then(function (result) {
-            if (result.extent) {
-              view.goTo(result.extent);
-            }
-          });
+  //         var queryExt = new Query({
+  //           objectIds: objID,
+  //         });
 
-          if (highlightSelect) {
-            highlightSelect.remove();
-          }
-          highlightSelect = layerView.highlight(objID);
+  //         lotLayer.queryExtent(queryExt).then(function (result) {
+  //           if (result.extent) {
+  //             view.goTo(result.extent);
+  //           }
+  //         });
 
-          view.on('click', function () {
-            layerView.filter = new FeatureFilter({
-              where: undefined,
-            });
-            highlightSelect.remove();
-          });
-        });
-        layerView.filter = new FeatureFilter({
-          where: lotMoaField + ' = ' + selectedStatus,
-        });
-      }); // End of whenLayerView
-    });
+  //         if (highlightSelect) {
+  //           highlightSelect.remove();
+  //         }
+  //         highlightSelect = layerView.highlight(objID);
 
-    // Chart title
-    yAxisRef.current = yAxis;
-    yAxis.data.setAll(lotMoaData);
-    series.data.setAll(lotMoaData);
+  //         view.on('click', function () {
+  //           layerView.filter = new FeatureFilter({
+  //             where: undefined,
+  //           });
+  //           highlightSelect.remove();
+  //         });
+  //       });
+  //       layerView.filter = new FeatureFilter({
+  //         where: lotMoaField + ' = ' + selectedStatus,
+  //       });
+  //     }); // End of whenLayerView
+  //   });
 
-    // Make stuff animate on load
-    // https://www.amcharts.com/docs/v5/concepts/animations/
-    series.appear(1000);
-    chart.appear(1000, 100);
+  //   // Chart title
+  //   yAxisRef.current = yAxis;
+  //   yAxis.data.setAll(lotMoaData);
+  //   series.data.setAll(lotMoaData);
 
-    return () => {
-      root2.dispose();
-    };
-  }, [chartID_moa, lotMoaData]);
+  //   // Make stuff animate on load
+  //   // https://www.amcharts.com/docs/v5/concepts/animations/
+  //   series.appear(1000);
+  //   chart.appear(1000, 100);
 
-  useEffect(() => {
-    barSeriesRef.current?.data.setAll(lotMoaData);
-    yAxisRef.current?.data.setAll(lotMoaData);
-  });
+  //   return () => {
+  //     root2.dispose();
+  //   };
+  // }, [chartID_moa, lotMoaData]);
+
+  // useEffect(() => {
+  //   barSeriesRef.current?.data.setAll(lotMoaData);
+  //   yAxisRef.current?.data.setAll(lotMoaData);
+  // });
   //JSX
   return (
     <>
@@ -612,6 +652,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           marginLeft: '15px',
           marginRight: '15px',
           justifyContent: 'space-between',
+          marginBottom: '20px',
         }}
       >
         <img
@@ -656,11 +697,49 @@ const LotChart = ({ municipal, barangay }: any) => {
         </dl>
       </div>
 
+      <div style={{ display: 'flex' }}>
+        <div
+          style={{
+            marginLeft: '15px',
+            fontSize: '17px',
+            color: primaryLabelColor,
+            marginTop: 'auto',
+            marginBottom: 'auto',
+            marginRight: '10px',
+          }}
+        >
+          Super Urgent Lot:{' '}
+        </div>
+        <CalciteSegmentedControl
+          style={{
+            marginRight: 'auto',
+          }}
+          scale="m"
+          onCalciteSegmentedControlChange={(event: any) =>
+            setSuperUrgentSelected(event.target.selectedItem.id)
+          }
+        >
+          {superUrgentSelected &&
+            superurgent_items.map((priority: any, index: any) => {
+              return (
+                <CalciteSegmentedControlItem
+                  {...(superUrgentSelected === priority ? { checked: true } : {})}
+                  key={index}
+                  value={priority}
+                  id={priority}
+                >
+                  {priority}
+                </CalciteSegmentedControlItem>
+              );
+            })}
+        </CalciteSegmentedControl>
+      </div>
+
       {/* Lot Chart */}
       <div
         id={chartID}
         style={{
-          height: '41vh',
+          height: '50vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
           marginBottom: '6%',
@@ -725,7 +804,7 @@ const LotChart = ({ municipal, barangay }: any) => {
         )}
       </CalciteLabel>
 
-      <div style={{ color: primaryLabelColor, fontSize: '1.2rem', marginLeft: '13px' }}>
+      {/* <div style={{ color: primaryLabelColor, fontSize: '1.2rem', marginLeft: '13px' }}>
         MODE OF ACQUISITION
       </div>
       <div
@@ -736,7 +815,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           color: 'white',
           marginLeft: '30px',
         }}
-      ></div>
+      ></div> */}
     </>
   );
 }; // End of lotChartgs
