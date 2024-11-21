@@ -773,6 +773,26 @@ export function highlightLot(layer: any) {
   });
 }
 
+export function highlightHandedOverLot(layer: any) {
+  view.whenLayerView(layer).then((urgentLayerView) => {
+    var query = layer.createQuery();
+    query.where = `${handedOverLotField} = 1`;
+    layer.queryFeatures(query).then((results: any) => {
+      const length = results.features.length;
+      let objID = [];
+      for (var i = 0; i < length; i++) {
+        var obj = results.features[i].attributes.OBJECTID;
+        objID.push(obj);
+      }
+
+      if (highlight) {
+        highlight.remove();
+      }
+      highlight = urgentLayerView.highlight(objID);
+    });
+  });
+}
+
 export function highlightRemove(layer: any) {
   if (highlight) {
     highlight.remove();

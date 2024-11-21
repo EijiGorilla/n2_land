@@ -23,7 +23,7 @@ import {
   prowLayer,
   strucOwnershipLayer,
   // superUrgentLotLayer,
-  handedOverLotLayer,
+  // handedOverLotLayer,
 } from './layers';
 import { highlightLot } from './components/Query';
 import Zoom from '@arcgis/core/widgets/Zoom';
@@ -53,7 +53,7 @@ const lotGroupLayer = new GroupLayer({
   visible: true,
   visibilityMode: 'independent',
   // layers: [endorsedLotLayer, lotLayer, handedOverLotLayer, superUrgentLotLayer, pnrLayer],
-  layers: [endorsedLotLayer, lotLayer, handedOverLotLayer, pnrLayer],
+  layers: [endorsedLotLayer, lotLayer, pnrLayer],
 });
 
 // Change the layer order by using index numbers in map.add
@@ -93,11 +93,11 @@ export const layerList = new LayerList({
       };
     }
 
-    if (item.title === 'Super Urgent Lot') {
-      // highlightLot(superUrgentLotLayer);
-    } else if (item.title === 'Handed-Over (public + private)') {
-      highlightLot(handedOverLotLayer);
-    }
+    // if (item.title === 'Super Urgent Lot') {
+    //   // highlightLot(superUrgentLotLayer);
+    // } else if (item.title === 'Handed-Over (public + private)') {
+    //   highlightLot(handedOverLotLayer);
+    // }
 
     item.title === 'Chainage' ||
     item.title === 'Pier Head/Column' ||

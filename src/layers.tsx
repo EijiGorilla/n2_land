@@ -510,40 +510,40 @@ const superUrgentLotRenderer = new UniqueValueRenderer({
 // });
 
 /* Handed-Over Lot (public + private) */
-const handedOverLotRenderer = new UniqueValueRenderer({
-  field: 'HandedOver',
+// const handedOverLotRenderer = new UniqueValueRenderer({
+//   field: 'HandedOver',
 
-  uniqueValueInfos: [
-    {
-      value: 1,
-      label: 'Handed-Over',
-      symbol: new SimpleFillSymbol({
-        color: [255, 0, 0, 0],
-        outline: {
-          color: '#00c5ff',
-          width: 0.3,
-        },
-      }),
-    },
-  ],
-});
+//   uniqueValueInfos: [
+//     {
+//       value: 1,
+//       label: 'Handed-Over',
+//       symbol: new SimpleFillSymbol({
+//         color: [255, 0, 0, 0],
+//         outline: {
+//           color: '#00c5ff',
+//           width: 0.3,
+//         },
+//       }),
+//     },
+//   ],
+// });
 
-export const handedOverLotLayer = new FeatureLayer({
-  portalItem: {
-    id: '23500954a8d84a46886e76e6e0883a69',
-    portal: {
-      url: 'https://gis.railway-sector.com/portal',
-    },
-  },
-  layerId: 4,
-  definitionExpression: 'HandedOver = 1',
-  renderer: handedOverLotRenderer,
-  popupEnabled: false,
-  title: 'Handed-Over (public + private)',
-  elevationInfo: {
-    mode: 'on-the-ground',
-  },
-});
+// export const handedOverLotLayer = new FeatureLayer({
+//   portalItem: {
+//     id: '23500954a8d84a46886e76e6e0883a69',
+//     portal: {
+//       url: 'https://gis.railway-sector.com/portal',
+//     },
+//   },
+//   layerId: 4,
+//   definitionExpression: 'HandedOver = 1',
+//   renderer: handedOverLotRenderer,
+//   popupEnabled: false,
+//   title: 'Handed-Over (public + private)',
+//   elevationInfo: {
+//     mode: 'on-the-ground',
+//   },
+// });
 
 /* Structure Layer */
 const height = 5;
