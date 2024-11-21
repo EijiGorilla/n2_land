@@ -779,6 +779,7 @@ const LotChart = ({ municipal, barangay }: any) => {
           name="handover-checkbox"
           label="VIEW"
           style={{ width: '20px' }}
+          scale="l"
           onCalciteCheckboxChange={(event: any) =>
             setHandedOverCheckBox(handedOverCheckBox === false ? true : false)
           }
