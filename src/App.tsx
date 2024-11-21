@@ -479,6 +479,9 @@ function App() {
                     <b>Progress Chart</b> indicates the number of handed-over lots for both public
                     and private lands{' '}
                   </li>
+                  <li>
+                    <b>Handed-Over</b> represents both public and privalte lands.
+                  </li>
                 </ul>
               </div>
             ) : (

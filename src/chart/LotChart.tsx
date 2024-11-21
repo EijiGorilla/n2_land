@@ -119,7 +119,6 @@ const LotChart = ({ municipal, barangay }: any) => {
   }, [superUrgentSelected]);
 
   useEffect(() => {
-    console.log(handedOverCheckBox);
     if (handedOverCheckBox === true) {
       highlightHandedOverLot(lotLayer);
     } else {
