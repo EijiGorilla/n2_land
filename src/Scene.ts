@@ -22,6 +22,7 @@ import {
   pierHeadColumnLayer,
   prowLayer,
   strucOwnershipLayer,
+  handedOverLotLayer,
   // superUrgentLotLayer,
   // handedOverLotLayer,
 } from './layers';
@@ -64,6 +65,7 @@ map.add(nloLoOccupancyGroupLayer);
 map.add(alignmentGroupLayer);
 map.add(prowLayer);
 map.add(stationLayer);
+map.add(handedOverLotLayer);
 
 export const view = new SceneView({
   container: undefined,
@@ -104,7 +106,7 @@ export const layerList = new LayerList({
     item.title === 'NLO/LO Ownership (Structure)' ||
     item.title === 'Super Urgent Lot' ||
     item.title === 'Land Acquisition (Endorsed Status)' ||
-    item.title === 'Handed-Over (public + private)' ||
+    // item.title === 'Handed-Over (public + private)' ||
     item.title === 'Structure' ||
     item.title === 'NLO (Non-Land Owner)' ||
     item.title === 'Occupancy (Structure)'

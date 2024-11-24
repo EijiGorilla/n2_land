@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { lotLayer } from '../layers';
+import { handedOverLotLayer, lotLayer } from '../layers';
 import { view } from '../Scene';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import Query from '@arcgis/core/rest/support/Query';
@@ -15,7 +15,6 @@ import {
   // generateLotMoaData,
   generateLotNumber,
   generateTotalAffectedArea,
-  highlightHandedOverLot,
   highlightLot,
   highlightRemove,
   thousands_separators,
@@ -94,18 +93,24 @@ const LotChart = ({ municipal, barangay }: any) => {
   if (superUrgentSelected === superurgent_items[0]) {
     if (!municipal) {
       lotLayer.definitionExpression = '1=1';
+      handedOverLotLayer.definitionExpression = '1=1';
     } else if (municipal && !barangay) {
       lotLayer.definitionExpression = queryMunicipality;
+      handedOverLotLayer.definitionExpression = queryMunicipality;
     } else if (municipal && barangay) {
       lotLayer.definitionExpression = queryMunicipalBarangay;
+      handedOverLotLayer.definitionExpression = queryMunicipalBarangay;
     }
   } else if (superUrgentSelected === superurgent_items[1]) {
     if (!municipal) {
       lotLayer.definitionExpression = querySuperUrgent;
+      handedOverLotLayer.definitionExpression = querySuperUrgent;
     } else if (municipal && !barangay) {
       lotLayer.definitionExpression = querySuperUrgentMunicipality;
+      handedOverLotLayer.definitionExpression = querySuperUrgentMunicipality;
     } else if (municipal && barangay) {
       lotLayer.definitionExpression = querySuperUrgentMunicipalBarangay;
+      handedOverLotLayer.definitionExpression = querySuperUrgentMunicipalBarangay;
     }
   }
 
@@ -120,9 +125,9 @@ const LotChart = ({ municipal, barangay }: any) => {
 
   useEffect(() => {
     if (handedOverCheckBox === true) {
-      highlightHandedOverLot(lotLayer);
+      handedOverLotLayer.visible = true;
     } else {
-      highlightRemove(lotLayer);
+      handedOverLotLayer.visible = false;
     }
   }, [handedOverCheckBox]);
 
@@ -773,7 +778,6 @@ const LotChart = ({ municipal, barangay }: any) => {
         >
           HANDED-OVER
         </div>
-
         <CalciteCheckbox
           name="handover-checkbox"
           label="VIEW"
@@ -783,6 +787,7 @@ const LotChart = ({ municipal, barangay }: any) => {
             setHandedOverCheckBox(handedOverCheckBox === false ? true : false)
           }
         ></CalciteCheckbox>
+        <div style={{ color: primaryLabelColor }}>View on the map</div>
       </div>
 
       <CalciteLabel layout="inline">
