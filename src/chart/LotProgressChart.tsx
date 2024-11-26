@@ -8,6 +8,7 @@ import { lotLayer } from '../layers';
 import { view } from '../Scene';
 import Query from '@arcgis/core/rest/support/Query';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
+import { barangayField, lotHandedOverDateField, municipalityField } from '../StatusUniqueValues';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -198,13 +199,16 @@ const LotProgressChart = ({ municipal, barangay, nextwidget }: any) => {
     series.columns.template.events.on('click', (ev) => {
       const selected: any = ev.target.dataItem?.dataContext;
       const selectedDate = dateFormat(selected.date, 'yyyy-MM-dd');
-
-      // const qExpression =
-      const qMunicipality = "Municipality = '" + municipal + "'";
-      const qBarangay = "Barangay = '" + barangay + "'";
+      const qMunicipality = `${municipalityField} = '` + municipal + "'";
+      const qBarangay = `${barangayField} = '` + barangay + "'";
       const qMunicipalBarangay = qMunicipality + ' AND ' + qBarangay;
       const qDate =
-        'HandedOverDate IS NOT NULL' + ' AND ' + "HandedOverDate = date'" + selectedDate + "'";
+        `${lotHandedOverDateField} IS NOT NULL` +
+        ' AND ' +
+        `${lotHandedOverDateField} = date'` +
+        selectedDate +
+        "'";
+      // 'HandedOverDate IS NOT NULL' + ' AND ' + "HandedOverDate = date'" + selectedDate + "'";
 
       var query = lotLayer.createQuery();
       if (municipal && barangay) {

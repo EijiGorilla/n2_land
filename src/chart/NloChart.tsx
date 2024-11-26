@@ -8,8 +8,9 @@ import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import { generateNloData, generateNloNumber, thousands_separators } from '../components/Query';
-import { CalciteLabel } from '@esri/calcite-components-react';
 import {
+  barangayField,
+  municipalityField,
   nloStatusField,
   primaryLabelColor,
   statusNloQuery,
@@ -46,8 +47,8 @@ const NloChart = memo(({ municipal, barangay }: any) => {
   const chartID = 'nlo-chart';
 
   // Query
-  const queryMunicipality = "Municipality = '" + municipal + "'";
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
 
   if (municipal && !barangay) {

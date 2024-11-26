@@ -4,7 +4,6 @@ import { view } from '../Scene';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import Query from '@arcgis/core/rest/support/Query';
 import * as am5 from '@amcharts/amcharts5';
-import * as am5xy from '@amcharts/amcharts5/xy';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
@@ -32,10 +31,13 @@ import {
   CalciteCheckbox,
 } from '@esri/calcite-components-react';
 import {
+  barangayField,
   lotMoaField,
   lotStatusField,
+  municipalityField,
   primaryLabelColor,
   querySuperUrgent,
+  statusLotLabel,
   statusLotQuery,
   statusMoaQuery,
   superurgent_items,
@@ -84,9 +86,9 @@ const LotChart = ({ municipal, barangay }: any) => {
   // const chartID_moa = 'land-moa';
 
   // Query
-  const queryMunicipality = "Municipality = '" + municipal + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
   const querySuperUrgentMunicipality = querySuperUrgent + ' AND ' + queryMunicipality;
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const querySuperUrgentMunicipalBarangay = querySuperUrgentMunicipality + ' AND ' + queryBarangay;
 
@@ -381,7 +383,7 @@ const LotChart = ({ municipal, barangay }: any) => {
       // }
       // "[#C9CC3F; fontSize: 12px;][bold]{valuePercentTotal.formatNumber('#.')}% ({value})[/]"
       if (target.dataItem) {
-        return category === 'Paid'
+        return category === statusLotLabel[0]
           ? '{value}[/]' +
               ' (' +
               thousands_separators(
@@ -389,7 +391,7 @@ const LotChart = ({ municipal, barangay }: any) => {
               ) +
               ' m2' +
               ')'
-          : category === 'For Payment Processing'
+          : category === statusLotLabel[1]
             ? '{value}[/]' +
               ' (' +
               thousands_separators(
@@ -397,7 +399,7 @@ const LotChart = ({ municipal, barangay }: any) => {
               ) +
               ' m2' +
               ')'
-            : category === 'For Legal Pass'
+            : category === statusLotLabel[2]
               ? '{value}[/]' +
                 ' (' +
                 thousands_separators(
@@ -405,7 +407,7 @@ const LotChart = ({ municipal, barangay }: any) => {
                 ) +
                 ' m2' +
                 ')'
-              : category === 'For Offer to Buy'
+              : category === statusLotLabel[3]
                 ? '{value}[/]' +
                   ' (' +
                   thousands_separators(
@@ -413,7 +415,7 @@ const LotChart = ({ municipal, barangay }: any) => {
                   ) +
                   ' m2' +
                   ')'
-                : category === 'For Notice of Taking'
+                : category === statusLotLabel[4]
                   ? '{value}[/]' +
                     ' (' +
                     thousands_separators(
@@ -421,7 +423,7 @@ const LotChart = ({ municipal, barangay }: any) => {
                     ) +
                     ' m2' +
                     ')'
-                  : category === 'With PTE'
+                  : category === statusLotLabel[5]
                     ? '{value}[/]' +
                       ' (' +
                       thousands_separators(
@@ -429,7 +431,7 @@ const LotChart = ({ municipal, barangay }: any) => {
                       ) +
                       ' m2' +
                       ')'
-                    : category === 'For Expropriation'
+                    : category === statusLotLabel[6]
                       ? '{value}[/]' +
                         ' (' +
                         thousands_separators(

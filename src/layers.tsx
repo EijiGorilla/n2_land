@@ -36,6 +36,19 @@ import {
   statusStructureOwnershipLabel,
   statusNloQuery,
   valueLabelColor,
+  lotStatusField,
+  lotHandedOverDateField,
+  percentHandedOverField,
+  municipalityField,
+  barangayField,
+  landOwnerField,
+  cpField,
+  endorsedField,
+  landUseField,
+  handedOverLotField,
+  nloStatusField,
+  nloLoStatusField,
+  occupancyField,
 } from './StatusUniqueValues';
 
 /* Standalone table for Dates */
@@ -355,7 +368,7 @@ const lotLayerRendererUniqueValueInfos = statusLotLabel.map((status: any, index:
 });
 
 let lotLayerRenderer = new UniqueValueRenderer({
-  field: 'StatusLA',
+  field: lotStatusField,
   defaultSymbol: lotDefaultSymbol, // autocasts as new SimpleFillSymbol()
   uniqueValueInfos: lotLayerRendererUniqueValueInfos,
 });
@@ -365,15 +378,15 @@ let customContentLot = new CustomContent({
   outFields: ['*'],
   creator: (event: any) => {
     // Extract AsscessDate of clicked pierAccessLayer
-    const handedOverDate = event.graphic.attributes.HandedOverDate;
-    const handOverArea = event.graphic.attributes.percentHandedOver;
-    const statusLot = event.graphic.attributes.StatusLA;
-    const landUse = event.graphic.attributes.LandUse;
-    const municipal = event.graphic.attributes.Municipality;
-    const barangay = event.graphic.attributes.Barangay;
-    const landOwner = event.graphic.attributes.LandOwner;
-    const cpNo = event.graphic.attributes.CP;
-    const endorse = event.graphic.attributes.Endorsed;
+    const handedOverDate = event.graphic.attributes[lotHandedOverDateField];
+    const handOverArea = event.graphic.attributes[percentHandedOverField];
+    const statusLot = event.graphic.attributes[lotStatusField];
+    const landUse = event.graphic.attributes[landUseField];
+    const municipal = event.graphic.attributes[municipalityField];
+    const barangay = event.graphic.attributes[barangayField];
+    const landOwner = event.graphic.attributes[landOwnerField];
+    const cpNo = event.graphic.attributes[cpField];
+    const endorse = event.graphic.attributes[endorsedField];
     const endorsed = statusLotEndorsedLabel[endorse];
 
     let daten: any;
@@ -536,7 +549,7 @@ export const handedOverLotLayer = new FeatureLayer({
     },
   },
   layerId: 4,
-  definitionExpression: 'HandedOver = 1',
+  definitionExpression: `${handedOverLotField} = 1`,
   renderer: handedOverLotRenderer,
   popupEnabled: false,
   title: 'Handed-Over (public + private)',
@@ -669,8 +682,9 @@ const nloRendererUniqueValueInfos = statusNloLabel.map((status: any, index: any)
     }),
   });
 });
+
 const nloRenderer = new UniqueValueRenderer({
-  field: 'StatusRC',
+  field: nloStatusField,
   uniqueValueInfos: nloRendererUniqueValueInfos,
 });
 
@@ -691,17 +705,13 @@ export const nloLayer = new FeatureLayer({
   minScale: 10000,
   maxScale: 0,
   popupTemplate: {
-    title: '<p>{StrucID}</p>',
+    title: `<p>{StrucID}</p>`,
     lastEditInfoEnabled: false,
     returnGeometry: true,
     content: [
       {
         type: 'fields',
         fieldInfos: [
-          {
-            fieldName: 'StrucOwner',
-            label: 'Structure Owner',
-          },
           {
             fieldName: 'Municipality',
           },
@@ -746,7 +756,7 @@ const structureOwnershipRendererUniqueValueInfos = statusStructureOwnershipLabel
 );
 
 let NLOLORenderer = new UniqueValueRenderer({
-  field: 'Status',
+  field: nloLoStatusField,
   uniqueValueInfos: structureOwnershipRendererUniqueValueInfos,
 });
 
@@ -806,8 +816,9 @@ const statusStructureOccupancyRendererUniqueValueInfos = statusStructureOccupanc
     });
   },
 );
+
 let occupancyRenderer = new UniqueValueRenderer({
-  field: 'Occupancy',
+  field: occupancyField,
   uniqueValueInfos: statusStructureOccupancyRendererUniqueValueInfos,
 });
 

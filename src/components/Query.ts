@@ -3,12 +3,17 @@ import StatisticDefinition from '@arcgis/core/rest/support/StatisticDefinition';
 import * as am5 from '@amcharts/amcharts5';
 import { view } from '../Scene';
 import {
+  affectedAreaField,
+  barangayField,
+  cpField,
   handedOverLotField,
   lotHandedOverAreaField,
   lotHandedOverDateField,
+  lotIdField,
   lotMoaField,
   lotPteField,
   lotStatusField,
+  municipalityField,
   nloStatusField,
   querySuperUrgent,
   statusLotEndorsedLabel,
@@ -64,9 +69,9 @@ export async function dateUpdate() {
 // Lot Status Query
 export async function generateLotData(superurgent: any, municipal: any, barangay: any) {
   // Query
-  const queryMunicipality = "Municipality = '" + municipal + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
   const querySuperUrgentMunicipality = querySuperUrgent + ' AND ' + queryMunicipality;
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const querySuperUrgentMunicipalBarangay = querySuperUrgentMunicipality + ' AND ' + queryBarangay;
 
@@ -140,7 +145,7 @@ export async function generateLotNumber() {
   const onStatisticsFieldValue: string = 'CASE WHEN ' + lotStatusField + ' >= 1 THEN 1 ELSE 0 END';
 
   var total_lot_number = new StatisticDefinition({
-    onStatisticField: 'LotID',
+    onStatisticField: lotIdField,
     outStatisticFieldName: 'total_lot_number',
     statisticType: 'count',
   });
@@ -165,13 +170,13 @@ export async function generateLotNumber() {
 
 export async function generateTotalAffectedArea(municipal: any, barangay: any) {
   // Query
-  const queryMunicipality = "Municipality = '" + municipal + "'";
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
-  const queryField = 'AffectedArea IS NOT NULL' + ' AND ' + lotStatusField + ' IS NOT NULL';
+  const queryField = `${affectedAreaField} IS NOT NULL` + ' AND ' + `${lotStatusField} IS NOT NULL`;
 
   var total_affected_area = new StatisticDefinition({
-    onStatisticField: 'AffectedArea',
+    onStatisticField: affectedAreaField,
     outStatisticFieldName: 'total_affected_area',
     statisticType: 'sum',
   });
@@ -193,21 +198,22 @@ export async function generateTotalAffectedArea(municipal: any, barangay: any) {
 }
 
 export async function generateAffectedAreaForPie(municipal: any, barangay: any) {
-  const queryMunicipality = "Municipality = '" + municipal + "'";
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
-  const statusQuery = 'StatusLA IS NOT NULL' + ' AND ' + 'StatusLA >= 1';
+  const statusQuery = `${lotStatusField} IS NOT NULL` + ' AND ' + `${lotStatusField} >= 1`;
+
   var total_affected_area = new StatisticDefinition({
-    onStatisticField: 'AffectedArea',
+    onStatisticField: affectedAreaField,
     outStatisticFieldName: 'total_affected_area',
     statisticType: 'sum',
   });
 
   var query = lotLayer.createQuery();
   query.outStatistics = [total_affected_area];
-  query.orderByFields = ['StatusLA'];
+  query.orderByFields = [lotStatusField];
 
-  query.groupByFieldsForStatistics = ['StatusLA'];
+  query.groupByFieldsForStatistics = [lotStatusField];
 
   if (municipal && !barangay) {
     query.where = statusQuery + ' AND ' + queryMunicipality;
@@ -250,13 +256,13 @@ export async function generateHandedOverLotsNumber(
   municipal: any,
   barangay: any,
 ) {
-  const queryMunicipality = "Municipality = '" + municipal + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
   const querySuperUrgentMunicipality = querySuperUrgent + ' AND ' + queryMunicipality;
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const querySuperUrgentMunicipalBarangay = querySuperUrgentMunicipality + ' AND ' + queryBarangay;
 
-  const queryField = 'LotID IS NOT NULL';
+  const queryField = `${lotIdField} IS NOT NULL`;
   const onStatisticsFieldValue: string =
     'CASE WHEN ' + handedOverLotField + ' = 1 THEN 1 ELSE 0 END';
 
@@ -267,7 +273,7 @@ export async function generateHandedOverLotsNumber(
   });
 
   var total_lot_N = new StatisticDefinition({
-    onStatisticField: 'LotID',
+    onStatisticField: lotIdField,
     outStatisticFieldName: 'total_lot_N',
     statisticType: 'count',
   });
@@ -306,8 +312,8 @@ export async function generateHandedOverLotsNumber(
 
 export async function generateLotMoaData(municipal: any, barangay: any) {
   // Query
-  const queryMunicipality = "Municipality = '" + municipal + "'";
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const queryField = lotMoaField + ' IS NOT NULL';
 
@@ -362,8 +368,8 @@ export async function generateLotProgress(municipality: any, barangay: any) {
   var query = lotLayer.createQuery();
   query.outStatistics = [total_count_lot];
   // eslint-disable-next-line no-useless-concat
-  const queryMunicipality = "Municipality = '" + municipality + "'";
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipality + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const queryHandedOverDate = lotHandedOverDateField + ' IS NOT NULL';
 
@@ -400,7 +406,7 @@ export async function generateLotProgress(municipality: any, barangay: any) {
 
 export async function generateHandedOverAreaData() {
   var total_affected_area = new StatisticDefinition({
-    onStatisticField: 'AffectedArea',
+    onStatisticField: affectedAreaField,
     outStatisticFieldName: 'total_affected_area',
     statisticType: 'sum',
   });
@@ -412,11 +418,11 @@ export async function generateHandedOverAreaData() {
   });
 
   var query = lotLayer.createQuery();
-  query.where = 'CP IS NOT NULL';
+  query.where = `${cpField} IS NOT NULL`;
   query.outStatistics = [total_affected_area, total_handedover_area];
-  query.orderByFields = ['CP'];
+  query.orderByFields = [cpField];
   query.returnGeometry = true;
-  query.groupByFieldsForStatistics = ['CP'];
+  query.groupByFieldsForStatistics = [cpField];
 
   return lotLayer.queryFeatures(query).then((response: any) => {
     var stats = response.features;
@@ -444,8 +450,8 @@ export async function generateHandedOverAreaData() {
 // Structure
 export async function generateStructureData(municipal: any, barangay: any) {
   // Query
-  const queryMunicipality = "Municipality = '" + municipal + "'";
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const queryField = structureStatusField + ' IS NOT NULL';
 
@@ -529,8 +535,8 @@ export async function generateStrucNumber() {
 
 export async function generateStrucMoaData(municipal: any, barangay: any) {
   // Query
-  const queryMunicipality = "Municipality = '" + municipal + "'";
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const queryField = structureMoaField + ' IS NOT NULL';
 
@@ -577,8 +583,8 @@ export async function generateStrucMoaData(municipal: any, barangay: any) {
 // Non-Land Owner
 export async function generateNloData(municipal: any, barangay: any) {
   // Query
-  const queryMunicipality = "Municipality = '" + municipal + "'";
-  const queryBarangay = "Barangay = '" + barangay + "'";
+  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
   const queryField = nloStatusField + ' IS NOT NULL';
 
@@ -651,9 +657,9 @@ export async function generateNloNumber() {
 export async function getMuniciaplityBarangayPair() {
   var query = lotLayer.createQuery();
   // eslint-disable-next-line no-useless-concat
-  query.where = 'Barangay IS NOT NULL' + ' AND ' + 'Municipality IS NOT NULL';
-  query.outFields = ['Municipality', 'Barangay'];
-  query.groupByFieldsForStatistics = ['Municipality', 'Barangay'];
+  query.where = `${barangayField} IS NOT NULL` + ' AND ' + `${municipalityField} IS NOT NULL`;
+  query.outFields = [municipalityField, barangayField];
+  query.groupByFieldsForStatistics = [municipalityField, barangayField];
 
   return lotLayer.queryFeatures(query).then((response: any) => {
     const values = response.features.map((result: any, index: number) => {
