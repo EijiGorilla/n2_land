@@ -23,10 +23,12 @@ import {
   prowLayer,
   strucOwnershipLayer,
   handedOverLotLayer,
+  ngcp_working_area,
+  ngcp_tagged_structureLayer,
   // superUrgentLotLayer,
   // handedOverLotLayer,
 } from './layers';
-import { highlightLot } from './components/Query';
+import { highlightLot, zoomToLayer } from './components/Query';
 import Zoom from '@arcgis/core/widgets/Zoom';
 import { lotIdField, structureIdField } from './StatusUniqueValues';
 
@@ -58,9 +60,17 @@ const lotGroupLayer = new GroupLayer({
   layers: [endorsedLotLayer, lotLayer, pnrLayer],
 });
 
+const ngcp2_groupLayer = new GroupLayer({
+  title: 'NGCP Site 2',
+  visible: false,
+  visibilityMode: 'independent',
+  layers: [ngcp_tagged_structureLayer, ngcp_working_area],
+});
+
 // Change the layer order by using index numbers in map.add
 map.add(pierAccessLayer);
 map.add(lotGroupLayer);
+map.add(ngcp2_groupLayer);
 map.add(structureLayer);
 map.add(nloLoOccupancyGroupLayer);
 map.add(alignmentGroupLayer);
@@ -81,39 +91,113 @@ export const basemaps = new BasemapGallery({
   container: undefined,
 });
 
+async function defineActions(event: any) {
+  const { item } = event;
+
+  // await item.layer.when();
+
+  if (item.title === 'NGCP Pole Relocation Working Area') {
+    item.open = true;
+    item.actionsSections = [
+      [
+        {
+          title: 'Zoom to Area',
+          className: 'esri-icon-zoom-to-object',
+          id: 'full-extent',
+        },
+      ],
+      // [
+      //   {
+      //     title: 'Highlight points',
+      //     className: 'esri-icon-lightbulb',
+      //     id: 'highlight-layer',
+      //   },
+      // ],
+    ];
+  }
+
+  if (item.title === 'NGCP Pole Relocation Tagged Structures') {
+    item.open = true;
+    item.actionsSections = [
+      [
+        {
+          title: 'Zoom to Tagged Structure',
+          className: 'esri-icon-zoom-to-object',
+          id: 'full-extent',
+        },
+      ],
+    ];
+
+    highlightLot(ngcp_tagged_structureLayer);
+  }
+
+  if (item.layer.type !== 'group') {
+    item.panel = {
+      content: 'legend',
+      open: true,
+    };
+  }
+
+  item.title === 'Chainage' ||
+  item.title === 'Pier Head/Column' ||
+  item.title === 'NLO/LO Ownership (Structure)' ||
+  // item.title === 'Super Urgent Lot' ||
+  item.title === 'Land Acquisition (Endorsed Status)' ||
+  // item.title === 'Handed-Over (public + private)' ||
+  item.title === 'Structure' ||
+  item.title === 'NGCP Pole Relocation Working Area' ||
+  item.title === 'NGCP Pole Relocation Tagged Structures' ||
+  item.title === 'NLO (Non-Land Owner)' ||
+  item.title === 'Occupancy (Structure)'
+    ? (item.visible = false)
+    : (item.visible = true);
+}
+
 // highlight super urgent
 export const layerList = new LayerList({
   view: view,
   selectionMode: 'multiple',
   visibilityAppearance: 'checkbox',
   container: undefined,
-  listItemCreatedFunction: (event) => {
-    const item = event.item;
-    if (item.layer.type !== 'group') {
-      item.panel = {
-        content: 'legend',
-        open: true,
-      };
-    }
+  listItemCreatedFunction: defineActions,
+  // listItemCreatedFunction: (event) => {
+  //   const item = event.item;
+  //   if (item.layer.type !== 'group') {
+  //     item.panel = {
+  //       content: 'legend',
+  //       open: true,
+  //     };
+  //   }
 
-    // if (item.title === 'Super Urgent Lot') {
-    //   // highlightLot(superUrgentLotLayer);
-    // } else if (item.title === 'Handed-Over (public + private)') {
-    //   highlightLot(handedOverLotLayer);
-    // }
+  // if (item.title === 'Super Urgent Lot') {
+  //   // highlightLot(superUrgentLotLayer);
+  // } else if (item.title === 'Handed-Over (public + private)') {
+  //   highlightLot(handedOverLotLayer);
+  // }
 
-    item.title === 'Chainage' ||
-    item.title === 'Pier Head/Column' ||
-    item.title === 'NLO/LO Ownership (Structure)' ||
-    item.title === 'Super Urgent Lot' ||
-    item.title === 'Land Acquisition (Endorsed Status)' ||
-    // item.title === 'Handed-Over (public + private)' ||
-    item.title === 'Structure' ||
-    item.title === 'NLO (Non-Land Owner)' ||
-    item.title === 'Occupancy (Structure)'
-      ? (item.visible = false)
-      : (item.visible = true);
-  },
+  // item.title === 'Chainage' ||
+  // item.title === 'Pier Head/Column' ||
+  // item.title === 'NLO/LO Ownership (Structure)' ||
+  // // item.title === 'Super Urgent Lot' ||
+  // item.title === 'Land Acquisition (Endorsed Status)' ||
+  // // item.title === 'Handed-Over (public + private)' ||
+  // item.title === 'Structure' ||
+  // item.title === 'NGCP Pole Relocation Working Area' ||
+  // item.title === 'NGCP Pole Relocation Tagged Structures' ||
+  // item.title === 'NLO (Non-Land Owner)' ||
+  // item.title === 'Occupancy (Structure)'
+  //   ? (item.visible = false)
+  //   : (item.visible = true);
+  // },
+});
+
+layerList.on('trigger-action', (event) => {
+  // capture the action id
+  const id = event.action.id;
+
+  if (id === 'full-extent') {
+    zoomToLayer(ngcp_working_area);
+  }
 });
 
 const sources = [

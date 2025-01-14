@@ -188,17 +188,17 @@ calcite-tabs {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #00032235;
+  background: #a9a9a9;
 
   /*#032235*/
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #00032235;
+  background: #a9a9a9;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #00032235;
+  background: #a9a9a9;
 }

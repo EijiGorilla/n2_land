@@ -659,6 +659,60 @@ export const structureLayer = new FeatureLayer({
   },
 });
 
+/* NGCP */
+const ngcpPoleWARenderer = new SimpleRenderer({
+  symbol: new SimpleFillSymbol({
+    color: [197, 0, 255],
+    style: 'backward-diagonal',
+    outline: {
+      color: '#C500FF',
+      width: 0.7,
+    },
+  }),
+});
+
+export const ngcp_working_area = new FeatureLayer({
+  portalItem: {
+    id: 'ef4460e67411480aa8315e897e9b172d',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  renderer: ngcpPoleWARenderer,
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+  definitionExpression: "SiteNo = '2'",
+  title: 'NGCP Pole Relocation Working Area',
+});
+
+const ngcp_tagged_structure_renderer = new SimpleRenderer({
+  symbol: new SimpleFillSymbol({
+    color: [0, 0, 0, 0],
+    outline: {
+      color: '#00ffffff',
+      width: 1,
+    },
+  }),
+});
+
+export const ngcp_tagged_structureLayer = new FeatureLayer({
+  portalItem: {
+    id: '23500954a8d84a46886e76e6e0883a69',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  layerId: 3,
+  title: 'NGCP Pole Relocation Tagged Structures',
+  definitionExpression: 'NGCP_Affected = 1',
+  renderer: ngcp_tagged_structure_renderer,
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+  popupEnabled: false,
+});
+
 // NLO Layer
 const symbolSize = 30;
 
