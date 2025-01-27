@@ -106,13 +106,6 @@ async function defineActions(event: any) {
           id: 'full-extent',
         },
       ],
-      // [
-      //   {
-      //     title: 'Highlight points',
-      //     className: 'esri-icon-lightbulb',
-      //     id: 'highlight-layer',
-      //   },
-      // ],
     ];
   }
 

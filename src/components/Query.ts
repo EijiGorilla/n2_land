@@ -9,10 +9,13 @@ import {
   handedOverLotField,
   lotHandedOverAreaField,
   lotHandedOverDateField,
+  lotHandOverDateField,
   lotIdField,
   lotMoaField,
   lotPteField,
   lotStatusField,
+  lotTargetActualDateField,
+  lotTargetActualField,
   municipalityField,
   nloStatusField,
   querySuperUrgent,
@@ -358,6 +361,74 @@ export async function generateLotMoaData(municipal: any, barangay: any) {
 }
 
 // For monthly progress chart of lot
+export async function timeSeriesHandedOverChartData(municipality: any, barangay: any) {
+  var total_target = new StatisticDefinition({
+    onStatisticField: 'CASE WHEN TargetActual = 1 THEN 1 ELSE 0 END',
+    outStatisticFieldName: 'total_target',
+    statisticType: 'sum',
+  });
+
+  var total_actual = new StatisticDefinition({
+    // means handed over
+    onStatisticField: 'CASE WHEN TargetActual = 2 THEN 1 ELSE 0 END',
+    outStatisticFieldName: 'total_actual',
+    statisticType: 'sum',
+  });
+
+  const query = lotLayer.createQuery();
+  query.outStatistics = [total_target, total_actual];
+  // eslint-disable-next-line no-useless-concat
+  const queryMunicipality = `${municipalityField} = '` + municipality + "'";
+  const queryBarangay = `${barangayField} = '` + barangay + "'";
+  const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
+  const queryHandedOverHandOverDate = lotTargetActualDateField + ' IS NOT NULL';
+
+  if (municipality && barangay) {
+    query.where = queryHandedOverHandOverDate + ' AND ' + queryMunicipalBarangay;
+  } else if (municipality && !barangay) {
+    query.where = queryHandedOverHandOverDate + ' AND ' + queryMunicipality;
+  } else {
+    query.where = queryHandedOverHandOverDate;
+  }
+
+  query.outFields = [lotTargetActualDateField];
+  query.orderByFields = [lotTargetActualDateField];
+  query.groupByFieldsForStatistics = [lotTargetActualDateField];
+
+  return lotLayer.queryFeatures(query).then((response: any) => {
+    var stats = response.features;
+
+    const data = stats.map((result: any, index: any) => {
+      const attributes = result.attributes;
+      const date = attributes[lotTargetActualDateField];
+      const targetCount = attributes.total_target;
+      const actualCount = attributes.total_actual;
+      return Object.assign({
+        date,
+        target: targetCount,
+        actual: actualCount,
+      });
+    });
+    var sum_target: any = 0;
+    var sum_actual: any = 0;
+
+    const data2 = data.map((result: any, index: any) => {
+      const date = result.date;
+      const v_target = result.target;
+      const v_actual = result.actual;
+      sum_target += v_target;
+      sum_actual += v_actual;
+      return Object.assign({
+        date,
+        target: sum_target,
+        actual: sum_actual,
+      });
+    });
+    console.log(data2);
+    return data2;
+  });
+}
+
 export async function generateLotProgress(municipality: any, barangay: any) {
   var total_count_lot = new StatisticDefinition({
     onStatisticField: lotHandedOverDateField,
@@ -399,7 +470,7 @@ export async function generateLotProgress(municipality: any, barangay: any) {
         value: total_handedover,
       });
     });
-
+    console.log(data);
     return data;
   });
 }
