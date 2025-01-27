@@ -194,6 +194,8 @@ export const pierAccessValueDateColor = [
   [0, 255, 0, 0.9], // Accessible
   [255, 255, 255, 0.9], // Dates are missing
 ];
+export const pierAccessStatusField = 'AccessStatus';
+export const pierAccessBatchField = 'BatchNo';
 
 // Chart and chart label color
 export const primaryLabelColor = '#9ca3af';

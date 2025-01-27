@@ -3,12 +3,7 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-import { dateFormat, timeSeriesHandedOverChartData } from '../components/Query';
-import { lotLayer } from '../layers';
-import { view } from '../Scene';
-import Query from '@arcgis/core/rest/support/Query';
-import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
-import { barangayField, lotHandedOverDateField, municipalityField } from '../StatusUniqueValues';
+import { dateFormat, pierBatchProgressChartData } from '../components/Query';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -18,20 +13,20 @@ function maybeDisposeRoot(divId: any) {
     }
   });
 }
-const LotProgressChart = ({ municipal, barangay }: any) => {
+const PierBatchChart = ({ municipal, barangay }: any) => {
   const legendRef = useRef<unknown | any | undefined>({});
   const xAxisRef = useRef<unknown | any | undefined>({});
   const yAxisRef = useRef<unknown | any | undefined>({});
   const chartRef = useRef<unknown | any | undefined>({});
-  const [lotProgressData, setLotProgressData] = useState([]);
+  const [pierBatchProgressData, setPierBatchProgressData] = useState([]);
 
-  const chartID = 'lot-progress';
+  const chartID = 'pier-batch-progress';
   useEffect(() => {
     // generateLotProgress(municipal, barangay).then((result: any) => {
     //   setLotProgressData(result);
     // });
-    timeSeriesHandedOverChartData(municipal, barangay).then((result: any) => {
-      setLotProgressData(result);
+    pierBatchProgressChartData(municipal, barangay).then((result: any) => {
+      setPierBatchProgressData(result);
     });
   }, [municipal, barangay]);
 
@@ -62,7 +57,7 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
     // Chart title
     chart.children.unshift(
       am5.Label.new(root, {
-        text: 'Monthly Progress & Target Schedule of Handed Over Lots',
+        text: 'Progress on Accessible Pier Locations',
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'center',
@@ -70,53 +65,27 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
         x: am5.percent(50),
         centerX: am5.percent(50),
         paddingTop: 0,
-        paddingBottom: 0,
+        paddingBottom: 10,
       }),
     );
 
     // Add cursor
     // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+
     var cursor = chart.set(
       'cursor',
       am5xy.XYCursor.new(root, {
         behavior: 'zoomX',
       }),
     );
-    cursor.lineY.set('visible', false);
+    cursor.lineX.set('visible', false);
 
     // Create axes
-    // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-    var xRenderer = am5xy.AxisRendererX.new(root, {
-      //minGridDistance: 60,
-      strokeOpacity: 1,
-      strokeWidth: 1,
-      stroke: am5.color('#ffffff'),
-    });
     var xAxis = chart.xAxes.push(
-      am5xy.DateAxis.new(root, {
-        // When you group data for series
-        // Note you need to baseInterval timeUnit is 'day'
-        // and groupIntervals timeUnit is 'month'
-        maxDeviation: 0,
-        groupData: true,
-        baseInterval: {
-          timeUnit: 'day',
-          count: 1,
-        },
-        // count:
-        groupIntervals: [{ timeUnit: 'month', count: 1 }],
-        // categoryField: 'date',
-        renderer: xRenderer,
-        tooltip: am5.Tooltip.new(root, {}),
-      }),
-    );
-
-    var yAxis = chart.yAxes.push(
       am5xy.ValueAxis.new(root, {
-        calculateTotals: true,
         min: 0,
-        renderer: am5xy.AxisRendererY.new(root, {
-          minGridDistance: 60,
+        maxPrecision: 0,
+        renderer: am5xy.AxisRendererX.new(root, {
           strokeOpacity: 1,
           strokeWidth: 1,
           stroke: am5.color('#ffffff'),
@@ -124,6 +93,19 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
       }),
     );
 
+    var yAxis = chart.yAxes.push(
+      am5xy.CategoryAxis.new(root, {
+        categoryField: 'batch',
+        tooltip: am5.Tooltip.new(root, {}),
+        renderer: am5xy.AxisRendererY.new(root, {
+          minGridDistance: 60,
+          strokeOpacity: 1,
+          strokeWidth: 1.5,
+          stroke: am5.color('#ffffff'),
+        }),
+      }),
+    );
+    yAxis.data.setAll(pierBatchProgressData);
     xAxis.get('renderer').labels.template.setAll({
       //oversizedBehavior: "wrap",
       textAlign: 'center',
@@ -143,16 +125,16 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
     yAxisRef.current = yAxis;
 
     // Add yaxix title
-    yAxis.children.unshift(
-      am5.Label.new(root, {
-        rotation: -90,
-        // text: 'No. of casted components',
-        y: am5.p50,
-        centerX: am5.p50,
-        fill: am5.color('#ffffff'),
-        fontSize: 11,
-      }),
-    );
+    // yAxis.children.unshift(
+    //   am5.Label.new(root, {
+    //     rotation: -90,
+    //     // text: 'No. of casted components',
+    //     y: am5.p50,
+    //     centerX: am5.p50,
+    //     fill: am5.color('#ffffff'),
+    //     fontSize: 11,
+    //   }),
+    // );
 
     // Add legend
     // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
@@ -162,6 +144,7 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
         centerY: am5.percent(50),
         x: am5.p50,
         y: am5.percent(108),
+        marginTop: -20,
       }),
     );
     legendRef.current = legend;
@@ -190,8 +173,9 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
           stacked: true,
           xAxis: xAxis,
           yAxis: yAxis,
-          valueYField: fieldName,
-          valueXField: 'date',
+          baseAxis: yAxis,
+          valueXField: fieldName,
+          categoryYField: 'batch',
           fill: color,
           stroke: color,
           // valueYGrouped: 'sum',
@@ -199,10 +183,10 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
       );
 
       series.columns.template.setAll({
-        tooltipText: '{name}, {categoryX}: {valueY}',
+        tooltipText: '{name}: {valueX}',
         tooltipY: am5.percent(10),
       });
-      series.data.setAll(lotProgressData);
+      series.data.setAll(pierBatchProgressData);
 
       // Make stuff animate on load
       // https://www.amcharts.com/docs/v5/concepts/animations/
@@ -211,7 +195,7 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
       series.bullets.push(function () {
         return am5.Bullet.new(root, {
           sprite: am5.Label.new(root, {
-            text: '{valueY}',
+            text: '{valueX}',
             fill: root.interfaceColors.get('alternativeText'),
             centerY: am5.p50,
             centerX: am5.p50,
@@ -223,22 +207,22 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
       legend.data.push(series);
     }
 
-    makeSeries('Actual (Handed over)', 'actual', am5.color('#0096FF'));
-    makeSeries('Target (To be handed over)', 'target', am5.color('#FF5733'));
+    makeSeries('Accessible', 'accessible', am5.color('#0096FF'));
+    makeSeries('Not Accessible', 'inaccessible', am5.color('#FF5733'));
 
     chart.appear(1000, 100);
 
     return () => {
       root.dispose();
     };
-  }, [chartID, lotProgressData]);
+  }, [chartID, pierBatchProgressData]);
 
   return (
     <>
       <div
         id={chartID}
         style={{
-          height: '40vh',
+          height: '44vh',
           width: '70%',
           backgroundColor: '#2b2b2b',
           color: 'white',
@@ -253,4 +237,4 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
   );
 };
 
-export default LotProgressChart;
+export default PierBatchChart;

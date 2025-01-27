@@ -1,4 +1,4 @@
-import { dateTable, lotLayer, nloLayer, structureLayer } from '../layers';
+import { dateTable, lotLayer, nloLayer, pierAccessLayer, structureLayer } from '../layers';
 import StatisticDefinition from '@arcgis/core/rest/support/StatisticDefinition';
 import * as am5 from '@amcharts/amcharts5';
 import { view } from '../Scene';
@@ -18,6 +18,8 @@ import {
   lotTargetActualField,
   municipalityField,
   nloStatusField,
+  pierAccessBatchField,
+  pierAccessStatusField,
   querySuperUrgent,
   statusLotEndorsedLabel,
   statusLotEndorsedQuery,
@@ -424,53 +426,62 @@ export async function timeSeriesHandedOverChartData(municipality: any, barangay:
         actual: sum_actual,
       });
     });
-    console.log(data2);
     return data2;
   });
 }
 
-export async function generateLotProgress(municipality: any, barangay: any) {
-  var total_count_lot = new StatisticDefinition({
-    onStatisticField: lotHandedOverDateField,
-    outStatisticFieldName: 'total_count_lot',
-    statisticType: 'count',
+export async function pierBatchProgressChartData(municipality: any, barangay: any) {
+  var total_accessible = new StatisticDefinition({
+    onStatisticField: 'CASE WHEN AccessStatus = 1 THEN 1 ELSE 0 END',
+    outStatisticFieldName: 'total_accessible',
+    statisticType: 'sum',
+  });
+
+  var total_inaccessible = new StatisticDefinition({
+    // means handed over
+    onStatisticField: 'CASE WHEN AccessStatus = 0 THEN 1 ELSE 0 END',
+    outStatisticFieldName: 'total_inaccessible',
+    statisticType: 'sum',
   });
 
   var query = lotLayer.createQuery();
-  query.outStatistics = [total_count_lot];
+  query.outStatistics = [total_accessible, total_inaccessible];
   // eslint-disable-next-line no-useless-concat
   const queryMunicipality = `${municipalityField} = '` + municipality + "'";
   const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
-  const queryHandedOverDate = lotHandedOverDateField + ' IS NOT NULL';
+  const queryAccessStatus = pierAccessStatusField + ' IS NOT NULL';
 
   if (municipality && barangay) {
-    query.where = queryHandedOverDate + ' AND ' + queryMunicipalBarangay;
+    query.where = queryAccessStatus + ' AND ' + queryMunicipalBarangay;
   } else if (municipality && !barangay) {
-    query.where = queryHandedOverDate + ' AND ' + queryMunicipality;
+    query.where = queryAccessStatus + ' AND ' + queryMunicipality;
   } else {
-    query.where = queryHandedOverDate;
+    query.where = queryAccessStatus;
   }
 
-  query.outFields = [lotHandedOverDateField];
-  query.orderByFields = [lotHandedOverDateField];
-  query.groupByFieldsForStatistics = [lotHandedOverDateField];
+  query.outFields = [pierAccessBatchField, pierAccessStatusField];
+  query.orderByFields = [pierAccessBatchField];
+  query.groupByFieldsForStatistics = [pierAccessBatchField];
 
-  return lotLayer.queryFeatures(query).then((response: any) => {
+  return pierAccessLayer.queryFeatures(query).then((response: any) => {
     var stats = response.features;
     const data = stats.map((result: any, index: any) => {
       const attributes = result.attributes;
-      const date = attributes.HandedOverDate;
+      const batch = attributes[pierAccessBatchField];
+      const batch_name =
+        batch === 1 ? 'Batch 1' : batch === 2 ? 'Batch 2' : batch === 3 ? 'Batch 3' : 'Batch 4';
 
-      const total_handedover = attributes.total_count_lot;
+      const total_access = attributes.total_accessible;
+      const total_inaccess = attributes.total_inaccessible;
 
       // compile in object array
       return Object.assign({
-        date: date,
-        value: total_handedover,
+        batch: batch_name,
+        accessible: total_access,
+        inaccessible: total_inaccess,
       });
     });
-    console.log(data);
     return data;
   });
 }

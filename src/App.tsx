@@ -46,6 +46,7 @@ import ExpropriationList from './components/ExpropriationList';
 import loadable from '@loadable/component';
 import { lotLayer } from './layers';
 import LotChart from './chart/LotChart';
+import PierBatchChart from './chart/PierBatchChart';
 
 function App() {
   const [asOfDate, setAsOfDate] = useState<undefined | any | unknown>(null);
@@ -381,6 +382,17 @@ function App() {
             ></CalciteAction>
 
             <CalciteAction
+              data-action-id="pierbatch-charts"
+              icon="graph-bar-100-stacked"
+              text="Accessible Pier Location"
+              id="pierbatch-charts"
+              onClick={(event: any) => {
+                setNextWidget(event.target.id);
+                setActiveWidget(nextWidget === activeWidget ? null : nextWidget);
+              }}
+            ></CalciteAction>
+
+            <CalciteAction
               data-action-id="handedover-charts"
               icon="graph-bar-side-by-side"
               text="Handed-Over Area"
@@ -428,6 +440,13 @@ function App() {
             class="timeSeries-panel"
             height-scale="l"
             data-panel-id="charts"
+            hidden
+          ></CalcitePanel>
+
+          <CalcitePanel
+            class="pierbatchaccess-panel"
+            height-scale="l"
+            data-panel-id="pierbatch-charts"
             hidden
           ></CalcitePanel>
 
@@ -527,12 +546,19 @@ function App() {
           <LotProgressChart
             municipal={municipalSelected.municipality}
             barangay={barangaySelected.name}
-            nextwidget={nextWidget === activeWidget ? null : nextWidget}
           />
         )}
 
         {nextWidget === 'handedover-charts' && nextWidget !== activeWidget && (
           <HandedOverAreaChart />
+        )}
+
+        {/* Progress on Accessible Pier Locations */}
+        {nextWidget === 'pierbatch-charts' && nextWidget !== activeWidget && (
+          <PierBatchChart
+            municipal={municipalSelected.municipality}
+            barangay={barangaySelected.name}
+          />
         )}
       </CalciteShell>
     </div>
