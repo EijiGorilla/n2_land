@@ -4,6 +4,11 @@ import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import { dateFormat, pierBatchProgressChartData } from '../components/Query';
+import { pierAccessLayer } from '../layers';
+import { view } from '../Scene';
+import Query from '@arcgis/core/rest/support/Query';
+import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
+import { pierAccessBatchField, pierAccessStatusField } from '../StatusUniqueValues';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -181,6 +186,73 @@ const PierBatchChart = ({ municipal, barangay }: any) => {
           // valueYGrouped: 'sum',
         }),
       );
+
+      // select chart series and filter
+      var highlightSelect: any;
+      series.columns.template.events.on('click', (ev) => {
+        const selected: any = ev.target.dataItem?.dataContext;
+        const selectedBatchName = selected.batch;
+        const selectedBatch =
+          selectedBatchName === 'Batch 1'
+            ? 1
+            : selectedBatchName === 'Batch 2'
+              ? 2
+              : selectedBatchName === 'Batch 3'
+                ? 3
+                : 4;
+
+        // const qExpression =
+        const qMunicipality = "Municipality = '" + municipal + "'";
+        const qBarangay = "Barangay = '" + barangay + "'";
+        const qMunicipalBarangay = qMunicipality + ' AND ' + qBarangay;
+        const status = fieldName === 'accessible' ? 1 : 0;
+        const qSelectedStatus = `${pierAccessStatusField} = ` + status;
+        const qSelectedBatch = `${pierAccessBatchField} = ` + selectedBatch;
+
+        var query = pierAccessLayer.createQuery();
+        if (municipal && barangay) {
+          query.where = qSelectedStatus + ' AND ' + qMunicipalBarangay + ' AND ' + qSelectedBatch;
+        } else if (municipal && !barangay) {
+          query.where = qSelectedStatus + ' AND ' + qMunicipality + ' AND ' + qSelectedBatch;
+        } else {
+          query.where = qSelectedStatus;
+        }
+
+        view.whenLayerView(pierAccessLayer).then((layerView: any) => {
+          pierAccessLayer.queryFeatures(query).then((results: any) => {
+            const RESULT_LENGTH = results.features;
+            const ROW_N = RESULT_LENGTH.length;
+
+            let objID = [];
+            for (var i = 0; i < ROW_N; i++) {
+              var obj = results.features[i].attributes.OBJECTID;
+              objID.push(obj);
+            }
+
+            var queryExt = new Query({
+              objectIds: objID,
+            });
+
+            pierAccessLayer.queryExtent(queryExt).then(function (result) {
+              if (result.extent) {
+                view.goTo(result.extent);
+              }
+            });
+
+            if (highlightSelect) {
+              highlightSelect.remove();
+            }
+            highlightSelect = layerView.highlight(objID);
+
+            view.on('click', function () {
+              layerView.filter = new FeatureFilter({
+                where: undefined,
+              });
+              highlightSelect.remove();
+            });
+          });
+        }); // End of whenLayerView
+      });
 
       series.columns.template.setAll({
         tooltipText: '{name}: {valueX}',

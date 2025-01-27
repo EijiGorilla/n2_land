@@ -8,7 +8,13 @@ import { lotLayer } from '../layers';
 import { view } from '../Scene';
 import Query from '@arcgis/core/rest/support/Query';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
-import { barangayField, lotHandedOverDateField, municipalityField } from '../StatusUniqueValues';
+import {
+  barangayField,
+  lotHandedOverDateField,
+  lotTargetActualDateField,
+  lotTargetActualField,
+  municipalityField,
+} from '../StatusUniqueValues';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -197,6 +203,65 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
           // valueYGrouped: 'sum',
         }),
       );
+
+      // select chart series and filter
+      var highlightSelect: any;
+      series.columns.template.events.on('click', (ev) => {
+        const selected: any = ev.target.dataItem?.dataContext;
+        const selectedDate = dateFormat(selected.date, 'yyyy-MM-dd');
+
+        // const qExpression =
+        const qMunicipality = "Municipality = '" + municipal + "'";
+        const qBarangay = "Barangay = '" + barangay + "'";
+        const qMunicipalBarangay = qMunicipality + ' AND ' + qBarangay;
+        const qDateSelected = lotTargetActualDateField + " = date'" + selectedDate + "'";
+        const status = fieldName === 'target' ? 1 : 2;
+        const qSelected = `${lotTargetActualField} = ` + status;
+
+        var query = lotLayer.createQuery();
+        if (municipal && barangay) {
+          query.where = qDateSelected + ' AND ' + qMunicipalBarangay + ' AND ' + qSelected;
+        } else if (municipal && !barangay) {
+          query.where = qDateSelected + ' AND ' + qMunicipality + ' AND ' + qSelected;
+        } else {
+          query.where = qDateSelected;
+        }
+
+        view.whenLayerView(lotLayer).then((layerView: any) => {
+          lotLayer.queryFeatures(query).then((results: any) => {
+            const RESULT_LENGTH = results.features;
+            const ROW_N = RESULT_LENGTH.length;
+
+            let objID = [];
+            for (var i = 0; i < ROW_N; i++) {
+              var obj = results.features[i].attributes.OBJECTID;
+              objID.push(obj);
+            }
+
+            var queryExt = new Query({
+              objectIds: objID,
+            });
+
+            lotLayer.queryExtent(queryExt).then(function (result) {
+              if (result.extent) {
+                view.goTo(result.extent);
+              }
+            });
+
+            if (highlightSelect) {
+              highlightSelect.remove();
+            }
+            highlightSelect = layerView.highlight(objID);
+
+            view.on('click', function () {
+              layerView.filter = new FeatureFilter({
+                where: undefined,
+              });
+              highlightSelect.remove();
+            });
+          });
+        }); // End of whenLayerView
+      });
 
       series.columns.template.setAll({
         tooltipText: '{name}, {categoryX}: {valueY}',
