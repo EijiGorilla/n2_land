@@ -66,7 +66,7 @@ const LotProgressChart = ({ municipal, barangay, nextwidget }: any) => {
     // Chart title
     chart.children.unshift(
       am5.Label.new(root, {
-        text: 'Monthly Progress',
+        text: 'Monthly Progress & Target Schedule of Handed Over Lots',
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'center',
@@ -150,7 +150,7 @@ const LotProgressChart = ({ municipal, barangay, nextwidget }: any) => {
     yAxis.children.unshift(
       am5.Label.new(root, {
         rotation: -90,
-        text: 'No. of casted components',
+        // text: 'No. of casted components',
         y: am5.p50,
         centerX: am5.p50,
         fill: am5.color('#ffffff'),
