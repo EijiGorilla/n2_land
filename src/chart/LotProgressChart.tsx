@@ -11,6 +11,7 @@ import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import {
   barangayField,
   lotHandedOverDateField,
+  lotHandOverDateField,
   lotTargetActualDateField,
   lotTargetActualField,
   municipalityField,
@@ -207,24 +208,20 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
       // select chart series and filter
       var highlightSelect: any;
       series.columns.template.events.on('click', (ev) => {
-        const selected: any = ev.target.dataItem?.dataContext;
-        const selectedDate = dateFormat(selected.date, 'yyyy-MM-dd');
-
         // const qExpression =
         const qMunicipality = "Municipality = '" + municipal + "'";
         const qBarangay = "Barangay = '" + barangay + "'";
         const qMunicipalBarangay = qMunicipality + ' AND ' + qBarangay;
-        const qDateSelected = lotTargetActualDateField + " = date'" + selectedDate + "'";
         const status = fieldName === 'target' ? 1 : 2;
         const qSelected = `${lotTargetActualField} = ` + status;
 
         var query = lotLayer.createQuery();
         if (municipal && barangay) {
-          query.where = qDateSelected + ' AND ' + qMunicipalBarangay + ' AND ' + qSelected;
+          query.where = qMunicipalBarangay + ' AND ' + qSelected;
         } else if (municipal && !barangay) {
-          query.where = qDateSelected + ' AND ' + qMunicipality + ' AND ' + qSelected;
+          query.where = qMunicipality + ' AND ' + qSelected;
         } else {
-          query.where = qDateSelected;
+          query.where = qSelected;
         }
 
         view.whenLayerView(lotLayer).then((layerView: any) => {
