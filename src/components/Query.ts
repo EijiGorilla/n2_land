@@ -37,6 +37,17 @@ import {
   superurgent_items,
 } from '../StatusUniqueValues';
 
+// get last date of month
+export function lastDateOfMonth(date: Date) {
+  const old_date = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+  const year = old_date.getFullYear();
+  const month = old_date.getMonth() + 1;
+  const day = old_date.getDate();
+  const final_date = `${year}-${month}-${day}`;
+
+  return final_date;
+}
+
 // Updat date
 export async function dateUpdate() {
   const monthList = [

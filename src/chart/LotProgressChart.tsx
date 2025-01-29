@@ -3,7 +3,7 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-import { dateFormat, timeSeriesHandedOverChartData } from '../components/Query';
+import { dateFormat, lastDateOfMonth, timeSeriesHandedOverChartData } from '../components/Query';
 import { lotLayer } from '../layers';
 import { view } from '../Scene';
 import Query from '@arcgis/core/rest/support/Query';
@@ -77,7 +77,7 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
         x: am5.percent(50),
         centerX: am5.percent(50),
         paddingTop: 0,
-        paddingBottom: 0,
+        marginBottom: 10,
       }),
     );
 
@@ -122,6 +122,8 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
       am5xy.ValueAxis.new(root, {
         calculateTotals: true,
         min: 0,
+        max: 100,
+        numberFormat: "#'%'",
         renderer: am5xy.AxisRendererY.new(root, {
           minGridDistance: 60,
           strokeOpacity: 1,
@@ -169,6 +171,7 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
         centerY: am5.percent(50),
         x: am5.p50,
         y: am5.percent(108),
+        marginTop: -20,
       }),
     );
     legendRef.current = legend;
@@ -209,19 +212,32 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
       var highlightSelect: any;
       series.columns.template.events.on('click', (ev) => {
         // const qExpression =
+        const select: any = ev.target.dataItem?.dataContext;
+        const raw_date = new Date(select?.date);
+        const last_date = lastDateOfMonth(new Date(raw_date));
+        const qDate =
+          fieldName === 'target'
+            ? `${lotHandOverDateField} <= date'` + last_date + "'"
+            : `${lotHandedOverDateField} <= date'` + last_date + "'";
+
         const qMunicipality = "Municipality = '" + municipal + "'";
         const qBarangay = "Barangay = '" + barangay + "'";
         const qMunicipalBarangay = qMunicipality + ' AND ' + qBarangay;
         const status = fieldName === 'target' ? 1 : 2;
         const qSelected = `${lotTargetActualField} = ` + status;
 
+        let layerViewFilter: any;
+
         var query = lotLayer.createQuery();
         if (municipal && barangay) {
-          query.where = qMunicipalBarangay + ' AND ' + qSelected;
+          query.where = qMunicipalBarangay + ' AND ' + qSelected + ' AND ' + qDate;
+          layerViewFilter = qMunicipalBarangay + ' AND ' + qSelected + ' AND ' + qDate;
         } else if (municipal && !barangay) {
-          query.where = qMunicipality + ' AND ' + qSelected;
+          query.where = qMunicipality + ' AND ' + qSelected + ' AND ' + qDate;
+          layerViewFilter = qMunicipality + ' AND ' + qSelected + ' AND ' + qDate;
         } else {
-          query.where = qSelected;
+          query.where = qSelected + ' AND ' + qDate;
+          layerViewFilter = qSelected + ' AND ' + qDate;
         }
 
         view.whenLayerView(lotLayer).then((layerView: any) => {
@@ -257,11 +273,14 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
               highlightSelect.remove();
             });
           });
+          layerView.filter = new FeatureFilter({
+            where: layerViewFilter,
+          });
         }); // End of whenLayerView
       });
 
       series.columns.template.setAll({
-        tooltipText: '{name}, {categoryX}: {valueY}',
+        tooltipText: '{name}: {valueY} ({valueYTotalPercent.formatNumber("#.#")}%)',
         tooltipY: am5.percent(10),
       });
       series.data.setAll(lotProgressData);
@@ -285,8 +304,8 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
       legend.data.push(series);
     }
 
-    makeSeries('Actual (Handed over)', 'actual', am5.color('#0096FF'));
-    makeSeries('Target (To be handed over)', 'target', am5.color('#FF5733'));
+    makeSeries('Actual', 'actual', am5.color('#0096FF'));
+    makeSeries('Target', 'target', am5.color('#FF5733'));
 
     chart.appear(1000, 100);
 
