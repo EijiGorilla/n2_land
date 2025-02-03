@@ -46,7 +46,7 @@ import ExpropriationList from './components/ExpropriationList';
 import loadable from '@loadable/component';
 import { lotLayer } from './layers';
 import LotChart from './chart/LotChart';
-import PierBatchChart from './chart/PierBatchChart';
+// import PierBatchChart from './chart/PierBatchChart';
 
 function App() {
   const [asOfDate, setAsOfDate] = useState<undefined | any | unknown>(null);
@@ -381,7 +381,7 @@ function App() {
               }}
             ></CalciteAction>
 
-            <CalciteAction
+            {/* <CalciteAction
               data-action-id="pierbatch-charts"
               icon="graph-bar-100-stacked"
               text="Accessible Pier Location"
@@ -390,7 +390,7 @@ function App() {
                 setNextWidget(event.target.id);
                 setActiveWidget(nextWidget === activeWidget ? null : nextWidget);
               }}
-            ></CalciteAction>
+            ></CalciteAction> */}
 
             <CalciteAction
               data-action-id="handedover-charts"
@@ -443,12 +443,12 @@ function App() {
             hidden
           ></CalcitePanel>
 
-          <CalcitePanel
+          {/* <CalcitePanel
             class="pierbatchaccess-panel"
             height-scale="l"
             data-panel-id="pierbatch-charts"
             hidden
-          ></CalcitePanel>
+          ></CalcitePanel> */}
 
           <CalcitePanel
             class="handedOverArea-panel"
@@ -554,12 +554,12 @@ function App() {
         )}
 
         {/* Progress on Accessible Pier Locations */}
-        {nextWidget === 'pierbatch-charts' && nextWidget !== activeWidget && (
+        {/* {nextWidget === 'pierbatch-charts' && nextWidget !== activeWidget && (
           <PierBatchChart
             municipal={municipalSelected.municipality}
             barangay={barangaySelected.name}
           />
-        )}
+        )} */}
       </CalciteShell>
     </div>
   );
