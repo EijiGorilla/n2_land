@@ -124,6 +124,7 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
         min: 0,
         max: 100,
         numberFormat: "#'%'",
+        strictMinMax: true,
         renderer: am5xy.AxisRendererY.new(root, {
           minGridDistance: 60,
           strokeOpacity: 1,
@@ -202,6 +203,8 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
           yAxis: yAxis,
           valueYField: fieldName,
           valueXField: 'date',
+          valueYShow: 'valueYTotalPercent',
+          categoryXField: 'date',
           fill: color,
           stroke: color,
           // valueYGrouped: 'sum',
