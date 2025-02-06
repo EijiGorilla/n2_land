@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from 'react';
-import Select from 'react-select';
 import {
   map,
   view,
@@ -41,11 +40,14 @@ import {
   CalciteListItem,
   CalciteButton,
 } from '@esri/calcite-components-react';
-import { dateUpdate, getMuniciaplityBarangayPair, zoomToLayer } from './components/Query';
-import ExpropriationList from './components/ExpropriationList';
 import loadable from '@loadable/component';
+import { dateUpdate, getMuniciaplityBarangayPair, zoomToLayer } from './Query';
+import ExpropriationList from './components/ExpropriationList';
 import { lotLayer } from './layers';
-import LotChart from './chart/LotChart';
+import LotChart from './components/LotChart';
+import DropdownListDisplay, { DropdownDataProvider } from './components/DropdownContext';
+import PierBatchChart from './components/PierBatchChart';
+
 // import PierBatchChart from './chart/PierBatchChart';
 
 function App() {
@@ -64,36 +66,11 @@ function App() {
   const [activeWidget, setActiveWidget] = useState<undefined | any | unknown>(null);
   const [nextWidget, setNextWidget] = useState<undefined | any | unknown>(null);
 
-  // For dropdown filter
-  const [initMunicipalBarangay, setInitMunicipalBarangay] = useState([
-    {
-      municipality: '',
-      barangay: [
-        {
-          name: '',
-        },
-      ],
-    },
-  ]);
-
-  const [municipality, setMunicipality] = useState(null);
-  const [barangay, setBarangay] = useState(null);
-  const [barangayList, setBarangayList] = useState([]);
-  const [municipalSelected, setMunicipalSelected] = useState({
-    municipality: '',
-    barangay: [
-      {
-        name: '',
-      },
-    ],
-  });
-  const [barangaySelected, setBarangaySelected] = useState({ name: '' });
-
   // loadable for code splitting
-  const NloChart = loadable(() => import('./chart/NloChart'));
-  const StructureChart = loadable(() => import('./chart/StructureChart'));
-  const LotProgressChart = loadable(() => import('./chart/LotProgressChart'));
-  const HandedOverAreaChart = loadable(() => import('./chart/HandedOverAreaChart'));
+  const NloChart = loadable(() => import('./components/NloChart'));
+  const StructureChart = loadable(() => import('./components/StructureChart'));
+  const LotProgressChart = loadable(() => import('./components/LotProgressChart'));
+  const HandedOverAreaChart = loadable(() => import('./components/HandedOverAreaChart'));
 
   //
   const [lotLayerLoaded, setLotLayerLoaded] = useState<any>();
@@ -103,37 +80,11 @@ function App() {
     });
   });
 
-  //**** Create dropdonw list */
-  // Get a pair of municipality and barangay
   useEffect(() => {
-    getMuniciaplityBarangayPair().then((response: any) => {
-      setInitMunicipalBarangay(response);
-    });
-
     dateUpdate().then((response: any) => {
       setAsOfDate(response);
     });
   }, []);
-
-  // Add zoomToLayer in App component, not LotChart component
-  useEffect(() => {
-    zoomToLayer(lotLayer);
-  }, [municipality, barangay]);
-
-  // handle change event of the Municipality dropdown
-  const handleMunicipalityChange = (obj: any) => {
-    setMunicipalSelected(obj);
-    setMunicipality(obj);
-    setBarangayList(obj.barangay);
-    setBarangay(null);
-    setBarangaySelected({ name: '' });
-  };
-
-  // handle change event of the barangay dropdownff
-  const handleBarangayChange = (obj: any) => {
-    setBarangaySelected(obj);
-    setBarangay(obj);
-  };
 
   // End of dropdown list
 
@@ -198,31 +149,6 @@ function App() {
     }
   }, []);
 
-  // Style CSS
-  const customstyles = {
-    option: (styles: any, { data, isDisabled, isFocused, isSelected }: any) => {
-      // const color = chroma(data.color);
-      return {
-        ...styles,
-        backgroundColor: isFocused ? '#999999' : isSelected ? '#2b2b2b' : '#2b2b2b',
-        color: '#ffffff',
-      };
-    },
-
-    control: (defaultStyles: any) => ({
-      ...defaultStyles,
-      backgroundColor: '#2b2b2b',
-      borderColor: '#949494',
-      color: '#ffffff',
-      touchUi: false,
-    }),
-    singleValue: (defaultStyles: any) => ({ ...defaultStyles, color: '#fff' }),
-  };
-
-  // https://developers.arcgis.com/calcite-design-system/resources/frameworks/
-  // --calcite-ui-background: #353535 f
-  // https://developers.arcgis.com/calcite-design-system/foundations/colors/
-  // https://codesandbox.io/examples/package/@esri/calcite-components-react
   return (
     <div>
       <CalciteShell>
@@ -233,34 +159,33 @@ function App() {
             <CalciteTabTitle class="NLO">NLO</CalciteTabTitle>
             <CalciteTabTitle class="ExproList">ExproList</CalciteTabTitle>
           </CalciteTabNav>
+
           {/* CalciteTab: Lot */}
           <CalciteTab>
-            {lotLayerLoaded === 'loaded' && (
-              <LotChart
-                municipal={municipalSelected.municipality}
-                barangay={barangaySelected.name}
-              />
-            )}
+            <DropdownDataProvider>
+              {lotLayerLoaded === 'loaded' && <LotChart />}
+            </DropdownDataProvider>
           </CalciteTab>
+
           {/* CalciteTab: Structure */}
           <CalciteTab>
-            <StructureChart
-              municipal={municipalSelected.municipality}
-              barangay={barangaySelected.name}
-            />
+            <DropdownDataProvider>
+              <StructureChart />
+            </DropdownDataProvider>
           </CalciteTab>
 
           {/* CalciteTab: Non-Land Owner */}
           <CalciteTab>
-            <NloChart municipal={municipalSelected.municipality} barangay={barangaySelected.name} />
+            <DropdownDataProvider>
+              <NloChart />
+            </DropdownDataProvider>
           </CalciteTab>
 
           {/* CalciteTab: List of Lots under Expropriation */}
           <CalciteTab>
-            <ExpropriationList
-              municipal={municipalSelected.municipality}
-              barangay={barangaySelected.name}
-            />
+            <DropdownDataProvider>
+              <ExpropriationList />
+            </DropdownDataProvider>
           </CalciteTab>
         </CalciteTabs>
         <header
@@ -285,45 +210,8 @@ function App() {
           <b className="headerTitle">N2 LAND ACQUISITION</b>
           <div className="date">{!asOfDate ? '' : 'As of ' + asOfDate}</div>
 
-          <div className="dropdownFilterLayout">
-            <div
-              style={{
-                color: 'white',
-                fontSize: '0.85rem',
-                margin: 'auto',
-                paddingRight: '0.5rem',
-              }}
-            >
-              Municipality
-            </div>
-            <Select
-              placeholder="Select Municipality"
-              value={municipality}
-              options={initMunicipalBarangay}
-              onChange={handleMunicipalityChange}
-              getOptionLabel={(x: any) => x.municipality}
-              styles={customstyles}
-            />
-            <br />
-            <div
-              style={{
-                color: 'white',
-                fontSize: '0.85rem',
-                margin: 'auto',
-                paddingRight: '0.5rem',
-              }}
-            >
-              Barangay
-            </div>
-            <Select
-              placeholder="Select Barangay"
-              value={barangay}
-              options={barangayList}
-              onChange={handleBarangayChange}
-              getOptionLabel={(x: any) => x.name}
-              styles={customstyles}
-            />
-          </div>
+          {/* Dropdown component */}
+          <DropdownListDisplay />
 
           <img
             src="https://EijiGorilla.github.io/Symbols/Projec_Logo/GCR LOGO.png"
@@ -542,24 +430,20 @@ function App() {
         </div>
 
         {/* Lot progress chart is loaded ONLY when charts widget is clicked. */}
-        {nextWidget === 'charts' && nextWidget !== activeWidget && lotLayerLoaded === 'loaded' && (
-          <LotProgressChart
-            municipal={municipalSelected.municipality}
-            barangay={barangaySelected.name}
-          />
-        )}
+        <DropdownDataProvider>
+          {nextWidget === 'charts' &&
+            nextWidget !== activeWidget &&
+            lotLayerLoaded === 'loaded' && <LotProgressChart />}
+        </DropdownDataProvider>
 
         {nextWidget === 'handedover-charts' && nextWidget !== activeWidget && (
           <HandedOverAreaChart />
         )}
 
         {/* Progress on Accessible Pier Locations */}
-        {/* {nextWidget === 'pierbatch-charts' && nextWidget !== activeWidget && (
-          <PierBatchChart
-            municipal={municipalSelected.municipality}
-            barangay={barangaySelected.name}
-          />
-        )} */}
+        <DropdownDataProvider>
+          {nextWidget === 'pierbatch-charts' && nextWidget !== activeWidget && <PierBatchChart />}
+        </DropdownDataProvider>
       </CalciteShell>
     </div>
   );

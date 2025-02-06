@@ -7,7 +7,7 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-import { generateNloData, generateNloNumber, thousands_separators } from '../components/Query';
+import { generateNloData, generateNloNumber, thousands_separators } from '../Query';
 import {
   barangayField,
   municipalityField,
@@ -16,6 +16,7 @@ import {
   statusNloQuery,
   valueLabelColor,
 } from '../StatusUniqueValues';
+import { useDropdownContext } from './DropdownContext';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -29,7 +30,12 @@ function maybeDisposeRoot(divId: any) {
 ///*** Others */
 
 /// Draw chart
-const NloChart = memo(({ municipal, barangay }: any) => {
+const NloChart = memo(() => {
+  const { municipalSelected, barangaySelected } = useDropdownContext();
+
+  const municipal = municipalSelected.municipality;
+  const barangay = barangaySelected.name;
+
   const pieSeriesRef = useRef<unknown | any | undefined>({});
   const legendRef = useRef<unknown | any | undefined>({});
   const chartRef = useRef<unknown | any | undefined>({});
@@ -88,6 +94,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     var chart = root.container.children.push(
       am5percent.PieChart.new(root, {
         layout: root.verticalLayout,
+        paddingBottom: 50,
       }),
     );
     chartRef.current = chart;
@@ -103,7 +110,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
         legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(28),
-        scale: 2.5,
+        scale: 1.5,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -113,7 +120,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     let inner_label = pieSeries.children.push(
       am5.Label.new(root, {
         text: '[#ffffff]{valueSum}[/]\n[fontSize: 5px; #d3d3d3; verticalAlign: super]FAMILIES[/]',
-        fontSize: 13,
+        fontSize: 25,
         centerX: am5.percent(50),
         centerY: am5.percent(40),
         populateText: true,
@@ -219,7 +226,6 @@ const NloChart = memo(({ municipal, barangay }: any) => {
     // Change the size of legend markers
     legend.markers.template.setAll({
       width: 18,
-      height: 18,
     });
 
     // Change the marker shape
@@ -335,7 +341,7 @@ const NloChart = memo(({ municipal, barangay }: any) => {
       <div
         id={chartID}
         style={{
-          height: '41vh',
+          height: '75vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
         }}

@@ -28,7 +28,7 @@ import {
   // superUrgentLotLayer,
   // handedOverLotLayer,
 } from './layers';
-import { highlightLot, zoomToLayer } from './components/Query';
+import { highlightLot, zoomToLayer } from './Query';
 import Zoom from '@arcgis/core/widgets/Zoom';
 import { lotIdField, structureIdField } from './StatusUniqueValues';
 

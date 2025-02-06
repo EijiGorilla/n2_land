@@ -17,7 +17,7 @@ import {
 import SolidEdges3D from '@arcgis/core/symbols/edges/SolidEdges3D';
 import CustomContent from '@arcgis/core/popup/content/CustomContent';
 import PopupTemplate from '@arcgis/core/PopupTemplate';
-import { dateFormat } from './components/Query';
+import { dateFormat } from './Query';
 import {
   pierAccessValue,
   pierAccessValueDateColor,

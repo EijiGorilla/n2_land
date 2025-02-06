@@ -1,7 +1,7 @@
-import { dateTable, lotLayer, nloLayer, pierAccessLayer, structureLayer } from '../layers';
+import { dateTable, lotLayer, nloLayer, pierAccessLayer, structureLayer } from './layers';
 import StatisticDefinition from '@arcgis/core/rest/support/StatisticDefinition';
 import * as am5 from '@amcharts/amcharts5';
-import { view } from '../Scene';
+import { view } from './Scene';
 import {
   affectedAreaField,
   barangayField,
@@ -35,7 +35,7 @@ import {
   structurePteField,
   structureStatusField,
   superurgent_items,
-} from '../StatusUniqueValues';
+} from './StatusUniqueValues';
 
 // get last date of month
 export function lastDateOfMonth(date: Date) {

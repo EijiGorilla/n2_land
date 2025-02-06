@@ -12,7 +12,7 @@ import {
   generateStrucNumber,
   generateStructureData,
   thousands_separators,
-} from '../components/Query';
+} from '../Query';
 import { CalciteLabel } from '@esri/calcite-components-react';
 import {
   barangayField,
@@ -24,6 +24,7 @@ import {
   structureStatusField,
   valueLabelColor,
 } from '../StatusUniqueValues';
+import { useDropdownContext } from './DropdownContext';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -37,7 +38,12 @@ function maybeDisposeRoot(divId: any) {
 ///*** Others */
 
 /// Draw chart
-const StructureChart = memo(({ municipal, barangay }: any) => {
+const StructureChart = memo(() => {
+  const { municipalSelected, barangaySelected } = useDropdownContext();
+
+  const municipal = municipalSelected.municipality;
+  const barangay = barangaySelected.name;
+
   // 1. Structure
   const pieSeriesRef = useRef<unknown | any | undefined>({});
   const legendRef = useRef<unknown | any | undefined>({});
@@ -127,7 +133,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
         legendValueText: "{valuePercentTotal.formatNumber('#.')}% ({value})",
         radius: am5.percent(45), // outer radius
         innerRadius: am5.percent(28),
-        scale: 2.2,
+        scale: 1.5,
       }),
     );
     pieSeriesRef.current = pieSeries;
@@ -137,7 +143,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
     let inner_label = pieSeries.children.push(
       am5.Label.new(root, {
         text: '[#ffffff]{valueSum}[/]\n[fontSize: 5px; #d3d3d3; verticalAlign: super]STRUCTURES[/]',
-        fontSize: 13,
+        fontSize: 25,
         centerX: am5.percent(50),
         centerY: am5.percent(40),
         populateText: true,
@@ -233,7 +239,7 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
       am5.Legend.new(root, {
         centerX: am5.percent(50),
         x: am5.percent(50),
-        scale: 1.03,
+        // scale: 1,
       }),
     );
     legendRef.current = legend;
@@ -551,18 +557,16 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
           style={{ paddingTop: '5px', paddingLeft: '5px' }}
         />
       </div>
-
       {/* Structure Chart */}
       <div
         id={chartID}
         style={{
-          height: '47vh',
+          height: '61vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
           marginBottom: '7%',
         }}
       ></div>
-
       {/* Permit-to-Enter */}
       <CalciteLabel>PERMIT-TO-ENTER</CalciteLabel>
       <CalciteLabel layout="inline">
@@ -572,9 +576,9 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
             <img
               src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
               alt="Structure Logo"
-              height={'18%'}
-              width={'18%'}
-              style={{ marginLeft: '70%', display: 'flex', marginTop: '-10%' }}
+              height={'15%'}
+              width={'15%'}
+              style={{ marginLeft: '280px', display: 'flex', marginTop: '-10%' }}
             />
           </b>
         ) : (
@@ -583,14 +587,14 @@ const StructureChart = memo(({ municipal, barangay }: any) => {
             <img
               src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"
               alt="Structure Logo"
-              height={'18%'}
-              width={'18%'}
-              style={{ marginLeft: '70%', display: 'flex', marginTop: '-10%' }}
+              height={'15%'}
+              width={'15%'}
+              style={{ marginLeft: '280px', display: 'flex', marginTop: '-10%' }}
             />
           </b>
         )}
       </CalciteLabel>
-
+      d
       {/* <CalciteLabel>MODE OF ACQUISITION</CalciteLabel>
       <div
         id={chartID_moa}

@@ -3,7 +3,7 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-import { dateFormat, lastDateOfMonth, timeSeriesHandedOverChartData } from '../components/Query';
+import { dateFormat, lastDateOfMonth, timeSeriesHandedOverChartData } from '../Query';
 import { lotLayer } from '../layers';
 import { view } from '../Scene';
 import Query from '@arcgis/core/rest/support/Query';
@@ -16,6 +16,7 @@ import {
   lotTargetActualField,
   municipalityField,
 } from '../StatusUniqueValues';
+import { useDropdownContext } from './DropdownContext';
 
 // Dispose function
 function maybeDisposeRoot(divId: any) {
@@ -25,7 +26,12 @@ function maybeDisposeRoot(divId: any) {
     }
   });
 }
-const LotProgressChart = ({ municipal, barangay }: any) => {
+const LotProgressChart = () => {
+  const { municipalSelected, barangaySelected } = useDropdownContext();
+
+  const municipal = municipalSelected.municipality;
+  const barangay = barangaySelected.name;
+
   const legendRef = useRef<unknown | any | undefined>({});
   const xAxisRef = useRef<unknown | any | undefined>({});
   const yAxisRef = useRef<unknown | any | undefined>({});
@@ -120,10 +126,10 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
 
     var yAxis = chart.yAxes.push(
       am5xy.ValueAxis.new(root, {
-        calculateTotals: true,
+        // calculateTotals: true,
         min: 0,
-        max: 100,
-        numberFormat: "#'%'",
+        // max: 100,
+        // numberFormat: "#'%'",
         strictMinMax: true,
         renderer: am5xy.AxisRendererY.new(root, {
           minGridDistance: 60,
@@ -203,7 +209,7 @@ const LotProgressChart = ({ municipal, barangay }: any) => {
           yAxis: yAxis,
           valueYField: fieldName,
           valueXField: 'date',
-          valueYShow: 'valueYTotalPercent',
+          // valueYShow: 'valueYTotalPercent',
           categoryXField: 'date',
           fill: color,
           stroke: color,
