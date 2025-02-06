@@ -72,6 +72,22 @@ const LotProgressChart = () => {
     );
     chartRef.current = chart;
 
+    let scrollbarY1 = am5xy.XYChartScrollbar.new(root, {
+      orientation: 'vertical',
+      // height: 50,
+      // width: 1,
+    });
+
+    scrollbarY1.startGrip.set('scale', 0.7);
+    scrollbarY1.endGrip.set('scale', 0.7);
+
+    chart.set('scrollbarY', scrollbarY1);
+    let scrollbarY2 = chart.get('scrollbarY');
+    scrollbarY2?.get('background')?.setAll({
+      fill: am5.color('#ffffff'),
+      fillOpacity: 0.2,
+    });
+
     // Chart title
     chart.children.unshift(
       am5.Label.new(root, {
