@@ -7,20 +7,15 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-import {
-  // generateStrucMoaData,
-  generateStrucNumber,
-  generateStructureData,
-  thousands_separators,
-} from '../Query';
+import { generateStrucNumber, generateStructureData, thousands_separators } from '../Query';
+import '../index.css';
+import '../App.css';
 import { CalciteLabel } from '@esri/calcite-components-react';
 import {
   barangayField,
   municipalityField,
   primaryLabelColor,
-  statusMoaStructureQuery,
   statusStructureQuery,
-  structureMoaField,
   structureStatusField,
   valueLabelColor,
 } from '../StatusUniqueValues';
@@ -571,7 +566,7 @@ const StructureChart = memo(() => {
       <CalciteLabel>PERMIT-TO-ENTER</CalciteLabel>
       <CalciteLabel layout="inline">
         {structureNumber[1] === 0 ? (
-          <b className="permitToEnterNumber">
+          <b className="permitToEnterNumber" style={{ color: valueLabelColor }}>
             {structureNumber[0]}% (0)
             <img
               src="https://EijiGorilla.github.io/Symbols/Permit-To-Enter.png"

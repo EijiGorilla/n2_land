@@ -11,7 +11,6 @@ import {
   generateAffectedAreaForPie,
   generateHandedOverLotsNumber,
   generateLotData,
-  // generateLotMoaData,
   generateLotNumber,
   generateTotalAffectedArea,
   highlightLot,
@@ -32,15 +31,12 @@ import {
 } from '@esri/calcite-components-react';
 import {
   barangayField,
-  lotMoaField,
   lotStatusField,
   municipalityField,
   primaryLabelColor,
   querySuperUrgent,
   statusLotLabel,
   statusLotQuery,
-  statusMoaQuery,
-  superurgent_items,
   valueLabelColor,
 } from '../StatusUniqueValues';
 import { useDropdownContext } from './DropdownContext';

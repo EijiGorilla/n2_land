@@ -19,6 +19,9 @@ import {
 } from '@esri/calcite-components-react';
 import { view } from '../Scene';
 import { barangayField, lotStatusField, municipalityField } from '../StatusUniqueValues';
+import { useDropdownContext } from './DropdownContext';
+import '../index.css';
+import '../App.css';
 
 // Zoom in to selected lot from expropriation list
 let highlightSelect: any;
@@ -46,7 +49,12 @@ function resultClickHandler(event: any) {
   });
 }
 
-const ExpropriationList = ({ municipal, barangay }: any) => {
+const ExpropriationList = () => {
+  const { municipalSelected, barangaySelected } = useDropdownContext();
+
+  const municipal = municipalSelected.municipality;
+  const barangay = barangaySelected.name;
+
   const [exproItem, setExproItem] = useState<undefined | any>([]);
   const queryMunicipality = `${municipalityField} = '` + municipal + "'";
   const queryBarangay = `${barangayField} = '` + barangay + "'";

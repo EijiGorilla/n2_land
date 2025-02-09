@@ -3,18 +3,15 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-import { dateFormat, lastDateOfMonth, timeSeriesHandedOverChartData } from '../Query';
+import { lastDateOfMonth, timeSeriesHandedOverChartData } from '../Query';
 import { lotLayer } from '../layers';
 import { view } from '../Scene';
 import Query from '@arcgis/core/rest/support/Query';
 import FeatureFilter from '@arcgis/core/layers/support/FeatureFilter';
 import {
-  barangayField,
   lotHandedOverDateField,
   lotHandOverDateField,
-  lotTargetActualDateField,
   lotTargetActualField,
-  municipalityField,
 } from '../StatusUniqueValues';
 import { useDropdownContext } from './DropdownContext';
 
