@@ -32,6 +32,13 @@ export const statusLotLabel = [
   'For Expropriation',
 ];
 
+export const statusLotNumber = statusLotLabel.map((stat, index) => {
+  return Object.assign({
+    category: stat,
+    value: index + 1,
+  });
+});
+
 // export const statusLotColor = ['#00734d', '#0070ff', '#ffff00', '#ffaa00', '#ff0000'];
 export const statusLotColor = [
   '#00734d',
