@@ -589,7 +589,7 @@ const StructureChart = memo(() => {
           </b>
         )}
       </CalciteLabel>
-      d
+
       {/* <CalciteLabel>MODE OF ACQUISITION</CalciteLabel>
       <div
         id={chartID_moa}

@@ -389,13 +389,13 @@ let customContentLot = new CustomContent({
     const endorse = event.graphic.attributes[endorsedField];
     const endorsed = statusLotEndorsedLabel[endorse];
 
-    let daten: any;
+    // let daten: any;
     let date: any;
     if (handedOverDate) {
-      daten = new Date(handedOverDate);
-      const year = daten.toLocalString('default', { year: 'numeric' });
-      const month = daten.toLocalString('default', { month: '2-digit' });
-      const day = daten.toLocalString('default', { day: '2-digit' });
+      const daten = new Date(handedOverDate);
+      const year = daten.toLocaleString('default', { year: 'numeric' });
+      const month = daten.toLocaleString('default', { month: '2-digit' });
+      const day = daten.toLocaleString('default', { day: '2-digit' });
       date = `${year}-${month}-${day}`;
     } else {
       date = 'Undefined';
@@ -551,7 +551,8 @@ export const handedOverLotLayer = new FeatureLayer({
   layerId: 4,
   definitionExpression: `${handedOverLotField} = 1`,
   renderer: handedOverLotRenderer,
-  popupEnabled: false,
+  // popupEnabled: false,
+  popupTemplate: templateLot,
   title: 'Handed-Over (public + private)',
   elevationInfo: {
     mode: 'on-the-ground',
