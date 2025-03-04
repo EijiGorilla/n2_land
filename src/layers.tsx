@@ -1,5 +1,4 @@
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';
-import SceneLayer from '@arcgis/core/layers/SceneLayer';
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
 import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import UniqueValueRenderer from '@arcgis/core/renderers/UniqueValueRenderer';
@@ -581,7 +580,7 @@ export const accessibleLotAreaLayer = new FeatureLayer({
     },
   },
   renderer: accessible_renderer,
-  title: 'Accessible Lot Area',
+  title: 'Handed-Over Area',
   elevationInfo: {
     mode: 'on-the-ground',
   },

@@ -8,30 +8,20 @@ import {
   cpField,
   handedOverLotField,
   lotHandedOverAreaField,
-  lotHandedOverDateField,
-  lotHandOverDateField,
   lotIdField,
-  lotMoaField,
-  lotPteField,
   lotStatusField,
   lotTargetActualDateField,
-  lotTargetActualField,
   municipalityField,
   nloStatusField,
   pierAccessBatchField,
   pierAccessStatusField,
   querySuperUrgent,
-  statusLotEndorsedLabel,
-  statusLotEndorsedQuery,
   statusLotLabel,
   statusLotQuery,
-  statusMoa,
-  statusMoaStructure,
   statusNloLabel,
   statusNloQuery,
   statusStructureLabel,
   statusStructureQuery,
-  structureMoaField,
   structurePteField,
   structureStatusField,
   superurgent_items,
@@ -326,50 +316,32 @@ export async function generateHandedOverLotsNumber(
   });
 }
 
-export async function generateLotMoaData(municipal: any, barangay: any) {
+export async function generateHandedOverArea(municipal: any, barangay: any) {
   // Query
   const queryMunicipality = `${municipalityField} = '` + municipal + "'";
   const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
-  const queryField = lotMoaField + ' IS NOT NULL';
+  const queryField = `${affectedAreaField} IS NOT NULL` + ' AND ' + `${lotStatusField} IS NOT NULL`;
 
-  var total_count = new StatisticDefinition({
-    onStatisticField: lotMoaField,
-    outStatisticFieldName: 'total_count',
-    statisticType: 'count',
+  var handed_over_area = new StatisticDefinition({
+    onStatisticField: lotHandedOverAreaField,
+    outStatisticFieldName: 'handed_over_area',
+    statisticType: 'sum',
   });
 
   var query = lotLayer.createQuery();
-  query.outFields = [lotMoaField];
-  query.outStatistics = [total_count];
-  query.orderByFields = [lotMoaField];
-  query.groupByFieldsForStatistics = [lotMoaField];
+  query.outStatistics = [handed_over_area];
 
   if (municipal && !barangay) {
-    query.where = queryField + ' AND ' + queryMunicipality;
+    query.where = queryField + ' AND ' + queryMunicipality + ' AND ' + queryField;
   } else if (barangay) {
-    query.where = queryField + ' AND ' + queryMunicipalBarangay;
+    query.where = queryField + ' AND ' + queryMunicipalBarangay + ' AND ' + queryField;
   }
 
   return lotLayer.queryFeatures(query).then((response: any) => {
-    var stats = response.features;
-    const data = stats.map((result: any, index: any) => {
-      const attributes = result.attributes;
-      const status_id = attributes.MoA;
-      const count = attributes.total_count;
-      return Object.assign({
-        category: statusMoa[status_id - 1],
-        value: count,
-      });
-    });
-
-    const data1: any = [];
-    statusMoa.map((status: any, index: any) => {
-      const find = data.find((emp: any) => emp.category === status);
-      const value = find === undefined ? 0 : find?.value;
-      data1.push({ category: status, value: value });
-    });
-    return data1;
+    var stats = response.features[0].attributes;
+    const value = stats.handed_over_area;
+    return value;
   });
 }
 
@@ -623,53 +595,6 @@ export async function generateStrucNumber() {
     const totaln = stats.total_struc_N;
     const percPTE = Number(((pte / totaln) * 100).toFixed(0));
     return [percPTE, pte, totaln];
-  });
-}
-
-export async function generateStrucMoaData(municipal: any, barangay: any) {
-  // Query
-  const queryMunicipality = `${municipalityField} = '` + municipal + "'";
-  const queryBarangay = `${barangayField} = '` + barangay + "'";
-  const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
-  const queryField = structureMoaField + ' IS NOT NULL';
-
-  var total_count = new StatisticDefinition({
-    onStatisticField: structureMoaField,
-    outStatisticFieldName: 'total_count',
-    statisticType: 'count',
-  });
-
-  var query = structureLayer.createQuery();
-  query.outFields = [structureMoaField];
-  query.outStatistics = [total_count];
-  query.orderByFields = [structureMoaField];
-  query.groupByFieldsForStatistics = [structureMoaField];
-
-  if (municipal && !barangay) {
-    query.where = queryField + ' AND ' + queryMunicipality;
-  } else if (barangay) {
-    query.where = queryField + ' AND ' + queryMunicipalBarangay;
-  }
-
-  return structureLayer.queryFeatures(query).then((response: any) => {
-    var stats = response.features;
-    const data = stats.map((result: any, index: any) => {
-      const attributes = result.attributes;
-      const status_id = attributes.MoA;
-      const count = attributes.total_count;
-      return Object.assign({
-        category: statusMoaStructure[status_id - 1],
-        value: count,
-      });
-    });
-
-    const data1: any = [];
-    statusMoaStructure.map((status: any, index: any) => {
-      const find = data.find((emp: any) => emp.category === status);
-      const value = find === undefined ? 0 : find?.value;
-      data1.push({ category: status, value: value });
-    });
-    return data1;
   });
 }
 

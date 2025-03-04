@@ -9,6 +9,7 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
 import {
   generateAffectedAreaForPie,
+  generateHandedOverArea,
   generateHandedOverLotsNumber,
   generateLotData,
   generateLotNumber,
@@ -24,7 +25,6 @@ import '@esri/calcite-components/dist/components/calcite-segmented-control-item'
 import '@esri/calcite-components/dist/components/calcite-label';
 import '@esri/calcite-components/dist/components/calcite-checkbox';
 import {
-  CalciteLabel,
   CalciteSegmentedControl,
   CalciteSegmentedControlItem,
   CalciteCheckbox,
@@ -72,8 +72,6 @@ const LotChart = () => {
   const chartID = 'pie-two';
 
   const [lotNumber, setLotNumber] = useState([]);
-  const [handedOverNumber, setHandedOverNumber] = useState([]);
-
   // Affected Area for Pie Chart
   const [affectAreaPie, setAffectAreaPie] = useState<unknown | any | undefined>([]);
   const [totalAffectedArea, setTotalAffectedArea] = useState<any>();
@@ -82,7 +80,9 @@ const LotChart = () => {
   const superurgent_items = ['OFF', 'ON'];
   const [superUrgentSelected, setSuperUrgentSelected] = useState<any>(superurgent_items[0]);
 
-  // Handed Over View checkbox
+  // Handed Over
+  const [handedOverNumber, setHandedOverNumber] = useState([]);
+  const [handedOverArea, setHandedOverArea] = useState<any>();
   const [handedOverCheckBox, setHandedOverCheckBox] = useState<boolean>(false);
 
   // 2.Mode of Acquisition
@@ -160,8 +160,13 @@ const LotChart = () => {
       setTotalAffectedArea(response);
     });
 
+    // Handed Over
     generateHandedOverLotsNumber(superUrgentSelected, municipal, barangay).then((response: any) => {
       setHandedOverNumber(response);
+    });
+
+    generateHandedOverArea(municipal, barangay).then((response: any) => {
+      setHandedOverArea(response);
     });
 
     // Mode of Acquisition
@@ -470,207 +475,6 @@ const LotChart = () => {
     legendRef.current?.data.setAll(pieSeriesRef.current.dataItems);
   });
 
-  // Mode of Acquisition
-  // useEffect(() => {
-  //   // Dispose previously created root element
-
-  //   maybeDisposeRoot(chartID_moa);
-
-  //   var root2 = am5.Root.new(chartID_moa);
-  //   root2.container.children.clear();
-  //   root2._logo?.dispose();
-
-  //   // Set themesf
-  //   // https://www.amcharts.com/docs/v5/concepts/themes/
-  //   root2.setThemes([am5themes_Animated.new(root2), am5themes_Responsive.new(root2)]);
-
-  //   // Create chart
-  //   // https://www.amcharts.com/docs/v5/charts/xy-chart/
-  //   var chart = root2.container.children.push(
-  //     am5xy.XYChart.new(root2, {
-  //       panX: false,
-  //       panY: false,
-  //       wheelX: 'none',
-  //       wheelY: 'none',
-  //     }),
-  //   );
-  //   chartRef_moa.current = chart;
-
-  //   // Create axes
-  //   // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-  //   var yRenderer = am5xy.AxisRendererY.new(root2, {
-  //     minGridDistance: 5,
-  //     strokeOpacity: 1,
-  //     strokeWidth: 1,
-  //     inversed: true,
-  //     stroke: am5.color('#ffffff'),
-  //   });
-  //   yRenderer.grid.template.set('location', 1);
-
-  //   var yAxis = chart.yAxes.push(
-  //     am5xy.CategoryAxis.new(root2, {
-  //       maxDeviation: 0,
-  //       categoryField: 'category',
-  //       renderer: yRenderer,
-  //     }),
-  //   );
-
-  //   // Remove grid lines
-  //   yAxis.get('renderer').grid.template.set('forceHidden', true);
-
-  //   var xAxis = chart.xAxes.push(
-  //     am5xy.ValueAxis.new(root2, {
-  //       maxDeviation: 0,
-  //       min: 0,
-  //       strictMinMax: true,
-  //       calculateTotals: true,
-  //       renderer: am5xy.AxisRendererX.new(root2, {
-  //         visible: true,
-  //         strokeOpacity: 1,
-  //         strokeWidth: 1,
-  //         stroke: am5.color('#ffffff'),
-  //       }),
-  //     }),
-  //   );
-  //   // Remove grid lines
-  //   xAxis.get('renderer').grid.template.set('forceHidden', true);
-
-  //   // Label properties for yAxis (category axis)
-  //   yAxis.get('renderer').labels.template.setAll({
-  //     //oversizedBehavior: "wrap",
-  //     textAlign: 'center',
-  //     fill: am5.color('#ffffff'),
-  //     //maxWidth: 150,
-  //     fontSize: 12,
-  //   });
-
-  //   xAxis.get('renderer').labels.template.setAll({
-  //     fill: am5.color('#ffffff'),
-  //     fontSize: 10,
-  //   });
-
-  //   // Create series
-  //   // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-  //   var series = chart.series.push(
-  //     am5xy.ColumnSeries.new(root2, {
-  //       name: 'Series 1',
-  //       xAxis: xAxis,
-  //       yAxis: yAxis,
-  //       valueXField: 'value',
-  //       sequencedInterpolation: true,
-  //       categoryYField: 'category',
-  //     }),
-  //   );
-  //   barSeriesRef.current = series;
-  //   chart.series.push(series);
-
-  //   var columnTemplate = series.columns.template;
-
-  //   columnTemplate.setAll({
-  //     draggable: true,
-  //     cursorOverStyle: 'pointer',
-  //     tooltipText: '{value}',
-  //     cornerRadiusBR: 10,
-  //     cornerRadiusTR: 10,
-  //     strokeOpacity: 0,
-  //   });
-
-  //   // Add Label bullet
-  //   series.bullets.push(function () {
-  //     return am5.Bullet.new(root2, {
-  //       locationY: 1,
-  //       sprite: am5.Label.new(root2, {
-  //         text: '{value}',
-  //         fill: root2.interfaceColors.get('alternativeText'),
-  //         centerY: 8,
-  //         centerX: am5.p50,
-  //         fontSize: 13,
-  //         populateText: true,
-  //       }),
-  //     });
-  //   });
-
-  //   // Use different color by column
-  //   /*
-  //       columnTemplate.adapters.add('fill', (fill, target) => {
-  //         return chart.get('colors').getIndex(series.columns.indexOf(target));
-  //       });
-
-  //       columnTemplate.adapters.add('stroke', (stroke, target) => {
-  //         return chart.get('colors').getIndex(series.columns.indexOf(target));
-  //       });
-  //       */
-
-  //   series.columns.template.events.on('click', function (ev) {
-  //     var Selected: any = ev.target.dataItem?.dataContext;
-  //     var Category: string = Selected.category;
-  //     const find = statusMoaQuery.find((emp: any) => emp.category === Category);
-  //     const selectedStatus = find?.value;
-
-  //     var highlightSelect: any;
-
-  //     var query = lotLayer.createQuery();
-  //     view.whenLayerView(lotLayer).then(function (layerView) {
-  //       //CHART_ELEMENT.style.visibility = "visible";
-
-  //       lotLayer.queryFeatures(query).then(function (results) {
-  //         const RESULT_LENGTH = results.features;
-  //         const ROW_N = RESULT_LENGTH.length;
-
-  //         let objID = [];
-  //         for (var i = 0; i < ROW_N; i++) {
-  //           var obj = results.features[i].attributes.OBJECTID;
-  //           objID.push(obj);
-  //         }
-
-  //         var queryExt = new Query({
-  //           objectIds: objID,
-  //         });
-
-  //         lotLayer.queryExtent(queryExt).then(function (result) {
-  //           if (result.extent) {
-  //             view.goTo(result.extent);
-  //           }
-  //         });
-
-  //         if (highlightSelect) {
-  //           highlightSelect.remove();
-  //         }
-  //         highlightSelect = layerView.highlight(objID);
-
-  //         view.on('click', function () {
-  //           layerView.filter = new FeatureFilter({
-  //             where: undefined,
-  //           });
-  //           highlightSelect.remove();
-  //         });
-  //       });
-  //       layerView.filter = new FeatureFilter({
-  //         where: lotMoaField + ' = ' + selectedStatus,
-  //       });
-  //     }); // End of whenLayerView
-  //   });
-
-  //   // Chart title
-  //   yAxisRef.current = yAxis;
-  //   yAxis.data.setAll(lotMoaData);
-  //   series.data.setAll(lotMoaData);
-
-  //   // Make stuff animate on load
-  //   // https://www.amcharts.com/docs/v5/concepts/animations/
-  //   series.appear(1000);
-  //   chart.appear(1000, 100);
-
-  //   return () => {
-  //     root2.dispose();
-  //   };
-  // }, [chartID_moa, lotMoaData]);
-
-  // useEffect(() => {
-  //   barSeriesRef.current?.data.setAll(lotMoaData);
-  //   yAxisRef.current?.data.setAll(lotMoaData);
-  // });
-  //JSX
   return (
     <>
       <div
@@ -680,7 +484,7 @@ const LotChart = () => {
           marginLeft: '15px',
           marginRight: '15px',
           justifyContent: 'space-between',
-          marginBottom: '20px',
+          marginBottom: '10px',
         }}
       >
         <img
@@ -770,94 +574,66 @@ const LotChart = () => {
           height: '57vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
-          marginBottom: '6%',
+          marginBottom: '3%',
         }}
       ></div>
 
       {/* Handed-Over */}
-      <div style={{ display: 'flex' }}>
+      <div
+        style={{
+          display: 'flex',
+          marginLeft: '15px',
+          marginRight: '15px',
+          justifyContent: 'space-between',
+          marginBottom: '20px',
+        }}
+      >
         <div
-          style={{
-            color: primaryLabelColor,
-            fontSize: '1.2rem',
-            marginLeft: '13px',
-            marginBottom: '13px',
-            marginRight: '10px',
-          }}
+          style={{ backgroundColor: 'green', height: '0', marginTop: '13px', marginRight: '-10px' }}
         >
-          HANDED-OVER
+          <CalciteCheckbox
+            name="handover-checkbox"
+            label="VIEW"
+            scale="l"
+            onCalciteCheckboxChange={(event: any) =>
+              setHandedOverCheckBox(handedOverCheckBox === false ? true : false)
+            }
+          ></CalciteCheckbox>
         </div>
-        <CalciteCheckbox
-          name="handover-checkbox"
-          label="VIEW"
-          style={{ width: '20px' }}
-          scale="l"
-          onCalciteCheckboxChange={(event: any) =>
-            setHandedOverCheckBox(handedOverCheckBox === false ? true : false)
-          }
-        ></CalciteCheckbox>
-        <div style={{ color: primaryLabelColor }}>View on the map</div>
-      </div>
-
-      <CalciteLabel layout="inline">
-        {handedOverNumber[0] === 'Infinity' ? (
-          <b
+        <dl style={{ alignItems: 'center' }}>
+          <dt style={{ color: primaryLabelColor, fontSize: '1.1rem' }}>Total Handed-Over</dt>
+          <dd
             style={{
               color: valueLabelColor,
-              fontSize: '2rem',
-              fontWeight: 'bold',
-              paddingLeft: '15px',
-              display: 'flex',
-            }}
-          >
-            N/A
-            <img
-              src="https://EijiGorilla.github.io/Symbols/Land_Acquisition/Handed_Over.svg"
-              alt="Land Logo"
-              height={'14%'}
-              width={'14%'}
-              style={{ marginLeft: 'auto', marginRight: '20px', marginTop: '-25px' }}
-            />
-          </b>
-        ) : (
-          <b
-            style={{
-              color: valueLabelColor,
-              fontSize: '2rem',
+              fontSize: '1.7rem',
               fontWeight: 'bold',
               fontFamily: 'calibri',
-              paddingLeft: '15px',
-              display: 'flex',
+              lineHeight: '1.2',
+              margin: 'auto',
             }}
           >
             {handedOverNumber[0]}% ({thousands_separators(handedOverNumber[1])})
-            <img
-              src="https://EijiGorilla.github.io/Symbols/Land_Acquisition/Handed_Over.svg"
-              alt="Land Logo"
-              height={'14%'}
-              width={'14%'}
-              style={{
-                marginLeft: 'auto',
-                marginRight: '20px',
-                marginTop: '-25px',
-              }}
-            />
-          </b>
-        )}
-      </CalciteLabel>
-
-      {/* <div style={{ color: primaryLabelColor, fontSize: '1.2rem', marginLeft: '13px' }}>
-        MODE OF ACQUISITION
+          </dd>
+        </dl>
+        <dl style={{ alignItems: 'center' }}>
+          <dt style={{ color: primaryLabelColor, fontSize: '1.1rem' }}>Handed-Over Area</dt>
+          {/* #d3d3d3 */}
+          <dd
+            style={{
+              color: valueLabelColor,
+              fontSize: '1.7rem',
+              fontFamily: 'calibri',
+              lineHeight: '1.2',
+              margin: 'auto',
+              fontWeight: 'bold',
+            }}
+          >
+            {handedOverArea && thousands_separators(handedOverArea.toFixed(0))}
+            <label style={{ fontWeight: 'normal', fontSize: '1.3rem' }}> m</label>
+            <label style={{ verticalAlign: 'super', fontSize: '0.6rem' }}>2</label>
+          </dd>
+        </dl>
       </div>
-      <div
-        id={chartID_moa}
-        style={{
-          height: '21vh',
-          backgroundColor: 'rgb(0,0,0,0)',
-          color: 'white',
-          marginLeft: '30px',
-        }}
-      ></div> */}
     </>
   );
 }; // End of lotChartgs
