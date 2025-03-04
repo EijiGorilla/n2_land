@@ -25,6 +25,7 @@ import {
   handedOverLotLayer,
   ngcp_working_area,
   ngcp_tagged_structureLayer,
+  accessibleLotAreaLayer,
   // superUrgentLotLayer,
   // handedOverLotLayer,
 } from './layers';
@@ -57,7 +58,7 @@ const lotGroupLayer = new GroupLayer({
   visible: true,
   visibilityMode: 'independent',
   // layers: [endorsedLotLayer, lotLayer, handedOverLotLayer, superUrgentLotLayer, pnrLayer],
-  layers: [endorsedLotLayer, lotLayer, pnrLayer],
+  layers: [endorsedLotLayer, lotLayer, pnrLayer, accessibleLotAreaLayer],
 });
 
 const ngcp2_groupLayer = new GroupLayer({

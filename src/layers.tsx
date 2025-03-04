@@ -560,6 +560,33 @@ export const handedOverLotLayer = new FeatureLayer({
 });
 handedOverLotLayer.listMode = 'hide';
 
+/* contractor accessible layer */
+const accessible_renderer = new SimpleRenderer({
+  symbol: new SimpleFillSymbol({
+    color: 'purple',
+    // style: 'cross',
+    style: 'solid',
+
+    outline: {
+      width: 1,
+      color: 'black',
+    },
+  }),
+});
+export const accessibleLotAreaLayer = new FeatureLayer({
+  portalItem: {
+    id: '32c788b35f7f4946b92820e7ae3cb9b3',
+    portal: {
+      url: 'https://gis.railway-sector.com/portal',
+    },
+  },
+  renderer: accessible_renderer,
+  title: 'Accessible Lot Area',
+  elevationInfo: {
+    mode: 'on-the-ground',
+  },
+});
+
 /* Structure Layer */
 const height = 5;
 const edgeSize = 0.3;
