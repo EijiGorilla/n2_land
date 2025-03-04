@@ -142,7 +142,8 @@ async function defineActions(event: any) {
   item.title === 'NGCP Pole Relocation Working Area' ||
   item.title === 'NGCP Pole Relocation Tagged Structures' ||
   item.title === 'NLO (Non-Land Owner)' ||
-  item.title === 'Occupancy (Structure)'
+  item.title === 'Occupancy (Structure)' ||
+  item.title === 'Handed-Over Area'
     ? (item.visible = false)
     : (item.visible = true);
 }
