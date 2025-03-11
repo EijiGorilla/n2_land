@@ -573,7 +573,7 @@ const LotChart = () => {
       <div
         id={chartID}
         style={{
-          height: '57vh',
+          height: '60vh',
           backgroundColor: 'rgb(0,0,0,0)',
           color: 'white',
           marginBottom: '3%',
@@ -587,7 +587,7 @@ const LotChart = () => {
           marginLeft: '15px',
           marginRight: '15px',
           justifyContent: 'space-between',
-          marginBottom: '20px',
+          marginBottom: '10px',
         }}
       >
         <div
