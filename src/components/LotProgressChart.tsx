@@ -351,7 +351,11 @@ const LotProgressChart = () => {
           marginLeft: 'auto',
           marginRight: 'auto',
         }}
-      ></div>
+      >
+        <b style={{ fontSize: '30px', color: 'red', opacity: '0.4', margin: 'auto' }}>
+          Under Development
+        </b>
+      </div>
     </>
   );
 };

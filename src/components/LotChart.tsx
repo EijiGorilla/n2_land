@@ -58,6 +58,8 @@ const LotChart = () => {
   const municipal = municipalSelected.municipality;
   const barangay = barangaySelected.name;
 
+  console.log('LotChart component is rendered.');
+
   // Add zoomToLayer in App component, not LotChart component
   useEffect(() => {
     zoomToLayer(lotLayer);

@@ -366,7 +366,9 @@ export async function timeSeriesHandedOverChartData(municipality: any, barangay:
   const queryMunicipality = `${municipalityField} = '` + municipality + "'";
   const queryBarangay = `${barangayField} = '` + barangay + "'";
   const queryMunicipalBarangay = queryMunicipality + ' AND ' + queryBarangay;
-  const queryHandedOverHandOverDate = lotTargetActualDateField + ' IS NOT NULL';
+  const queryField = `${lotIdField} IS NOT NULL`;
+  const queryHandedOverHandOverDate =
+    lotTargetActualDateField + ' IS NOT NULL' + ' AND ' + queryField;
 
   if (municipality && barangay) {
     query.where = queryHandedOverHandOverDate + ' AND ' + queryMunicipalBarangay;
