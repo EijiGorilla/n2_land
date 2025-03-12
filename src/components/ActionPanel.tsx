@@ -89,7 +89,7 @@ function ActionPanel() {
             }}
           ></CalciteAction>
 
-          <CalciteAction
+          {/*<CalciteAction
             data-action-id="pierbatch-charts"
             icon="graph-bar-100-stacked"
             text="Accessible Pier Location"
@@ -98,7 +98,7 @@ function ActionPanel() {
               setNextWidget(event.target.id);
               setActiveWidget(nextWidget === activeWidget ? null : nextWidget);
             }}
-          ></CalciteAction>
+          ></CalciteAction> */}
 
           <CalciteAction
             data-action-id="handedover-charts"
