@@ -7,13 +7,15 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5themes_Responsive from '@amcharts/amcharts5/themes/Responsive';
-import { generateNloData, generateNloNumber, thousands_separators } from '../Query';
+import { dateUpdate, generateNloData, generateNloNumber, thousands_separators } from '../Query';
 import {
   barangayField,
+  cutoff_days,
   municipalityField,
   nloStatusField,
   primaryLabelColor,
   statusNloQuery,
+  updatedDateCategoryNames,
   valueLabelColor,
 } from '../StatusUniqueValues';
 import { useDropdownContext } from './DropdownContext';
@@ -35,6 +37,17 @@ const NloChart = memo(() => {
 
   const municipal = municipalSelected.municipality;
   const barangay = barangaySelected.name;
+
+  // 0. Updated date
+  const [asOfDate, setAsOfDate] = useState<undefined | any | unknown>(null);
+  const [daysPass, setDaysPass] = useState<boolean>(false);
+
+  useEffect(() => {
+    dateUpdate(updatedDateCategoryNames[2]).then((response: any) => {
+      setAsOfDate(response[0][0]);
+      setDaysPass(response[0][1] >= cutoff_days ? true : false);
+    });
+  }, []);
 
   const pieSeriesRef = useRef<unknown | any | undefined>({});
   const legendRef = useRef<unknown | any | undefined>({});
@@ -323,6 +336,16 @@ const NloChart = memo(() => {
           width={'17%'}
           style={{ paddingTop: '5px', paddingLeft: '5px' }}
         />
+      </div>
+      <div
+        style={{
+          color: daysPass === true ? 'red' : 'gray',
+          fontSize: '0.8rem',
+          float: 'right',
+          marginRight: '5px',
+        }}
+      >
+        {!asOfDate ? '' : 'As of ' + asOfDate}
       </div>
       {/* <CalciteLabel>TOTAL NON-LAND OWNERS</CalciteLabel>
       <CalciteLabel layout="inline">

@@ -1,3 +1,7 @@
+// Updated Dates
+export const updatedDateCategoryNames = ['Land Acquisition', 'Structure', 'Non Land Owner'];
+export const cutoff_days = 30;
+
 // Lot Status
 export const superUrgentField = 'Urgent';
 export const querySuperUrgent = `${superUrgentField} = 0`;
