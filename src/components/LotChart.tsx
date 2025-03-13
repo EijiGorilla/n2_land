@@ -248,6 +248,10 @@ const LotChart = () => {
       tooltipText: '{category}: {valuePercentTotal.formatNumber("#.")}%',
     });
 
+    // Disabling labels and ticksll
+    pieSeries.labels.template.set('visible', false);
+    pieSeries.ticks.template.set('visible', false);
+
     // EventDispatcher is disposed at SpriteEventDispatcher...
     // It looks like this error results from clicking events
     pieSeries.slices.template.events.on('click', (ev) => {
