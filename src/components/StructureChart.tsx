@@ -369,6 +369,7 @@ const StructureChart = memo(() => {
       >
         {!asOfDate ? '' : 'As of ' + asOfDate}
       </div>
+
       {/* Structure Chart */}
       <div
         id={chartID}
